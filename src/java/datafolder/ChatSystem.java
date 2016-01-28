@@ -14,8 +14,11 @@ import java.util.HashMap;
 public class ChatSystem {
     private static ChatSystem instance = new ChatSystem();
     private Message message;
+    private Workers workers;
     private int messageIdIncrement;
+    private int workerIdIncerement;
     private HashMap<Integer, Message> messageList;
+    private HashMap<Integer, Workers> workerList; 
     
     private ChatSystem(){
         this.message = new Message();
@@ -31,9 +34,11 @@ public class ChatSystem {
         messageList.put(m.getID() , m);
     }
     
+    /*
     public HashMap<Integer, Message> getMessage(){
         return messageList;
     }
+    */
     
     public Message getMessageByID(int id){
         return messageList.get(id);
@@ -46,4 +51,22 @@ public class ChatSystem {
     public int getMessageIncrement(){
         return this.messageIdIncrement;
     }
+    
+    public void addWorker(Workers w){
+        workerList.put(w.getId(), w);
+    }
+    
+    public Workers getWorkerById(int id){
+        return workerList.get(id);
+    }
+
+    public int getWorkerIdIncerement() {
+        return workerIdIncerement;
+    }
+
+    public void setWorkerIdIncerement(int workerIdIncerement) {
+        this.workerIdIncerement = workerIdIncerement;
+    }
+    
+    
 }
