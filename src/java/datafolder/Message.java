@@ -5,6 +5,10 @@
  */
 package datafolder;
 
+import java.sql.Timestamp;
+import java.util.Calendar;
+import java.util.Date;
+import javax.xml.bind.DatatypeConverter;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -14,18 +18,30 @@ import javax.xml.bind.annotation.XmlRootElement;
  */
 @XmlRootElement
 public class Message {
+
     private int id;
     private String content;
     private String postName;
-    
-    public Message(){
-        
+    private Timestamp timeStamp;
+    private String currentTime;
+
+    public Message() {
+
     }
-    
-    public Message(int id, String c, String n){
+
+    public Message(int id, String c, String n) {
         this.id = id;
         this.content = c;
         this.postName = n;
+        this.currentTime = this.currentTime();
+    }
+
+    private String currentTime() {
+        Date yourDate = new Date();
+        Calendar c = Calendar.getInstance();
+        c.setTime(yourDate);
+        String xmlDateTime = DatatypeConverter.printDateTime(c);
+        return xmlDateTime;
     }
 
     @XmlElement
@@ -33,10 +49,19 @@ public class Message {
         return id;
     }
 
-    
     @XmlElement
     public String getContent() {
         return content;
+    }
+
+    @XmlElement
+    public Timestamp getTimestamp() {
+        return this.timeStamp;
+    }
+    
+    @XmlElement
+    public String getCurrentTime(){
+        return this.currentTime;
     }
 
     public void setContent(String content) {

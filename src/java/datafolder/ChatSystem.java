@@ -24,6 +24,7 @@ public class ChatSystem {
         this.message = new Message();
         this.messageList = new HashMap<>();
         this.messageIdIncrement = 0;
+        this.workerIdIncerement = 0;
     }
     
     public static ChatSystem getInstance() {

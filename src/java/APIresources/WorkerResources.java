@@ -25,10 +25,13 @@ public class WorkerResources {
         this.system = ChatSystem.getInstance();
     }
     
+    /*
+    breaks the server for some reason... fix!!!
     @Path("/{workerid}")
     @GET
     @Produces(MediaType.APPLICATION_XML)
     public Workers getWorkersIdXML(@PathParam("workerid") int workerid){
         return system.getWorkerById(workerid);
     }
+    */
 }
