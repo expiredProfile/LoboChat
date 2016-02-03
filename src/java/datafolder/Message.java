@@ -23,9 +23,7 @@ public class Message {
     private String postName;
     private String currentTime;
 
-    public Message() {
-
-    }
+    public Message() {}
 
     public Message(int id, String c, String n) {
         this.id = id;
@@ -51,11 +49,6 @@ public class Message {
     public String getContent() {
         return content;
     }
-    
-    @XmlElement
-    public String getCurrentTime(){
-        return this.currentTime;
-    }
 
     public void setContent(String content) {
         this.content = content;
@@ -68,5 +61,10 @@ public class Message {
 
     public void setPostName(String postName) {
         this.postName = postName;
+    }
+    
+    @XmlElement
+    public String getCurrentTime(){
+        return this.currentTime;
     }
 }
