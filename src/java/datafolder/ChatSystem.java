@@ -5,6 +5,7 @@
  */
 package datafolder;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
@@ -18,11 +19,15 @@ public class ChatSystem {
     private int messageIdIncrement;
     private int workerIdIncerement;
     private HashMap<Integer, Message> messageList;
-    private HashMap<Integer, Workers> workerList; 
+    //private HashMap<Integer, Workers> workerList;
+    private ArrayList<Workers> loggedIn;
+    private ArrayList<Workers> loggedOut;
     
     private ChatSystem(){
         this.message = new Message();
         this.messageList = new HashMap<>();
+        this.loggedIn = new ArrayList<>();
+        this.loggedOut = new ArrayList<>();
         this.messageIdIncrement = 0;
         this.workerIdIncerement = 0;
     }
@@ -35,11 +40,9 @@ public class ChatSystem {
         messageList.put(m.getID() , m);
     }
     
-    /*
     public HashMap<Integer, Message> getMessage(){
         return messageList;
     }
-    */
     
     public Message getMessageByID(int id){
         return messageList.get(id);
@@ -53,10 +56,29 @@ public class ChatSystem {
         return this.messageIdIncrement;
     }
     
+    /*
     public void addWorker(Workers w){
         workerList.put(w.getId(), w);
     }
+    */
+
+    public ArrayList<Workers> getLoggedOutList(){
+        return this.loggedOut;
+    }
     
+    public ArrayList<Workers> getLoggedInList(){
+        return this.loggedIn;
+    }
+    
+    public void workerLoggedIn(Workers w){
+        loggedIn.add(w);
+    }
+    
+    public void workerLoggedOut(Workers w){
+        loggedOut.add(w);
+    }
+    
+    /*
     public HashMap<Integer, Workers> getWorkers(){
         return workerList;
     }
@@ -64,6 +86,7 @@ public class ChatSystem {
     public Workers getWorkerById(int id){
         return workerList.get(id);
     }
+    */
 
     public int getWorkerIdIncerement() {
         return workerIdIncerement;

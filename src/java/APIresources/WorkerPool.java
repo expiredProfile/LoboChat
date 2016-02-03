@@ -32,9 +32,9 @@ public class WorkerPool {
     }
     
     private void addToWorkers(){
-        system.addWorker(kim);
-        system.addWorker(henkka);
-        system.addWorker(kasper);
-        system.addWorker(tommi);
+        system.workerLoggedOut(kim);
+        system.workerLoggedOut(henkka);
+        system.workerLoggedOut(kasper);
+        system.workerLoggedOut(tommi);
     }
 }

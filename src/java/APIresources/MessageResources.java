@@ -7,6 +7,7 @@ package APIresources;
 
 import datafolder.ChatSystem;
 import datafolder.Message;
+import java.util.ArrayList;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -27,16 +28,15 @@ public class MessageResources {
         this.system = ChatSystem.getInstance();
     }
     
-    /*
     @GET
     @Produces(MediaType.APPLICATION_XML)
-    public Message getMessageXML(){
-        for(Message m : system.getMessage().values()){
-            
+    public ArrayList<Message> getMessageXML(){
+        ArrayList<Message> list = new ArrayList<>();
+        for(int i = 0; i < system.getMessage().size(); i++){
+            list.add(system.getMessageByID(i));
         }
-        return ;
+       return list;
     }
-    */
     
     @POST
     @Consumes(MediaType.APPLICATION_XML)
