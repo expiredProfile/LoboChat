@@ -15,7 +15,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 public class Alert {
     private int id;
-    private String postName; //sender?
+    private String postName;
     //Urgency level?
     
     public Alert(){}
