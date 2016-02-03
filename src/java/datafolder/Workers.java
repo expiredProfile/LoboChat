@@ -12,4 +12,5 @@ package datafolder;
 public interface Workers {
     public String getName();
     public int getId();
+    public String getTitle();
 }

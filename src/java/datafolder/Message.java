@@ -5,7 +5,6 @@
  */
 package datafolder;
 
-import java.sql.Timestamp;
 import java.util.Calendar;
 import java.util.Date;
 import javax.xml.bind.DatatypeConverter;
@@ -22,7 +21,6 @@ public class Message {
     private int id;
     private String content;
     private String postName;
-    private Timestamp timeStamp;
     private String currentTime;
 
     public Message() {
@@ -52,11 +50,6 @@ public class Message {
     @XmlElement
     public String getContent() {
         return content;
-    }
-
-    @XmlElement
-    public Timestamp getTimestamp() {
-        return this.timeStamp;
     }
     
     @XmlElement

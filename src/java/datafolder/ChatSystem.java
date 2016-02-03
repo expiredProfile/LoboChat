@@ -57,6 +57,10 @@ public class ChatSystem {
         workerList.put(w.getId(), w);
     }
     
+    public HashMap<Integer, Workers> getWorkers(){
+        return workerList;
+    }
+    
     public Workers getWorkerById(int id){
         return workerList.get(id);
     }

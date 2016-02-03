@@ -14,6 +14,7 @@ import javax.xml.bind.annotation.XmlElement;
 public class Doctor implements Workers{
     private int id;
     private String name;
+    private String title;
     
     public Doctor(){
         
@@ -22,6 +23,7 @@ public class Doctor implements Workers{
     public Doctor(int id, String name){
         this.id = id;
         this.name = name;
+        this.title = "Doctor";
     }
     
     @XmlElement
@@ -34,5 +36,11 @@ public class Doctor implements Workers{
     @Override
     public String getName() {
         return name;
+    }
+    
+    @XmlElement
+    @Override
+    public String getTitle() {
+        return title;
     }
 }

@@ -11,9 +11,10 @@ import javax.xml.bind.annotation.XmlElement;
  *
  * @author kimmo
  */
-public class Nurse {
+public class Nurse implements Workers{
     private int id;
     private String name;
+    private String title;
 
     public Nurse(){
         
@@ -22,16 +23,25 @@ public class Nurse {
     public Nurse(int id, String name){
         this.id = id;
         this.name = name;
+        this.title = "Nurse";
     }
     
     @XmlElement
+    @Override
     public int getId() {
         return id;
     }
 
     @XmlElement
+    @Override
     public String getName() {
         return name;
+    }
+    
+    @XmlElement
+    @Override
+    public String getTitle() {
+        return title;
     }
     
     

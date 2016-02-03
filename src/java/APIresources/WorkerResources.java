@@ -20,13 +20,24 @@ import javax.ws.rs.core.MediaType;
 @Path("/Workers")
 public class WorkerResources {
     private static ChatSystem system;
+    private WorkerPool pool;
     
     public WorkerResources(){
         this.system = ChatSystem.getInstance();
+        this.pool = new WorkerPool();
     }
     
     /*
-    breaks the server for some reason... fix!!!
+    @GET
+    @Produces(MediaType.APPLICATION_XML)
+    public Workers getWorkersXML(){
+        String result = "";
+        for(Workers w : system.getWorkers().values()){
+            result += "< " + w.getTitle() + " : " + w.getName() + " : " + w.getId() + " >";
+        }
+        return result;
+    }
+
     @Path("/{workerid}")
     @GET
     @Produces(MediaType.APPLICATION_XML)
