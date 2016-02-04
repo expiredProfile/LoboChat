@@ -13,7 +13,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author kimmo
  */
 @XmlRootElement
-public class Guard implements Workers{
+public class Guard extends Worker{
     private int id;
     private String name;
     private String title;

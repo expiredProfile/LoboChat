@@ -6,7 +6,7 @@
 package APIresources;
 
 import datafolder.ChatSystem;
-import datafolder.Workers;
+import datafolder.Worker;
 import java.util.ArrayList;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -33,7 +33,7 @@ public class WorkerResources {
     @Consumes(MediaType.APPLICATION_XML)
     public boolean workerLogIn(String s){
         boolean state = false;
-        for(Workers w : system.getLoggedOutList()){
+        for(Worker w : system.getLoggedOutList()){
             if(w.getName().equals(s)){
                 system.getLoggedOutList().remove(w);
                 system.getLoggedInList().add(w);
@@ -46,24 +46,22 @@ public class WorkerResources {
         return state;
     }
     
-    //@Path("/LoggedOut")
+    @Path("/LoggedOut")
     @GET
     @Produces(MediaType.APPLICATION_XML)
-    public ArrayList<Workers> getLoggedOutXML(){
+    public ArrayList<Worker> getLoggedOutXML(){
         return system.getLoggedOutList();
     }
     
-    /*
+    
+    @Path("/LoggedIn")
     @GET
     @Produces(MediaType.APPLICATION_XML)
-    public Workers getWorkersXML(){
-        String result = "";
-        for(Workers w : system.getWorkers().values()){
-            result += "< " + w.getTitle() + " : " + w.getName() + " : " + w.getId() + " >";
-        }
-        return result;
+    public ArrayList<Worker> getLoggedInXML(){
+        return system.getLoggedInList();
     }
 
+    /*
     @Path("/{workerid}")
     @GET
     @Produces(MediaType.APPLICATION_XML)

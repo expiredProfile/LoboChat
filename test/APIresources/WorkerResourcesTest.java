@@ -5,7 +5,7 @@
  */
 package APIresources;
 
-import datafolder.Workers;
+import datafolder.Worker;
 import java.util.ArrayList;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -59,8 +59,8 @@ public class WorkerResourcesTest {
     public void testGetLoggedOutXML() {
         System.out.println("getLoggedOutXML");
         WorkerResources instance = new WorkerResources();
-        ArrayList<Workers> expResult = null;
-        ArrayList<Workers> result = instance.getLoggedOutXML();
+        ArrayList<Worker> expResult = null;
+        ArrayList<Worker> result = instance.getLoggedOutXML();
         assertEquals(expResult, result);
     }
     

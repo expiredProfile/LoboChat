@@ -15,13 +15,13 @@ import java.util.HashMap;
 public class ChatSystem {
     private static ChatSystem instance = new ChatSystem();
     private Message message;
-    private Workers workers;
+    private Worker workers;
     private int messageIdIncrement;
     private int workerIdIncerement;
     private HashMap<Integer, Message> messageList;
     //private HashMap<Integer, Workers> workerList;
-    private ArrayList<Workers> loggedIn;
-    private ArrayList<Workers> loggedOut;
+    private ArrayList<Worker> loggedIn;
+    private ArrayList<Worker> loggedOut;
     
     private ChatSystem(){
         this.message = new Message();
@@ -62,19 +62,19 @@ public class ChatSystem {
     }
     */
 
-    public ArrayList<Workers> getLoggedOutList(){
+    public ArrayList<Worker> getLoggedOutList(){
         return this.loggedOut;
     }
     
-    public ArrayList<Workers> getLoggedInList(){
+    public ArrayList<Worker> getLoggedInList(){
         return this.loggedIn;
     }
     
-    public void workerLoggedIn(Workers w){
+    public void workerLoggedIn(Worker w){
         loggedIn.add(w);
     }
     
-    public void workerLoggedOut(Workers w){
+    public void workerLoggedOut(Worker w){
         loggedOut.add(w);
     }
     

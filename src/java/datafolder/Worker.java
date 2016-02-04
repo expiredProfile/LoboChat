@@ -7,17 +7,19 @@ package datafolder;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlSeeAlso;
 
 /**
  *
  * @author kimmo
  */
 @XmlRootElement
-public interface Workers {
+@XmlSeeAlso({Guard.class,Nurse.class,Doctor.class,Psychotherapist.class})
+public abstract class Worker {
     @XmlElement
-    public String getName();
+    public abstract String getName();
     @XmlElement
-    public int getId();
+    public abstract int getId();
     @XmlElement
-    public String getTitle();
+    public abstract String getTitle();
 }
