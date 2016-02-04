@@ -16,6 +16,7 @@ public class ChatSystem {
     private static ChatSystem instance = new ChatSystem();
     private Message message;
     private Worker currentUser;
+    private Alert alert;
     private int messageIdIncrement;
     private int workerIdIncerement;
     private int alertIdIncerement;
@@ -26,6 +27,7 @@ public class ChatSystem {
     
     private ChatSystem(){
         this.message = new Message();
+        this.alert = new Alert();
         this.messageList = new HashMap<>();
         this.loggedIn = new ArrayList<>();
         this.loggedOut = new ArrayList<>();
@@ -77,7 +79,6 @@ public class ChatSystem {
         return workerIdIncerement++;
     }
     
-
     public void setCurrentUser(Worker w){
         this.currentUser = w;
     }

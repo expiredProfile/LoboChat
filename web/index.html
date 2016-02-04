@@ -8,70 +8,8 @@
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     </head>
     <body>
-
-        <!--        <script>
-                    $(document).ready(function () {
-                    }); // $(document).ready
-                
-                    function messageResource(task) {
-                
-                        var xmlhttp = new XMLHttpRequest();
-                        var value = $("#inputField").val();
-        
-                        switch (task) {
-                            case "sendMessage":
-                                console.log("Sending message");
-                                xmlhttp.open("POST", "http://localhost:8080/LoboChat/resources/Messages", true);
-                                xmlhttp.send(value);
-                                xmlhttp.onreadystatechange = function () {
-                                    if (xmlhttp.readyState === 4 && xmlhttp.status === 204) {
-                                        //document.getElementById("resultBox").innerHTML = "...";
-                                        console.log("Done with sending!");
-                                    }// if
-                                };// xmlhttp.onreadystatechange
-                                break;
-        
-                            case "getAllMessages":
-                                console.log("Getting all messages");
-                                xmlhttp.open("GET", "http://localhost:8080/LoboChat/resources/Messages", true);
-                                xmlhttp.send();
-                                xmlhttp.onreadystatechange = function () {
-                                    if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
-                                        processXML(xmlhttp.responseXML);
-                                    }
-                                    ;//if
-                                };// xmlhttp.onreadystatechange
-                                break;
-        
-                            case "getMessageById":
-        
-                                console.log("Getting message with id ");
-                                xmlhttp.open("GET", "http://localhost:8080/LoboChat/resources/Messages/" + value, true);
-                                xmlhttp.send();
-                                xmlhttp.onreadystatechange = function () {
-                                    if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
-                                        processXML(xmlhttp.responseXML);
-                                    }// if
-                                };// xmlhttp.onreadystatechange
-                        }//switch
-                    }// messageAPI
-        
-                    function processXML(xml) {
-                        var processedContent = "";
-                        var content = xml.getElementsByTagName("content");
-                        var messageID = xml.getElementsByTagName("ID");
-                        var postName = xml.getElementsByTagName("postName");
-                        for (i = 0; i < content.length; i++) {
-                            processedContent += postName[i].textContent + ": " + content[i].textContent + " (" + messageID[i].textContent + ")<br>";
-                        }//for
-                        document.getElementById("resultBox").innerHTML = processedContent;
-                    }//processXML
-        
-        
-                </script> -->
         <script>
             $(document).ready(function () {
-
                 $("#getAllMessagesButton").click(function () {
                     $.ajax({
                         url: "http://localhost:8080/LoboChat/resources/Messages",
@@ -80,9 +18,7 @@
                         success: listMessages
                     });
                 });//getAllMessages
-
                 $("#sendMessageButton").click(function () {
-
                     var messageContent = $("#inputField").val();
                     $.ajax({
                         url: "http://localhost:8080/LoboChat/resources/Messages",
@@ -95,10 +31,9 @@
                 });// sendMessage
                 
                 $("#loginButton").click(function () {
-
                     var messageContent = $("#inputField").val();
                     $.ajax({
-                        url: "http://localhost:8080/LoboChat/resources/Messages",
+                        url: "http://localhost:8080/LoboChat/resources/Workers/LoggedIn",
                         data: messageContent,
                         type: 'POST',
                         contentType: 'text/plain',
@@ -106,9 +41,7 @@
                         success: document.getElementById("outputField").innerHTML = " "
                     }); // ajax
                 });// sendMessage
-
             }); // $(document).ready
-
             function listMessages(xml, status) {
                 console.log("listing messages");
                 xmlString = (new XMLSerializer()).serializeToString(xml);
@@ -116,13 +49,12 @@
                 var $xml = $(xml);
                 var content = "";
                 $xml.find("message").each(function () {
-                    content += $(this).find("ID").text() + " " + $(this).find("postName").text() + ": "
+                    content += $(this).find("id").text() + " " + $(this).find("postTitle").text() + " " 
+                            + $(this).find("postName").text() + ": "
                             + $(this).find("content").text() + "<br>";
                 });
                 document.getElementById("outputField").innerHTML = content;
-            }
-            ; // listMessages
-
+            }; // listMessages
         </script>
 
 

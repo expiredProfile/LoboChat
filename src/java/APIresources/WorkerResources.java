@@ -31,6 +31,7 @@ public class WorkerResources {
     
     //Change media type to TEXT_PLAIN?
     @POST
+    //@Path("/LoggedIn")
     @Consumes(MediaType.TEXT_PLAIN)
     public boolean workerLogIn(String s){
         boolean state = false;
@@ -49,6 +50,7 @@ public class WorkerResources {
     }
     
     @POST
+    @Path("/LoggedOut")
     @Consumes(MediaType.TEXT_PLAIN)
     public void workerLogOut(String s){
         for(Worker w : system.getLoggedInList()){
@@ -63,16 +65,17 @@ public class WorkerResources {
     //Add method to GET current user from client side to be used 
     //for messages to set the poster name and title
     
-    @Path("/LoggedOut")
     @GET
+    @Path("/LoggedOut")
     @Produces(MediaType.APPLICATION_XML)
     public ArrayList<Worker> getLoggedOutXML(){
         return system.getLoggedOutList();
     }
     
     
-    @Path("/LoggedIn")
+    
     @GET
+    @Path("/LoggedIn")
     @Produces(MediaType.APPLICATION_XML)
     public ArrayList<Worker> getLoggedInXML(){
         return system.getLoggedInList();

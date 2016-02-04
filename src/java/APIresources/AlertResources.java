@@ -7,6 +7,7 @@ package APIresources;
 
 import datafolder.ChatSystem;
 import datafolder.Alert;
+import datafolder.AlertData;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -22,9 +23,11 @@ import javax.ws.rs.core.MediaType;
 @Path("/Alerts")
 public class AlertResources {
     private final ChatSystem system;
+    private AlertData data;
     
     public AlertResources() {
         this.system = ChatSystem.getInstance();
+        this.data = new AlertData();
     }
     
     @POST

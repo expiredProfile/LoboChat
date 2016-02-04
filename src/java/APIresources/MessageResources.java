@@ -28,9 +28,9 @@ public class MessageResources {
     public MessageResources() {
         this.system = ChatSystem.getInstance();
     }
-
+    
     @GET
-    @Produces(MediaType.APPLICATION_XML)
+    @Produces(MediaType.TEXT_PLAIN)
     public ArrayList<Message> getMessageXML() {
         ArrayList<Message> list = new ArrayList<>();
         for (int i = 0; i < system.getMessage().size(); i++) {
@@ -38,7 +38,9 @@ public class MessageResources {
         }
         return list;
     }
-
+    
+    
+    
     //Send username from browser when sending a new message
     @POST
     @Consumes("text/plain")
@@ -49,23 +51,25 @@ public class MessageResources {
         Message message = new Message(id, s, title, name);
         system.addMessage(message);
     }
-
+    
+    //Simple version that does not require worker class interaction
+    /*
     @POST
-    @Path("/add")
     @Consumes("text/plain")
     public void postMessageXml(String s) {
         int id = system.getMessageIncrement();
         String name = "testUser";
-        Message message = new Message(id, s, name);
+        String title = "title";
+        Message message = new Message(id, s, title, name);
         system.addMessage(message);
-        id++;
-        system.setMessageIncrement(id);
     }
-
+    */
+    
     @Path("/{messageid}")
     @GET
     @Produces(MediaType.APPLICATION_XML)
     public Message getMessageIdXML(@PathParam("messageid") int messageid) {
         return system.getMessageByID(messageid);
     }
+
 }
