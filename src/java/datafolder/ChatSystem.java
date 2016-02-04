@@ -15,7 +15,6 @@ import java.util.HashMap;
 public class ChatSystem {
     private static ChatSystem instance = new ChatSystem();
     private Message message;
-    //private Worker workers;
     private Worker currentUser;
     private int messageIdIncrement;
     private int workerIdIncerement;

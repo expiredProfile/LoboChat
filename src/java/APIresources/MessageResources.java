@@ -41,7 +41,7 @@ public class MessageResources {
     
     //Send username from browser when sending a new message
     @POST
-    @Consumes(MediaType.APPLICATION_XML)
+    @Consumes(MediaType.TEXT_PLAIN)
     public void postMessage(String s){
         int id = system.getMessageIncrement();
         String name = system.getCurrentUser().getName();
