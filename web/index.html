@@ -6,61 +6,27 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+        <script src="js/loboscript.js"></script>
     </head>
     <body>
-        <script>
-            $(document).ready(function () {
-                $("#getAllMessagesButton").click(function () {
-                    $.ajax({
-                        url: "http://localhost:8080/LoboChat/resources/Messages",
-                        method: 'GET',
-                        dataType: 'xml', // returned datatype
-                        success: listMessages
-                    });
-                });//getAllMessages
-                $("#sendMessageButton").click(function () {
-                    var messageContent = $("#inputField").val();
-                    $.ajax({
-                        url: "http://localhost:8080/LoboChat/resources/Messages",
-                        data: messageContent,
-                        type: 'POST',
-                        contentType: 'text/plain',
-                        dataType: 'xml',
-                        success: document.getElementById("outputField").innerHTML = " "
-                    }); // ajax
-                });// sendMessage
-                
-                $("#loginButton").click(function () {
-                    var messageContent = $("#inputField").val();
-                    $.ajax({
-                        url: "http://localhost:8080/LoboChat/resources/Workers/LoggedIn",
-                        data: messageContent,
-                        type: 'POST',
-                        contentType: 'text/plain',
-                        dataType: 'xml',
-                        success: document.getElementById("outputField").innerHTML = " "
-                    }); // ajax
-                });// sendMessage
-            }); // $(document).ready
-            function listMessages(xml, status) {
-                console.log("listing messages");
-                xmlString = (new XMLSerializer()).serializeToString(xml);
-                console.log("XML: " + xmlString);
-                var $xml = $(xml);
-                var content = "";
-                $xml.find("message").each(function () {
-                    content += $(this).find("id").text() + " " + $(this).find("postTitle").text() + " " 
-                            + $(this).find("postName").text() + ": "
-                            + $(this).find("content").text() + "<br>";
-                });
-                document.getElementById("outputField").innerHTML = content;
-            }; // listMessages
-        </script>
-
-
-        <input type="text" id="inputField">
-        <button id="sendMessageButton" >Send message</button>
-        <button id="getAllMessagesButton" >All messages</button>
-        <button id="loginButton" >Login</button>
-        <div id="outputField"></div>
+        <div id="login">
+            <button id="loginButton" >Login</button>
+        </div>
+        
+        <div id="messageFields">
+            <input type="text" id="inputField">
+            <button id="sendMessageButton" >Send message</button>
+            <button id="getAllMessagesButton" >All messages</button>
+            <div id="outputField"></div>
+        </div>
+        
+        <div id="alertFields">
+            <select id="alert">
+                <option value="0">Need assistance</option>
+                <option value="1">Disturbance</option>
+                <option value="2">Fire alert</option>
+            </select>
+            <button id="sendAlertButton" >Alert</button>
+            <div id="alertResponse"></div>
+        </div>
     </body>

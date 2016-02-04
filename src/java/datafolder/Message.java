@@ -5,9 +5,7 @@
  */
 package datafolder;
 
-import java.util.Calendar;
-import java.util.Date;
-import javax.xml.bind.DatatypeConverter;
+import APIresources.TimeResources;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -31,15 +29,7 @@ public class Message {
         this.content = c;
         this.postTitle = t;
         this.postName = n;
-        this.currentTime = this.currentTime();
-    }
-
-    private String currentTime() {
-        Date yourDate = new Date();
-        Calendar c = Calendar.getInstance();
-        c.setTime(yourDate);
-        String xmlDateTime = DatatypeConverter.printDateTime(c);
-        return xmlDateTime;
+        this.currentTime = TimeResources.getInstance().getTimestamp();
     }
 
     @XmlElement

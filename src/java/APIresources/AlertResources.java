@@ -7,7 +7,6 @@ package APIresources;
 
 import datafolder.ChatSystem;
 import datafolder.Alert;
-import datafolder.AlertData;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;

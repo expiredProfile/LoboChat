@@ -3,8 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package datafolder;
+package APIresources;
 
+import datafolder.Alert;
 import java.util.HashMap;
 import javax.xml.bind.annotation.XmlElement;
 
