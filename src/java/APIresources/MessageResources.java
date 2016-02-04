@@ -39,8 +39,19 @@ public class MessageResources {
     }
     
     @POST
-    @Consumes(MediaType.APPLICATION_XML)
+    @Consumes("text/plain")
     public void postMessage(String s){
+        int id = system.getMessageIncrement();
+        String name = "testUser";
+        Message message = new Message(id, s, name);
+        system.addMessage(message);
+        id++;
+        system.setMessageIncrement(id);
+    }
+    @POST
+    @Path("/add")
+    @Consumes("text/plain")
+    public void postMessageXml(String s){
         int id = system.getMessageIncrement();
         String name = "testUser";
         Message message = new Message(id, s, name);

@@ -1,16 +1,121 @@
 <!DOCTYPE html>
-<!--
-To change this license header, choose License Headers in Project Properties.
-To change this template file, choose Tools | Templates
-and open the template in the editor.
--->
+
 <html>
     <head>
-        <title>TODO supply a title</title>
+        <title>LoboChat</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     </head>
     <body>
-        <div>TODO write content</div>
+
+        <!--        <script>
+                    $(document).ready(function () {
+                    }); // $(document).ready
+                
+                    function messageResource(task) {
+                
+                        var xmlhttp = new XMLHttpRequest();
+                        var value = $("#inputField").val();
+        
+                        switch (task) {
+                            case "sendMessage":
+                                console.log("Sending message");
+                                xmlhttp.open("POST", "http://localhost:8080/LoboChat/resources/Messages", true);
+                                xmlhttp.send(value);
+                                xmlhttp.onreadystatechange = function () {
+                                    if (xmlhttp.readyState === 4 && xmlhttp.status === 204) {
+                                        //document.getElementById("resultBox").innerHTML = "...";
+                                        console.log("Done with sending!");
+                                    }// if
+                                };// xmlhttp.onreadystatechange
+                                break;
+        
+                            case "getAllMessages":
+                                console.log("Getting all messages");
+                                xmlhttp.open("GET", "http://localhost:8080/LoboChat/resources/Messages", true);
+                                xmlhttp.send();
+                                xmlhttp.onreadystatechange = function () {
+                                    if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
+                                        processXML(xmlhttp.responseXML);
+                                    }
+                                    ;//if
+                                };// xmlhttp.onreadystatechange
+                                break;
+        
+                            case "getMessageById":
+        
+                                console.log("Getting message with id ");
+                                xmlhttp.open("GET", "http://localhost:8080/LoboChat/resources/Messages/" + value, true);
+                                xmlhttp.send();
+                                xmlhttp.onreadystatechange = function () {
+                                    if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
+                                        processXML(xmlhttp.responseXML);
+                                    }// if
+                                };// xmlhttp.onreadystatechange
+                        }//switch
+                    }// messageAPI
+        
+                    function processXML(xml) {
+                        var processedContent = "";
+                        var content = xml.getElementsByTagName("content");
+                        var messageID = xml.getElementsByTagName("ID");
+                        var postName = xml.getElementsByTagName("postName");
+                        for (i = 0; i < content.length; i++) {
+                            processedContent += postName[i].textContent + ": " + content[i].textContent + " (" + messageID[i].textContent + ")<br>";
+                        }//for
+                        document.getElementById("resultBox").innerHTML = processedContent;
+                    }//processXML
+        
+        
+                </script> -->
+        <script>
+            $(document).ready(function () {
+
+                $("#getAllMessagesButton").click(function () {
+                    $.ajax({
+                        url: "http://localhost:8080/LoboChat/resources/Messages",
+                        method: 'GET',
+                        dataType: 'xml', // returned datatype
+                        success: listMessages
+                    });
+                });//getAllMessages
+
+                $("#sendMessageButton").click(function () {
+
+                    var messageContent = $("#inputField").val();
+                    $.ajax({
+                        url: "http://localhost:8080/LoboChat/resources/Messages",
+                        data: messageContent,
+                        type: 'POST',
+                        contentType: 'text/plain',
+                        dataType: 'xml',
+                        success: listMessages
+                    }); // ajax
+                });// sendMessage
+
+            }); // $(document).ready
+
+            function listMessages(xml, status) {
+                console.log("listing messages");
+                xmlString = (new XMLSerializer()).serializeToString(xml);
+                console.log("XML: " + xmlString);
+                var $xml = $(xml);
+                var content = "";
+                $xml.find("message").each(function () {
+                    content += $(this).find("ID").text() + " " + $(this).find("postName").text() + ": "
+                            + $(this).find("content").text() + "<br>";
+                });
+
+                document.getElementById("outputField").innerHTML = content;
+            }
+            ; // listMessages
+
+        </script>
+
+
+        <input type="text" id="inputField">
+        <button id="sendMessageButton" onclick="messageResource(this.value)">Send message</button>
+        <button id="getAllMessagesButton" onclick="messageResource(this.value)">All messages</button>
+        <div id="outputField"></div>
     </body>
-</html>
