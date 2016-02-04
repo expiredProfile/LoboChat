@@ -29,6 +29,7 @@ public class WorkerResources {
         this.pool = new WorkerPool();
     }
     
+    //Change media type to TEXT_PLAIN?
     @POST
     @Consumes(MediaType.APPLICATION_XML)
     public boolean workerLogIn(String s){
@@ -37,6 +38,7 @@ public class WorkerResources {
             if(w.getName().equals(s)){
                 system.getLoggedOutList().remove(w);
                 system.getLoggedInList().add(w);
+                system.setCurrentUser(w);
                 state = true;
                 break;
             } else {
@@ -45,6 +47,9 @@ public class WorkerResources {
         }
         return state;
     }
+    
+    //Add method to GET current user from client side to be used 
+    //for messages to set the poster name and title
     
     @Path("/LoggedOut")
     @GET

@@ -20,6 +20,7 @@ public class Message {
 
     private int id;
     private String content;
+    private String postTitle;
     private String postName;
     private String currentTime;
 
@@ -27,9 +28,10 @@ public class Message {
 
     }
 
-    public Message(int id, String c, String n) {
+    public Message(int id, String c,String t, String n) {
         this.id = id;
         this.content = c;
+        this.postTitle = t;
         this.postName = n;
         this.currentTime = this.currentTime();
     }
@@ -68,5 +70,10 @@ public class Message {
 
     public void setPostName(String postName) {
         this.postName = postName;
+    }
+    
+    @XmlElement
+    public String getPostTitle(){
+        return postTitle;
     }
 }

@@ -38,15 +38,16 @@ public class MessageResources {
        return list;
     }
     
+    
+    //Send username from browser when sending a new message
     @POST
     @Consumes(MediaType.APPLICATION_XML)
     public void postMessage(String s){
         int id = system.getMessageIncrement();
-        String name = "testUser";
-        Message message = new Message(id, s, name);
+        String name = system.getCurrentUser().getName();
+        String title = system.getCurrentUser().getTitle();
+        Message message = new Message(id, s,title, name);
         system.addMessage(message);
-        id++;
-        system.setMessageIncrement(id);
     }
     
     @Path("/{messageid}")
