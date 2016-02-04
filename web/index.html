@@ -90,7 +90,20 @@
                         type: 'POST',
                         contentType: 'text/plain',
                         dataType: 'xml',
-                        success: listMessages
+                        success: document.getElementById("outputField").innerHTML = " "
+                    }); // ajax
+                });// sendMessage
+                
+                $("#loginButton").click(function () {
+
+                    var messageContent = $("#inputField").val();
+                    $.ajax({
+                        url: "http://localhost:8080/LoboChat/resources/Messages",
+                        data: messageContent,
+                        type: 'POST',
+                        contentType: 'text/plain',
+                        dataType: 'xml',
+                        success: document.getElementById("outputField").innerHTML = " "
                     }); // ajax
                 });// sendMessage
 
@@ -106,7 +119,6 @@
                     content += $(this).find("ID").text() + " " + $(this).find("postName").text() + ": "
                             + $(this).find("content").text() + "<br>";
                 });
-
                 document.getElementById("outputField").innerHTML = content;
             }
             ; // listMessages
@@ -115,7 +127,8 @@
 
 
         <input type="text" id="inputField">
-        <button id="sendMessageButton" onclick="messageResource(this.value)">Send message</button>
-        <button id="getAllMessagesButton" onclick="messageResource(this.value)">All messages</button>
+        <button id="sendMessageButton" >Send message</button>
+        <button id="getAllMessagesButton" >All messages</button>
+        <button id="loginButton" >Login</button>
         <div id="outputField"></div>
     </body>

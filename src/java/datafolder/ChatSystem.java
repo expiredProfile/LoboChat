@@ -15,12 +15,11 @@ import java.util.HashMap;
 public class ChatSystem {
     private static ChatSystem instance = new ChatSystem();
     private Message message;
-    private Worker workers;
+    private Worker currentUser;
     private int messageIdIncrement;
     private int workerIdIncerement;
     private int alertIdIncerement;
     private HashMap<Integer, Message> messageList;
-    private HashMap<Integer, Workers> workerList;
     private HashMap<Integer, Alert> alertList;
     private ArrayList<Worker> loggedIn;
     private ArrayList<Worker> loggedOut;
@@ -52,22 +51,12 @@ public class ChatSystem {
     public Message getMessageByID(int id){
         return messageList.get(id);
     }
-    
-    public void setMessageIncrement(int id){
-        this.messageIdIncrement = id;
-    }
-    
-    public int getMessageIncrement(){
-        return this.messageIdIncrement;
-    }
-    
-    //Worker methods
-    /*
-    public void addWorker(Workers w){
-        workerList.put(w.getId(), w);
-    }
-    */
 
+    public int getMessageIncrement(){
+        return this.messageIdIncrement++;
+    }
+
+    //Worker methods
     public ArrayList<Worker> getLoggedOutList(){
         return this.loggedOut;
     }
@@ -83,25 +72,20 @@ public class ChatSystem {
     public void workerLoggedOut(Worker w){
         loggedOut.add(w);
     }
-    
-    /*
-    public HashMap<Integer, Workers> getWorkers(){
-        return workerList;
-    }
-    
-    public Workers getWorkerById(int id){
-        return workerList.get(id);
-    }
-    */
 
     public int getWorkerIdIncerement() {
-        return workerIdIncerement;
-    }
-
-    public void setWorkerIdIncerement(int workerIdIncerement) {
-        this.workerIdIncerement = workerIdIncerement;
+        return workerIdIncerement++;
     }
     
+
+    public void setCurrentUser(Worker w){
+        this.currentUser = w;
+    }
+    
+    public Worker getCurrentUser(){
+        return this.currentUser;
+    }
+        
     //Alert methods
     public void addAlert(Alert a){
         alertList.put(a.getID() , a);

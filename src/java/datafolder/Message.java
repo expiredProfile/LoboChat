@@ -20,14 +20,16 @@ public class Message {
 
     private int id;
     private String content;
+    private String postTitle;
     private String postName;
     private String currentTime;
 
     public Message() {}
 
-    public Message(int id, String c, String n) {
+    public Message(int id, String c,String t, String n) {
         this.id = id;
         this.content = c;
+        this.postTitle = t;
         this.postName = n;
         this.currentTime = this.currentTime();
     }
@@ -64,6 +66,10 @@ public class Message {
     }
     
     @XmlElement
+    public String getPostTitle(){
+        return postTitle;
+    }
+        
     public String getCurrentTime(){
         return this.currentTime;
     }
