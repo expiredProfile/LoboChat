@@ -50,14 +50,8 @@ public class WorkerResources {
     @GET
     @Produces(MediaType.APPLICATION_XML)
     public ArrayList<Workers> getLoggedOutXML(){
-        ArrayList<Workers> list = new ArrayList<>();
-        for(Workers w : system.getLoggedOutList()){
-            System.out.println(w.toString());
-            list.add(w);
-        }
-        return list;
+        return system.getLoggedOutList();
     }
-    
     
     /*
     @GET
