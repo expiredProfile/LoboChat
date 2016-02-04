@@ -18,8 +18,10 @@ public class ChatSystem {
     private Worker workers;
     private int messageIdIncrement;
     private int workerIdIncerement;
+    private int alertIdIncerement;
     private HashMap<Integer, Message> messageList;
-    //private HashMap<Integer, Workers> workerList;
+    private HashMap<Integer, Workers> workerList;
+    private HashMap<Integer, Alert> alertList;
     private ArrayList<Worker> loggedIn;
     private ArrayList<Worker> loggedOut;
     
@@ -28,14 +30,17 @@ public class ChatSystem {
         this.messageList = new HashMap<>();
         this.loggedIn = new ArrayList<>();
         this.loggedOut = new ArrayList<>();
+        this.alertList = new HashMap<>();
         this.messageIdIncrement = 0;
         this.workerIdIncerement = 0;
+        this.alertIdIncerement = 0;
     }
     
     public static ChatSystem getInstance() {
         return instance;
     }
     
+    //Message methods
     public void addMessage(Message m){
         messageList.put(m.getID() , m);
     }
@@ -56,6 +61,7 @@ public class ChatSystem {
         return this.messageIdIncrement;
     }
     
+    //Worker methods
     /*
     public void addWorker(Workers w){
         workerList.put(w.getId(), w);
@@ -96,5 +102,20 @@ public class ChatSystem {
         this.workerIdIncerement = workerIdIncerement;
     }
     
+    //Alert methods
+    public void addAlert(Alert a){
+        alertList.put(a.getID() , a);
+    }
     
+    public Alert getAlertByID(int id){
+        return alertList.get(id);
+    }
+    
+    public void setAlertIncrement(int id){
+        this.alertIdIncerement = id;
+    }
+    
+    public int getAlertIncrement(){
+        return this.alertIdIncerement;
+    }
 }

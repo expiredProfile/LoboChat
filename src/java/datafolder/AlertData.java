@@ -13,17 +13,21 @@ import javax.xml.bind.annotation.XmlElement;
  * @author Kasper
  */
 public class AlertData {
-    private HashMap<Integer, String> alertCategories = new HashMap<Integer, String>();
+    //Order data with urgency?
+    private HashMap<Integer, String> alertCategories;
     
     public AlertData() {
-        alertCategories.put(0, "Disturbance");
-        alertCategories.put(1, "Need assistance");
+        alertCategories = new HashMap<>();
+        alertCategories.put(0, "Need assistance");
+        alertCategories.put(1, "Disturbance");
         alertCategories.put(2, "Fire alert");
     }
     
+    //Get alert info (value) with id (key)
     @XmlElement
-    public String getAlert(int id) {
-        String alert = alertCategories.get(id);
-        return alert;
+    public String getAlertInfo(Alert a) {
+        int infoId = a.getInfoID();
+        String info = alertCategories.get(infoId);
+        return info;
     }
 }
