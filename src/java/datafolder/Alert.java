@@ -13,27 +13,26 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
- * @author kimmo
+ * @author Kasper
  */
 @XmlRootElement
-public class Message {
-
+public class Alert {
     private int id;
-    private String content;
-    private String postTitle;
+    private int infoId;
     private String postName;
     private String currentTime;
-
-    public Message() {}
-
-    public Message(int id, String c,String t, String n) {
+    //Urgency level?
+    
+    public Alert(){}
+    
+    public Alert(int id, int infoId, String n){
         this.id = id;
-        this.content = c;
-        this.postTitle = t;
+        this.infoId = infoId;
         this.postName = n;
         this.currentTime = this.currentTime();
     }
-
+    
+    //Timestamp function
     private String currentTime() {
         Date yourDate = new Date();
         Calendar c = Calendar.getInstance();
@@ -46,14 +45,10 @@ public class Message {
     public int getID() {
         return id;
     }
-
+    
     @XmlElement
-    public String getContent() {
-        return content;
-    }
-
-    public void setContent(String content) {
-        this.content = content;
+    public int getInfoID() {
+        return infoId;
     }
 
     @XmlElement
@@ -66,10 +61,6 @@ public class Message {
     }
     
     @XmlElement
-    public String getPostTitle(){
-        return postTitle;
-    }
-        
     public String getCurrentTime(){
         return this.currentTime;
     }
