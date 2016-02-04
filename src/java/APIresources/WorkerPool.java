@@ -10,17 +10,17 @@ import datafolder.Doctor;
 import datafolder.Guard;
 import datafolder.Nurse;
 import datafolder.Psychotherapist;
-import datafolder.Workers;
+import datafolder.Worker;
 
 /**
  *
  * @author kimmo
  */
 public class WorkerPool {
-    private Workers kim;
-    private Workers henkka;
-    private Workers kasper;
-    private Workers tommi;
+    private Worker kim;
+    private Worker henkka;
+    private Worker kasper;
+    private Worker tommi;
     private ChatSystem system = ChatSystem.getInstance();
     
     public WorkerPool(){
@@ -32,9 +32,9 @@ public class WorkerPool {
     }
     
     private void addToWorkers(){
-        system.addWorker(kim);
-        system.addWorker(henkka);
-        system.addWorker(kasper);
-        system.addWorker(tommi);
+        system.workerLoggedOut(kim);
+        system.workerLoggedOut(henkka);
+        system.workerLoggedOut(kasper);
+        system.workerLoggedOut(tommi);
     }
 }

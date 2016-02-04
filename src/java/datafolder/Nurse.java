@@ -6,12 +6,14 @@
 package datafolder;
 
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
  * @author kimmo
  */
-public class Nurse implements Workers{
+@XmlRootElement
+public class Nurse extends Worker{
     private int id;
     private String name;
     private String title;

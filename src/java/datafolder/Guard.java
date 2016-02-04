@@ -6,12 +6,14 @@
 package datafolder;
 
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
  * @author kimmo
  */
-public class Guard implements Workers{
+@XmlRootElement
+public class Guard extends Worker{
     private int id;
     private String name;
     private String title;
