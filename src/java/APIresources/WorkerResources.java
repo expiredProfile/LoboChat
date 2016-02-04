@@ -32,7 +32,7 @@ public class WorkerResources {
     //Change media type to TEXT_PLAIN?
     @POST
     //@Path("/LoggedIn")
-    @Consumes(MediaType.TEXT_PLAIN)
+    @Consumes(MediaType.APPLICATION_XML)
     public boolean workerLogIn(String s){
         boolean state = false;
         for(Worker w : system.getLoggedOutList()){
@@ -51,7 +51,7 @@ public class WorkerResources {
     
     @POST
     @Path("/LoggedOut")
-    @Consumes(MediaType.TEXT_PLAIN)
+    @Consumes(MediaType.APPLICATION_XML)
     public void workerLogOut(String s){
         for(Worker w : system.getLoggedInList()){
             if(w.getName().equals(s)){

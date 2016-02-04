@@ -9,52 +9,105 @@
     </head>
     <body>
         <script>
+            var baseUrl = "http://localhost:8080/LoboChat/resources";
             $(document).ready(function () {
-                $("#getAllMessagesButton").click(function () {
-                    $.ajax({
-                        url: "http://localhost:8080/LoboChat/resources/Messages",
-                        method: 'GET',
-                        dataType: 'xml', // returned datatype
-                        success: listMessages
-                    });
-                });//getAllMessages
-                $("#sendMessageButton").click(function () {
-                    var messageContent = $("#inputField").val();
-                    $.ajax({
-                        url: "http://localhost:8080/LoboChat/resources/Messages",
-                        data: messageContent,
-                        type: 'POST',
-                        contentType: 'text/plain',
-                        dataType: 'xml',
-                        success: document.getElementById("outputField").innerHTML = " "
-                    }); // ajax
+                /*
+                 $("#getAllMessagesButton").click(function () {
+                 $.ajax({
+                 url: "http://localhost:8080/LoboChat/resources/Messages",
+                 method: 'GET',
+                 dataType: 'xml', // returned datatype
+                 success: listMessages
+                 });
+                 });//getAllMessages
+                 $("#sendMessageButton").click(function () {
+                 var messageContent = $("#inputField").val();
+                 $.ajax({
+                 url: "http://localhost:8080/LoboChat/resources/Messages",
+                 data: messageContent,
+                 type: 'POST',
+                 contentType: 'text/plain',
+                 dataType: 'xml',
+                 success: document.getElementById("outputField").innerHTML = " "
+                 }); // ajax
+                 });// sendMessage
+                 */
+                $("#loginButton").click(function () {
+                    logIn();
                 });// sendMessage
                 
-                $("#loginButton").click(function () {
-                    var messageContent = $("#inputField").val();
+                $("#loggedInUsers").click(function () {
                     $.ajax({
-                        url: "http://localhost:8080/LoboChat/resources/Workers/LoggedIn",
-                        data: messageContent,
-                        type: 'POST',
-                        contentType: 'text/plain',
+                        url: baseUrl + '/Workers/LoggedIn',
+                        type: 'GET',
                         dataType: 'xml',
-                        success: document.getElementById("outputField").innerHTML = " "
-                    }); // ajax
-                });// sendMessage
+                        success: loggedInOUt
+                    });
+                });
+                
+                $("#loggedOutUsers").click(function () {
+                    $.ajax({
+                        url: baseUrl + '/Workers/LoggedOut',
+                        type: 'GET',
+                        dataType: 'xml',
+                        success: loggedInOut
+                    });
+                });
             }); // $(document).ready
-            function listMessages(xml, status) {
+
+            function logIn() {
+                console.log('In addWorkerXML....');
+
+                var workerXmlDoc = $.parseXML('<worker><id></id><name></name><title></title></worker>');
+                var $workerXML = $(workerXmlDoc);
+                var workerName = $('#inputField').val();
+                $workerXML.find('name').append(workerName);
+                var workerXMLstring = '<worker><id></id><name>' + workerName + '</name><title></title></worker>';
+
+                xmlString = (new XMLSerializer()).serializeToString(workerXmlDoc);
+                console.log('workerXmlDoc serialized: \n ' + xmlString);
+
+                $.ajax({
+                    url: baseUrl + '/Workers',
+                    data: workerXmlDoc,
+                    processData: false,
+                    type: 'POST',
+                    contentType: 'application/xml',
+                    dataType: 'xml',
+                    success: alert('Success'),
+                    error: function (response) {
+                        alert('Error ' + response.statusText);
+                    }
+                });
+            }
+
+            function loggedInOut(xml, status) {            
                 console.log("listing messages");
                 xmlString = (new XMLSerializer()).serializeToString(xml);
                 console.log("XML: " + xmlString);
                 var $xml = $(xml);
                 var content = "";
-                $xml.find("message").each(function () {
-                    content += $(this).find("id").text() + " " + $(this).find("postTitle").text() + " " 
-                            + $(this).find("postName").text() + ": "
-                            + $(this).find("content").text() + "<br>";
+                $xml.find('workers').each(function () {
+                    content += $(this).find("id").text() + " " + $(this).find("name").text() + " "
+                            + $(this).find("title").text() + "<br>";
                 });
                 document.getElementById("outputField").innerHTML = content;
-            }; // listMessages
+            }
+            /*
+             function listMessages(xml, status) {
+             console.log("listing messages");
+             xmlString = (new XMLSerializer()).serializeToString(xml);
+             console.log("XML: " + xmlString);
+             var $xml = $(xml);
+             var content = "";
+             $xml.find("message").each(function () {
+             content += $(this).find("id").text() + " " + $(this).find("postTitle").text() + " "
+             + $(this).find("postName").text() + ": "
+             + $(this).find("content").text() + "<br>";
+             });
+             document.getElementById("outputField").innerHTML = content;
+             }; // listMessages
+             */
         </script>
 
 
@@ -62,5 +115,7 @@
         <button id="sendMessageButton" >Send message</button>
         <button id="getAllMessagesButton" >All messages</button>
         <button id="loginButton" >Login</button>
+        <button id="loggedInUsers">Logged In</button>
+        <button id="loggedOutUsers">Logged Out</button>
         <div id="outputField"></div>
     </body>

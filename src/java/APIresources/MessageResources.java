@@ -30,7 +30,7 @@ public class MessageResources {
     }
     
     @GET
-    @Produces(MediaType.TEXT_PLAIN)
+    @Produces(MediaType.APPLICATION_XML)
     public ArrayList<Message> getMessageXML() {
         ArrayList<Message> list = new ArrayList<>();
         for (int i = 0; i < system.getMessage().size(); i++) {
@@ -39,11 +39,9 @@ public class MessageResources {
         return list;
     }
     
-    
-    
     //Send username from browser when sending a new message
     @POST
-    @Consumes("text/plain")
+    @Consumes(MediaType.APPLICATION_XML)
     public void postMessage(String s) {
         int id = system.getMessageIncrement();
         String name = system.getCurrentUser().getName();
@@ -51,8 +49,8 @@ public class MessageResources {
         Message message = new Message(id, s, title, name);
         system.addMessage(message);
     }
-    
     //Simple version that does not require worker class interaction
+    
     /*
     @POST
     @Consumes("text/plain")

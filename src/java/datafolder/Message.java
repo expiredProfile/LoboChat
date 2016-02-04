@@ -70,6 +70,7 @@ public class Message {
         return postTitle;
     }
         
+    @XmlElement
     public String getCurrentTime(){
         return this.currentTime;
     }
