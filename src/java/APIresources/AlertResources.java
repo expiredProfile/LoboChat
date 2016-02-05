@@ -7,7 +7,6 @@ package APIresources;
 
 import datafolder.ChatSystem;
 import datafolder.Alert;
-import datafolder.AlertData;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -31,11 +30,12 @@ public class AlertResources {
     }
     
     @POST
+    //how this gets alertcategory (string in js)?
     @Consumes(MediaType.APPLICATION_XML)
-    public void postAlert(int infoId){
+    public void postAlert(int alertCat){
         int id = system.getAlertIncrement();
         String name = "testUser";
-        Alert alert = new Alert(id, infoId, name);
+        Alert alert = new Alert(id, alertCat, name);
         system.addAlert(alert);
         id++;
         system.setAlertIncrement(id);
@@ -43,8 +43,11 @@ public class AlertResources {
     
     @Path("/{alertid}")
     @GET
+    //Get alert info and return plain text?
     @Produces(MediaType.APPLICATION_XML)
-    public Alert getAlertIdXML(@PathParam("alertid") int alertid){
-        return system.getAlertByID(alertid);
+    public String getAlertIdXML(@PathParam("alertid") int alertid){
+        Alert alert = system.getAlertByID(alertid);
+        String info = data.getAlertInfo(alert);
+        return info;
     }
 }

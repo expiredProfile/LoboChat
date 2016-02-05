@@ -5,9 +5,7 @@
  */
 package datafolder;
 
-import java.util.Calendar;
-import java.util.Date;
-import javax.xml.bind.DatatypeConverter;
+import APIresources.TimeResources;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -18,27 +16,18 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 public class Alert {
     private int id;
-    private int infoId;
+    private int alertCat;
     private String postName;
     private String currentTime;
     //Urgency level?
     
     public Alert(){}
     
-    public Alert(int id, int infoId, String n){
+    public Alert(int id, int c, String n){
         this.id = id;
-        this.infoId = infoId;
+        this.alertCat = c;
         this.postName = n;
-        this.currentTime = this.currentTime();
-    }
-    
-    //Timestamp function
-    private String currentTime() {
-        Date yourDate = new Date();
-        Calendar c = Calendar.getInstance();
-        c.setTime(yourDate);
-        String xmlDateTime = DatatypeConverter.printDateTime(c);
-        return xmlDateTime;
+        this.currentTime = TimeResources.getInstance().getTimestamp();
     }
 
     @XmlElement
@@ -47,8 +36,8 @@ public class Alert {
     }
     
     @XmlElement
-    public int getInfoID() {
-        return infoId;
+    public int getAlertCat() {
+        return alertCat;
     }
 
     @XmlElement
