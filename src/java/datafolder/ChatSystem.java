@@ -15,7 +15,7 @@ import java.util.HashMap;
 public class ChatSystem {
     private static ChatSystem instance = new ChatSystem();
     private Message message;
-    private Worker currentUser;
+    private Worker worker;
     private Alert alert;
     private int messageIdIncrement;
     private int workerIdIncerement;
@@ -27,6 +27,7 @@ public class ChatSystem {
     
     private ChatSystem(){
         this.message = new Message();
+        this.worker = new Worker();
         this.alert = new Alert();
         this.messageList = new HashMap<>();
         this.loggedIn = new ArrayList<>();
@@ -78,15 +79,7 @@ public class ChatSystem {
     public int getWorkerIdIncerement() {
         return workerIdIncerement++;
     }
-    
-    public void setCurrentUser(Worker w){
-        this.currentUser = w;
-    }
-    
-    public Worker getCurrentUser(){
-        return this.currentUser;
-    }
-        
+ 
     //Alert methods
     public void addAlert(Alert a){
         alertList.put(a.getID() , a);

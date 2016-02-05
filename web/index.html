@@ -35,16 +35,16 @@
                 $("#loginButton").click(function () {
                     logIn();
                 });// sendMessage
-                
+
                 $("#loggedInUsers").click(function () {
                     $.ajax({
                         url: baseUrl + '/Workers/LoggedIn',
                         type: 'GET',
                         dataType: 'xml',
-                        success: loggedInOUt
+                        success: loggedInOut
                     });
                 });
-                
+
                 $("#loggedOutUsers").click(function () {
                     $.ajax({
                         url: baseUrl + '/Workers/LoggedOut',
@@ -56,40 +56,31 @@
             }); // $(document).ready
 
             function logIn() {
-                console.log('In addWorkerXML....');
-
-                var workerXmlDoc = $.parseXML('<worker><id></id><name></name><title></title></worker>');
-                var $workerXML = $(workerXmlDoc);
                 var workerName = $('#inputField').val();
-                $workerXML.find('name').append(workerName);
-                var workerXMLstring = '<worker><id></id><name>' + workerName + '</name><title></title></worker>';
-
-                xmlString = (new XMLSerializer()).serializeToString(workerXmlDoc);
-                console.log('workerXmlDoc serialized: \n ' + xmlString);
-
+                alert(workerName);
                 $.ajax({
                     url: baseUrl + '/Workers',
-                    data: workerXmlDoc,
-                    processData: false,
+                    data: workerName,
                     type: 'POST',
-                    contentType: 'application/xml',
-                    dataType: 'xml',
+                    contentType: 'text/plain',
                     success: alert('Success'),
                     error: function (response) {
                         alert('Error ' + response.statusText);
                     }
                 });
-            }
+            }           
 
-            function loggedInOut(xml, status) {            
+            function loggedInOut(xml, status) {
                 console.log("listing messages");
                 xmlString = (new XMLSerializer()).serializeToString(xml);
                 console.log("XML: " + xmlString);
                 var $xml = $(xml);
                 var content = "";
                 $xml.find('workers').each(function () {
-                    content += $(this).find("id").text() + " " + $(this).find("name").text() + " "
-                            + $(this).find("title").text() + "<br>";
+                    $xml.find('worker').each(function () {
+                        content += $(this).find("id").text() + " " + $(this).find("name").text() + " "
+                                + $(this).find("title").text() + "<br>";
+                    });
                 });
                 document.getElementById("outputField").innerHTML = content;
             }
@@ -115,6 +106,7 @@
         <button id="sendMessageButton" >Send message</button>
         <button id="getAllMessagesButton" >All messages</button>
         <button id="loginButton" >Login</button>
+        <button id="logoutButton">Logout</button>
         <button id="loggedInUsers">Logged In</button>
         <button id="loggedOutUsers">Logged Out</button>
         <div id="outputField"></div>

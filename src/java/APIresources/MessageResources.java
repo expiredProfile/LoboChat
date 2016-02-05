@@ -44,10 +44,10 @@ public class MessageResources {
     @Consumes(MediaType.APPLICATION_XML)
     public void postMessage(String s) {
         int id = system.getMessageIncrement();
-        String name = system.getCurrentUser().getName();
-        String title = system.getCurrentUser().getTitle();
-        Message message = new Message(id, s, title, name);
-        system.addMessage(message);
+        //String name = system.getCurrentUser().getName();
+        //String title = system.getCurrentUser().getTitle();
+        //Message message = new Message(id, s, title, name);
+        //system.addMessage(message);
     }
     //Simple version that does not require worker class interaction
     

@@ -21,63 +21,54 @@ import javax.ws.rs.core.MediaType;
  */
 @Path("/Workers")
 public class WorkerResources {
+
     private static ChatSystem system;
     private WorkerPool pool;
-    
-    public WorkerResources(){
+
+    public WorkerResources() {
         this.system = ChatSystem.getInstance();
-        this.pool = new WorkerPool();
+        this.pool = WorkerPool.getInstance();
     }
-    
+
     //Change media type to TEXT_PLAIN?
     @POST
     //@Path("/LoggedIn")
-    @Consumes(MediaType.APPLICATION_XML)
-    public boolean workerLogIn(String s){
-        boolean state = false;
+    @Consumes(MediaType.TEXT_PLAIN)
+    public void workerLogIn(String s) {
+        System.out.println(s);
         for(Worker w : system.getLoggedOutList()){
             if(w.getName().equals(s)){
                 system.getLoggedOutList().remove(w);
                 system.getLoggedInList().add(w);
-                system.setCurrentUser(w);
-                state = true;
-                break;
-            } else {
-                state = false;
             }
         }
-        return state;
     }
-    
+
     @POST
     @Path("/LoggedOut")
     @Consumes(MediaType.APPLICATION_XML)
-    public void workerLogOut(String s){
-        for(Worker w : system.getLoggedInList()){
-            if(w.getName().equals(s)){
+    public void workerLogOut(String s) {
+        for (Worker w : system.getLoggedInList()) {
+            if (w.getName().equals(s)) {
                 system.getLoggedInList().remove(w);
                 system.getLoggedOutList().add(w);
             }
         }
     }
-    
-    
+
     //Add method to GET current user from client side to be used 
     //for messages to set the poster name and title
-    
     @GET
     @Path("/LoggedOut")
     @Produces(MediaType.APPLICATION_XML)
-    public ArrayList<Worker> getLoggedOutXML(){
+    public ArrayList<Worker> getLoggedOutXML() {
         return system.getLoggedOutList();
     }
-    
-    
-    
+
     @GET
     @Path("/LoggedIn")
     @Produces(MediaType.APPLICATION_XML)
-    public ArrayList<Worker> getLoggedInXML(){
+    public ArrayList<Worker> getLoggedInXML() {
         return system.getLoggedInList();
     }
 
@@ -88,5 +79,5 @@ public class WorkerResources {
     public Workers getWorkersIdXML(@PathParam("workerid") int workerid){
         return system.getWorkerById(workerid);
     }
-    */
+     */
 }

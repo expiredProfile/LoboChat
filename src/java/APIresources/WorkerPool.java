@@ -6,10 +6,6 @@
 package APIresources;
 
 import datafolder.ChatSystem;
-import datafolder.Doctor;
-import datafolder.Guard;
-import datafolder.Nurse;
-import datafolder.Psychotherapist;
 import datafolder.Worker;
 
 /**
@@ -17,18 +13,23 @@ import datafolder.Worker;
  * @author kimmo
  */
 public class WorkerPool {
+    private static WorkerPool instance = new WorkerPool();
     private Worker kim;
     private Worker henkka;
     private Worker kasper;
     private Worker tommi;
     private ChatSystem system = ChatSystem.getInstance();
     
-    public WorkerPool(){
-        this.kim = new Guard(1, "Kim");
-        this.henkka = new Doctor(2, "Henkka");
-        this.kasper = new Psychotherapist(3, "Kasper");
-        this.tommi = new Nurse(4, "Tommi");
+    private WorkerPool(){
+        this.kim = new Worker("Kim", "Guard");
+        this.henkka = new Worker("Henkka", "Doctor");
+        this.kasper = new Worker("Kasper", "Psychotherapist");
+        this.tommi = new Worker("Tommi", "Nurse");
         this.addToWorkers();
+    }
+    
+    public static WorkerPool getInstance(){
+        return instance;
     }
     
     private void addToWorkers(){

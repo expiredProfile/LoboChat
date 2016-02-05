@@ -7,19 +7,41 @@ package datafolder;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlSeeAlso;
 
 /**
  *
  * @author kimmo
  */
 @XmlRootElement
-@XmlSeeAlso({Guard.class,Nurse.class,Doctor.class,Psychotherapist.class})
-public abstract class Worker {
+public class Worker {
+
+    private int id;
+    private String name;
+    private String title;
+    private IDIncrement increment = IDIncrement.getInstance();
+
+    public Worker() {
+
+    }
+
+    public Worker(String name, String title) {
+        this.id = increment.incrementID();
+        this.name = name;
+        this.title = title;
+    }
+
     @XmlElement
-    public abstract String getName();
+    public int getId() {
+        return id;
+    }
+
     @XmlElement
-    public abstract int getId();
+    public String getName() {
+        return name;
+    }
+
     @XmlElement
-    public abstract String getTitle();
+    public String getTitle() {
+        return title;
+    }
 }
