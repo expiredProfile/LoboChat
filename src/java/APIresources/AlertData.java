@@ -3,8 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package datafolder;
+package APIresources;
 
+import datafolder.Alert;
 import java.util.HashMap;
 import javax.xml.bind.annotation.XmlElement;
 
@@ -23,11 +24,11 @@ public class AlertData {
         alertCategories.put(2, "Fire alert");
     }
     
-    //Get alert info (value) with id (key)
+    //Get alert info (value) with alert category id (key)
     @XmlElement
     public String getAlertInfo(Alert a) {
-        int infoId = a.getInfoID();
-        String info = alertCategories.get(infoId);
+        int alertCat = a.getAlertCat();
+        String info = alertCategories.get(alertCat);
         return info;
     }
 }
