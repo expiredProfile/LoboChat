@@ -27,8 +27,8 @@ public class AlertData {
     //Get alert info (value) with id (key)
     @XmlElement
     public String getAlertInfo(Alert a) {
-        int infoId = a.getInfoID();
-        String info = alertCategories.get(infoId);
+        int alertCat = a.getAlertCat();
+        String info = alertCategories.get(alertCat);
         return info;
     }
 }

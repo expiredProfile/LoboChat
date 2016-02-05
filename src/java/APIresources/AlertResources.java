@@ -31,10 +31,11 @@ public class AlertResources {
     
     @POST
     @Consumes(MediaType.APPLICATION_XML)
-    public void postAlert(int infoId){
+    //How this gets alertCategory (String in js)?
+    public void postAlert(int alertCat){
         int id = system.getAlertIncrement();
         String name = "testUser";
-        Alert alert = new Alert(id, infoId, name);
+        Alert alert = new Alert(id, alertCat, name);
         system.addAlert(alert);
         id++;
         system.setAlertIncrement(id);
