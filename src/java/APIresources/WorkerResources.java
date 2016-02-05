@@ -30,12 +30,10 @@ public class WorkerResources {
         this.pool = WorkerPool.getInstance();
     }
 
-    //Change media type to TEXT_PLAIN?
     @POST
     //@Path("/LoggedIn")
     @Consumes(MediaType.TEXT_PLAIN)
     public void workerLogIn(String s) {
-        System.out.println(s);
         for(Worker w : system.getLoggedOutList()){
             if(w.getName().equals(s)){
                 system.getLoggedOutList().remove(w);

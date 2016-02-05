@@ -2,112 +2,14 @@
 
 <html>
     <head>
-        <title>LoboChat</title>
+        <title>Lobo Chat</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+        <script src="LoboScript.js"></script>
     </head>
-    <body>
-        <script>
-            var baseUrl = "http://localhost:8080/LoboChat/resources";
-            $(document).ready(function () {
-                /*
-                 $("#getAllMessagesButton").click(function () {
-                 $.ajax({
-                 url: "http://localhost:8080/LoboChat/resources/Messages",
-                 method: 'GET',
-                 dataType: 'xml', // returned datatype
-                 success: listMessages
-                 });
-                 });//getAllMessages
-                 $("#sendMessageButton").click(function () {
-                 var messageContent = $("#inputField").val();
-                 $.ajax({
-                 url: "http://localhost:8080/LoboChat/resources/Messages",
-                 data: messageContent,
-                 type: 'POST',
-                 contentType: 'text/plain',
-                 dataType: 'xml',
-                 success: document.getElementById("outputField").innerHTML = " "
-                 }); // ajax
-                 });// sendMessage
-                 */
-                $("#loginButton").click(function () {
-                    logIn();
-                });// sendMessage
-
-                $("#loggedInUsers").click(function () {
-                    $.ajax({
-                        url: baseUrl + '/Workers/LoggedIn',
-                        type: 'GET',
-                        dataType: 'xml',
-                        success: loggedInOut
-                    });
-                });
-
-                $("#loggedOutUsers").click(function () {
-                    $.ajax({
-                        url: baseUrl + '/Workers/LoggedOut',
-                        type: 'GET',
-                        dataType: 'xml',
-                        success: loggedInOut
-                    });
-                });
-            }); // $(document).ready
-
-            function logIn() {
-                var workerName = $('#inputField').val();
-                alert(workerName);
-                $.ajax({
-                    url: baseUrl + '/Workers',
-                    data: workerName,
-                    type: 'POST',
-                    contentType: 'text/plain',
-                    success: alert('Success'),
-                    error: function (response) {
-                        alert('Error ' + response.statusText);
-                    }
-                });
-            }           
-
-            function loggedInOut(xml, status) {
-                console.log("listing messages");
-                xmlString = (new XMLSerializer()).serializeToString(xml);
-                console.log("XML: " + xmlString);
-                var $xml = $(xml);
-                var content = "";
-                $xml.find('workers').each(function () {
-                    $xml.find('worker').each(function () {
-                        content += $(this).find("id").text() + " " + $(this).find("name").text() + " "
-                                + $(this).find("title").text() + "<br>";
-                    });
-                });
-                document.getElementById("outputField").innerHTML = content;
-            }
-            /*
-             function listMessages(xml, status) {
-             console.log("listing messages");
-             xmlString = (new XMLSerializer()).serializeToString(xml);
-             console.log("XML: " + xmlString);
-             var $xml = $(xml);
-             var content = "";
-             $xml.find("message").each(function () {
-             content += $(this).find("id").text() + " " + $(this).find("postTitle").text() + " "
-             + $(this).find("postName").text() + ": "
-             + $(this).find("content").text() + "<br>";
-             });
-             document.getElementById("outputField").innerHTML = content;
-             }; // listMessages
-             */
-        </script>
-
-
+    <body>        
         <input type="text" id="inputField">
-        <button id="sendMessageButton" >Send message</button>
-        <button id="getAllMessagesButton" >All messages</button>
         <button id="loginButton" >Login</button>
-        <button id="logoutButton">Logout</button>
-        <button id="loggedInUsers">Logged In</button>
-        <button id="loggedOutUsers">Logged Out</button>
-        <div id="outputField"></div>
     </body>
+</html>

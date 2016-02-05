@@ -22,7 +22,6 @@ public class IDIncrement {
     }
     
     public int incrementID(){
-        System.out.println("before: " + id);
         return this.id++;
     }
 }
