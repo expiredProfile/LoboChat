@@ -24,7 +24,7 @@ public class AlertData {
         alertCategories.put(2, "Fire alert");
     }
     
-    //Get alert info (value) with id (key)
+    //Get alert info (value) with alert category id (key)
     @XmlElement
     public String getAlertInfo(Alert a) {
         int alertCat = a.getAlertCat();

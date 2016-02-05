@@ -30,8 +30,8 @@ public class AlertResources {
     }
     
     @POST
+    //how this gets alertcategory (string in js)?
     @Consumes(MediaType.APPLICATION_XML)
-    //How this gets alertCategory (String in js)?
     public void postAlert(int alertCat){
         int id = system.getAlertIncrement();
         String name = "testUser";
@@ -43,8 +43,11 @@ public class AlertResources {
     
     @Path("/{alertid}")
     @GET
+    //Get alert info and return plain text?
     @Produces(MediaType.APPLICATION_XML)
-    public Alert getAlertIdXML(@PathParam("alertid") int alertid){
-        return system.getAlertByID(alertid);
+    public String getAlertIdXML(@PathParam("alertid") int alertid){
+        Alert alert = system.getAlertByID(alertid);
+        String info = data.getAlertInfo(alert);
+        return info;
     }
 }

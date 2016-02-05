@@ -4,11 +4,12 @@
  * and open the template in the editor.
  */
 
+var baseUrl = "http://localhost:8080/LoboChat/resources";
 
 $(document).ready(function () {
     $("#getAllMessagesButton").click(function () {
         $.ajax({
-            url: "http://localhost:8080/LoboChat/resources/Messages",
+            url: baseUrl + "/Messages",
             method: 'GET',
             dataType: 'xml', // returned datatype
             success: listMessages
@@ -18,7 +19,7 @@ $(document).ready(function () {
     $("#sendMessageButton").click(function () {
         var messageContent = $("#inputField").val();
         $.ajax({
-            url: "http://localhost:8080/LoboChat/resources/Messages",
+            url: baseUrl + "/Messages",
             data: messageContent,
             type: 'POST',
             contentType: 'text/plain',
@@ -30,7 +31,7 @@ $(document).ready(function () {
     $("#loginButton").click(function () {
         var messageContent = $("#inputField").val();
         $.ajax({
-            url: "http://localhost:8080/LoboChat/resources/Workers/LoggedIn",
+            url: baseUrl + "/Workers/LoggedIn",
             data: messageContent,
             type: 'POST',
             contentType: 'text/plain',
@@ -56,7 +57,7 @@ $(document).ready(function () {
     $("#sendAlertButton").click(function () {
         var alertCategory = $("#alert").val();
         $.ajax({
-            url: "http://localhost:8080/LoboChat/resources/Alerts",
+            url: baseUrl + "/Alerts",
             data: alertCategory,
             type: 'POST',
             contentType: 'text/plain',
