@@ -17,8 +17,9 @@ public class ChatSystem {
     private Message message;
     private Worker worker;
     private Alert alert;
+    private Conversation conversation;
     private int alertIdIncerement;
-    private HashMap<Integer, Conversation> conversations;
+    private HashMap<String, Conversation> conversations;
     private HashMap<Integer, Alert> alertList;
     private ArrayList<Worker> loggedIn;
     private ArrayList<Worker> loggedOut;
@@ -27,6 +28,7 @@ public class ChatSystem {
         this.message = new Message();
         this.worker = new Worker();
         this.alert = new Alert();
+        this.conversation = new Conversation();
         this.conversations = new HashMap<>();
         this.loggedIn = new ArrayList<>();
         this.loggedOut = new ArrayList<>();
@@ -40,15 +42,16 @@ public class ChatSystem {
     
     //Conversation methods
     public void addConversation(Conversation c){
-        conversations.put(c.getID() , c);
+        String key = c.getName1() + c.getName2();
+        conversations.put(key , c);
     }
 
-    public ArrayList<Message> getConversationMessages(int id){
-        return conversations.get(id).getMessages();
+    public ArrayList<Message> getConversationMessages(String names){
+        return conversations.get(names).getMessages();
     }
     
-    public void addMessageToConversation(int id, Message m){
-        conversations.get(id).addMessage(m);
+    public void addMessageToConversation(String names, Message m){
+        conversations.get(names).addMessage(m);
     }
 
     //Worker methods

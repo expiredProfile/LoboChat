@@ -33,16 +33,15 @@ public class MessageResources {
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.APPLICATION_XML)
     public ArrayList<Message> getMessageXML(String s) {
-        int id = Integer.parseInt(s);
-        return system.getConversationMessages(id);
+        return system.getConversationMessages(s);
     }
     
     //Send username from browser when sending a new message
     @POST
     @Consumes(MediaType.APPLICATION_XML)
-    public void postMessage(int id, Message m) {
-        int ID = id;
-        system.addMessageToConversation(id, m);
+    public void postMessage(Message m) {
+        String names = m.getPostName() + m.getReceiver();
+        system.addMessageToConversation(names, m);
     }
     
     //Simple version that does not require worker class interaction    

@@ -19,14 +19,16 @@ public class Message {
     private int id;
     private String content;
     private String postName;
+    private String receiver;
     private String currentTime;
 
     public Message() {}
 
-    public Message(String c, String n) {
+    public Message(int id, String content, String name, String receiver) {
         this.id = incrementID();
-        this.content = c;
-        this.postName = n;
+        this.content = content;
+        this.postName = name;
+        this.receiver = receiver;
         this.currentTime = TimeResources.getInstance().getTimestamp();
     }
 
@@ -51,6 +53,11 @@ public class Message {
 
     public void setPostName(String postName) {
         this.postName = postName;
+    }
+    
+    @XmlElement
+    public String getReceiver(){
+        return this.receiver;
     }
         
     @XmlElement
