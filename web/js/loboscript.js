@@ -48,7 +48,7 @@ $(document).ready(function () {
             url: baseUrl + '/resources/Workers/LoggedIn',
             type: 'GET',
             dataType: 'xml',
-            success: loggedInOut
+            success: loggedIn
         });
     }); //loggedInUsers
 
@@ -57,7 +57,7 @@ $(document).ready(function () {
             url: baseUrl + '/resources/Workers/LoggedOut',
             type: 'GET',
             dataType: 'xml',
-            success: loggedInOut
+            success: loggedOut
         });
     }); //loggedOutUsers
 
@@ -105,7 +105,7 @@ function logOut() {
     });
 }
 
-function loggedInOut(xml, status) {
+function loggedOut(xml, status) {
     console.log("listing messages");
     xmlString = (new XMLSerializer()).serializeToString(xml);
     console.log("XML: " + xmlString);
@@ -117,7 +117,29 @@ function loggedInOut(xml, status) {
                     + "<br>";
         });
     });
-    document.getElementById("outputField").innerHTML = content;
+    document.getElementById("outField").innerHTML = content;
+}
+
+function loggedIn(xml, status) {
+    console.log("listing messages");
+    xmlString = (new XMLSerializer()).serializeToString(xml);
+    console.log("XML: " + xmlString);
+    var $xml = $(xml);
+    var content = "";
+    $xml.find('workers').each(function () {
+        $xml.find('worker').each(function () {
+            content += "<div class='onlines'><a href='' onclick='openChat("+$(this).find("id").text()+")'\n\
+             value="+$(this).find("id").text()+"\
+            > "+$(this).find("title").text() + ": " + $(this).find("name").text()
+                    + "</a></div><br>";
+        });
+    });
+    document.getElementById("inField").innerHTML = content;
+}
+
+function openChat(id){
+    var url = baseUrl+"/chaWin";
+    window.open();
 }
 
 function writeCookie(name, value, days) {
