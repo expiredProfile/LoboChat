@@ -4,13 +4,14 @@
  * and open the template in the editor.
  */
 
-var baseUrl = "http://localhost:8080/LoboChat/resources";
+var baseUrl = "http://localhost:8080/LoboChat";
+var workerName = $('#inputField').val();
 
 $(document).ready(function () {
     /*
     $("#getAllMessagesButton").click(function () {
         $.ajax({
-            url: baseUrl + "/Messages",
+            url: baseUrl + "/resources/Messages",
             method: 'GET',
             dataType: 'xml', // returned datatype
             success: listMessages
@@ -20,7 +21,7 @@ $(document).ready(function () {
     $("#sendMessageButton").click(function () {
         var messageContent = $("#inputField").val();
         $.ajax({
-            url: baseUrl + "/Messages",
+            url: baseUrl + "/resources/Messages",
             data: messageContent,
             type: 'POST',
             contentType: 'text/plain',
@@ -32,11 +33,17 @@ $(document).ready(function () {
    
    $("#loginButton").click(function () {
         logIn();
-    });// loginButton
+        writeCookie('curretnUser', workerName, 3);
+        window.location = baseUrl + "/userlists.html";
+    });
+    $("#logOutButton").click(function () {
+        logOut();
+        window.location = baseUrl;
+    });
     
     $("#loggedInUsers").click(function () {
         $.ajax({
-            url: baseUrl + '/Workers/LoggedIn',
+            url: baseUrl + '/resources/Workers/LoggedIn',
             type: 'GET',
             dataType: 'xml',
             success: loggedInOut
@@ -45,7 +52,7 @@ $(document).ready(function () {
 
     $("#loggedOutUsers").click(function () {
         $.ajax({
-            url: baseUrl + '/Workers/LoggedOut',
+            url: baseUrl + '/resources/Workers/LoggedOut',
             type: 'GET',
             dataType: 'xml',
             success: loggedInOut
@@ -55,7 +62,7 @@ $(document).ready(function () {
     $("#sendAlertButton").click(function () {
         var alertCategory = $("#alert").val();
         $.ajax({
-            url: baseUrl + "/Alerts",
+            url: baseUrl + "/resources/Alerts",
             data: alertCategory,
             type: 'POST',
             contentType: 'text/plain',
@@ -67,19 +74,31 @@ $(document).ready(function () {
 }); // $(document).ready
 
 function logIn() {
-    var workerName = $('#inputField').val();
-    alert(workerName);
     $.ajax({
         url: baseUrl + '/Workers',
         data: workerName,
         type: 'POST',
         contentType: 'text/plain',
-        success: alert('Success'),
+        success: alert('Logged In'),
         error: function (response) {
             alert('Error ' + response.statusText);
         }
     });
-}           
+}
+
+function logOut() {
+    var currentUser = readCookie('currentUser');
+    $.ajax({
+        url: baseUrl + '/Workers/LoggedOut',
+        data: currentUser,
+        type: 'POST',
+        contentType: 'text/plain',
+        success: alert('Logged Out'),
+        error: function (response) {
+            alert('Error ' + response.statusText);
+        }
+    });
+}
 
 function loggedInOut(xml, status) {
     console.log("listing messages");
@@ -89,12 +108,40 @@ function loggedInOut(xml, status) {
     var content = "";
     $xml.find('workers').each(function () {
         $xml.find('worker').each(function () {
-            content += $(this).find("id").text() + " " + $(this).find("name").text() + " "
-                    + $(this).find("title").text() + "<br>";
+            content += $(this).find("title").text() + ": " + $(this).find("name").text()
+                    + "<br>";
         });
     });
     document.getElementById("outputField").innerHTML = content;
 }
+
+function writeCookie(name, value, days) {
+    var date, expires;
+    if (days) {
+        date = new Date();
+        date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+        expires = "; expires=" + date.toGMTString();
+    } else {
+        expires = "";
+    }
+    document.cookie = name + "=" + value + expires + "; path=/";
+}
+
+function readCookie(name) {
+    var i, c, ca, nameEQ = name + "=";
+    ca = document.cookie.split(';');
+    for (i = 0; i < ca.length; i++) {
+        c = ca[i];
+        while (c.charAt(0) === ' ') {
+            c = c.substring(1, c.length);
+        }
+        if (c.indexOf(nameEQ) === 0) {
+            return c.substring(nameEQ.length, c.length);
+        }
+    }
+    return '';
+}
+
 /*
 function listMessages(xml, status) {
     console.log("listing messages");
