@@ -5,7 +5,7 @@
  */
 
 var baseUrl = "http://localhost:8080/LoboChat";
-var workerName = $('#inputField').val();
+var workerName;
 
 $(document).ready(function () {
     /*
@@ -32,13 +32,15 @@ $(document).ready(function () {
     */
    
    $("#loginButton").click(function () {
-        logIn();
-        writeCookie('curretnUser', workerName, 3);
-        window.location = baseUrl + "/userlists.html";
+       workerName = $('#inputField').val();
+
+        logIn(workerName);
+        writeCookie('currentUser', workerName, 3);
+       // window.location = baseUrl + "/userlists.html";
     });
     $("#logOutButton").click(function () {
         logOut();
-        window.location = baseUrl;
+        //window.location = baseUrl;
     });
     
     $("#loggedInUsers").click(function () {
@@ -73,27 +75,28 @@ $(document).ready(function () {
     
 }); // $(document).ready
 
-function logIn() {
+function logIn(workerName) {
     $.ajax({
-        url: baseUrl + '/Workers',
+        url: "http://localhost:8080/LoboChat/resources/Workers",
         data: workerName,
         type: 'POST',
         contentType: 'text/plain',
-        success: alert('Logged In'),
+        success: alert('Logged In ' + workerName),
         error: function (response) {
-            alert('Error ' + response.statusText);
+            alert(response.statusText + " wn: " + workerName);
         }
     });
 }
 
 function logOut() {
     var currentUser = readCookie('currentUser');
+    window.alert("keksistä: " + currentUser);
     $.ajax({
-        url: baseUrl + '/Workers/LoggedOut',
+        url: 'http://localhost:8080/LoboChat/resources/Workers/LoggedOut',
         data: currentUser,
         type: 'POST',
         contentType: 'text/plain',
-        success: alert('Logged Out'),
+        //success: alert('Logged Out'),
         error: function (response) {
             alert('Error ' + response.statusText);
         }

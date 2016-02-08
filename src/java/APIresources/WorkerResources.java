@@ -45,12 +45,13 @@ public class WorkerResources {
 
     @POST
     @Path("/LoggedOut")
-    @Consumes(MediaType.APPLICATION_XML)
+    @Consumes(MediaType.TEXT_PLAIN)
     public void workerLogOut(String s) {
         for (Worker w : system.getLoggedInList()) {
             if (w.getName().equals(s)) {
                 system.getLoggedInList().remove(w);
                 system.getLoggedOutList().add(w);
+                break;
             }
         }
     }
