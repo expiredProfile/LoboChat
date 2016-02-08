@@ -9,40 +9,40 @@ var workerName;
 
 $(document).ready(function () {
     /*
-    $("#getAllMessagesButton").click(function () {
-        $.ajax({
-            url: baseUrl + "/resources/Messages",
-            method: 'GET',
-            dataType: 'xml', // returned datatype
-            success: listMessages
-        });
-    });//getAllMessages
-    
-    $("#sendMessageButton").click(function () {
-        var messageContent = $("#inputField").val();
-        $.ajax({
-            url: baseUrl + "/resources/Messages",
-            data: messageContent,
-            type: 'POST',
-            contentType: 'text/plain',
-            dataType: 'xml',
-            success: document.getElementById("outputField").innerHTML = " "
-        }); // ajax
-    });// sendMessage
-    */
-   
-   $("#loginButton").click(function () {
-       workerName = $('#inputField').val();
+     $("#getAllMessagesButton").click(function () {
+     $.ajax({
+     url: baseUrl + "/resources/Messages",
+     method: 'GET',
+     dataType: 'xml', // returned datatype
+     success: listMessages
+     });
+     });//getAllMessages
+     
+     $("#sendMessageButton").click(function () {
+     var messageContent = $("#inputField").val();
+     $.ajax({
+     url: baseUrl + "/resources/Messages",
+     data: messageContent,
+     type: 'POST',
+     contentType: 'text/plain',
+     dataType: 'xml',
+     success: document.getElementById("outputField").innerHTML = " "
+     }); // ajax
+     });// sendMessage
+     */
 
-        logIn(workerName);
+    $("#loginButton").click(function () {
+        workerName = $('#inputField').val();
         writeCookie('currentUser', workerName, 3);
-       // window.location = baseUrl + "/userlists.html";
+        logIn(workerName);
+
+        // window.location = baseUrl + "/userlists.html";
     });
     $("#logOutButton").click(function () {
         logOut();
         //window.location = baseUrl;
     });
-    
+
     $("#loggedInUsers").click(function () {
         $.ajax({
             url: baseUrl + '/resources/Workers/LoggedIn',
@@ -60,7 +60,7 @@ $(document).ready(function () {
             success: loggedInOut
         });
     }); //loggedOutUsers
-    
+
     $("#sendAlertButton").click(function () {
         var alertCategory = $("#alert").val();
         $.ajax({
@@ -72,16 +72,17 @@ $(document).ready(function () {
             success: document.getElementById("alertResponse").innerHTML = " "
         }); // ajax
     });// sendAlert
-    
+
 }); // $(document).ready
 
 function logIn(workerName) {
     $.ajax({
-        url: "http://localhost:8080/LoboChat/resources/Workers",
+        url: baseUrl + "/resources/Workers",
         data: workerName,
         type: 'POST',
         contentType: 'text/plain',
-        success: alert('Logged In ' + workerName),
+        //success: alert('Logged In ' + workerName),
+        success: window.location = baseUrl + "/userlists.html",
         error: function (response) {
             alert(response.statusText + " wn: " + workerName);
         }
@@ -92,11 +93,12 @@ function logOut() {
     var currentUser = readCookie('currentUser');
     window.alert("keksistä: " + currentUser);
     $.ajax({
-        url: 'http://localhost:8080/LoboChat/resources/Workers/LoggedOut',
+        url: baseUrl + "/resources/Workers/LoggedOut",
         data: currentUser,
         type: 'POST',
         contentType: 'text/plain',
         //success: alert('Logged Out'),
+        success: window.location = baseUrl,
         error: function (response) {
             alert('Error ' + response.statusText);
         }
@@ -146,17 +148,17 @@ function readCookie(name) {
 }
 
 /*
-function listMessages(xml, status) {
-    console.log("listing messages");
-    xmlString = (new XMLSerializer()).serializeToString(xml);
-    console.log("XML: " + xmlString);
-    var $xml = $(xml);
-    var content = "";
-    $xml.find("message").each(function () {
-        content += $(this).find("id").text() + " " + $(this).find("postTitle").text() + " " 
-                + $(this).find("postName").text() + ": "
-                + $(this).find("content").text() + "<br>";
-    });
-    document.getElementById("outputField").innerHTML = content;
-}; // listMessages
-*/
+ function listMessages(xml, status) {
+ console.log("listing messages");
+ xmlString = (new XMLSerializer()).serializeToString(xml);
+ console.log("XML: " + xmlString);
+ var $xml = $(xml);
+ var content = "";
+ $xml.find("message").each(function () {
+ content += $(this).find("id").text() + " " + $(this).find("postTitle").text() + " " 
+ + $(this).find("postName").text() + ": "
+ + $(this).find("content").text() + "<br>";
+ });
+ document.getElementById("outputField").innerHTML = content;
+ }; // listMessages
+ */
