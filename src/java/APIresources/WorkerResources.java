@@ -34,10 +34,11 @@ public class WorkerResources {
     //@Path("/LoggedIn")
     @Consumes(MediaType.TEXT_PLAIN)
     public void workerLogIn(String s) {
-        for(Worker w : system.getLoggedOutList()){
-            if(w.getName().equals(s)){
-                system.getLoggedOutList().remove(w);
+        for (Worker w : system.getLoggedOutList()) {
+            if (w.getName().equals(s)) {
                 system.getLoggedInList().add(w);
+                system.getLoggedOutList().remove(w);
+                break;
             }
         }
     }
