@@ -91,7 +91,7 @@ function logIn(workerName) {
 
 function logOut() {
     var currentUser = readCookie('currentUser');
-    window.alert("keksistä: " + currentUser);
+    window.alert("From cookie: " + currentUser);
     $.ajax({
         url: baseUrl + "/resources/Workers/LoggedOut",
         data: currentUser,
