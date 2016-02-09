@@ -30,15 +30,14 @@ public class AlertResources {
     }
     
     @POST
-    @Consumes(MediaType.TEXT_PLAIN)
+    @Consumes(MediaType.APPLICATION_XML)
     public void postAlert(Alert a){
+        system.addAlert(a);
         for(Worker w : system.getLoggedInList()) {
-            if(w.getTitle().equals()) {
-                w.receiveAlert();
+            if(w.getTitle().equals(a.getReceiverGroup())) { //If title matches target group
+                w.receiveAlert(); //Notify about alert
             }
         }
-        //Alert alert = new Alert(id, alertCat, name);
-        //system.addAlert(alert);
     }
     
     @GET

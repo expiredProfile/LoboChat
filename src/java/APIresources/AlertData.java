@@ -27,7 +27,7 @@ public class AlertData {
     //@XmlElement
     //Get info id as param instead?
     public String getAlertInfo(Alert a) {
-        int alertCat = a.getAlertCat();
+        int alertCat = Integer.parseInt(a.getAlertCat());
         String info = alertCategories.get(alertCat);
         return info;
     }

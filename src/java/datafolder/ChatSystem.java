@@ -16,7 +16,6 @@ public class ChatSystem {
     private static ChatSystem instance = new ChatSystem();
     private Message message;
     private Worker worker;
-    private Alert alert;
     private Conversation conversation;
     private HashMap<String, Conversation> conversations;
     private HashMap<Integer, Alert> alertHistory;
@@ -26,7 +25,6 @@ public class ChatSystem {
     private ChatSystem(){
         this.message = new Message();
         this.worker = new Worker();
-        this.alert = new Alert();
         this.conversation = new Conversation();
         this.conversations = new HashMap<>();
         this.loggedIn = new ArrayList<>();
