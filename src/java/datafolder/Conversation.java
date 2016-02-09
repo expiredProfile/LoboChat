@@ -30,8 +30,7 @@ public class Conversation {
         this.name1 = name;
         this.name2 = name2;
         this.topic = topic;
-        this.messages = new ArrayList<>();
-        
+        this.messages = new ArrayList<>();       
     }
     
     @XmlElement
