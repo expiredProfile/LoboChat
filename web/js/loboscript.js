@@ -1,3 +1,4 @@
+
 /* 
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -6,16 +7,17 @@
 
 var baseUrl = "http://localhost:8080/LoboChat";
 var workerName;
+//var chatParticipantId;
+var chatParticipantName;
+var chatID;
 
 $(document).ready(function () {
-    
     $(function () {
         adjustStyle($(this).width());
         $(window).resize(function () {
             adjustStyle($(this).width());
         });
     });
-    
     /*
      $("#getAllMessagesButton").click(function () {
      $.ajax({
@@ -43,20 +45,18 @@ $(document).ready(function () {
         workerName = $('#inputField').val();
         writeCookie('currentUser', workerName, 3);
         logIn(workerName);
-
         // window.location = baseUrl + "/userlists.html";
     });
     $("#logOutButton").click(function () {
         logOut();
         //window.location = baseUrl;
     });
-
     $("#loggedInUsers").click(function () {
         $.ajax({
             url: baseUrl + '/resources/Workers/LoggedIn',
             type: 'GET',
             dataType: 'xml',
-            success: loggedInOut
+            success: loggedIn
         });
     }); //loggedInUsers
 
@@ -65,7 +65,7 @@ $(document).ready(function () {
             url: baseUrl + '/resources/Workers/LoggedOut',
             type: 'GET',
             dataType: 'xml',
-            success: loggedInOut
+            success: loggedOut
         });
     }); //loggedOutUsers
 
@@ -79,7 +79,7 @@ $(document).ready(function () {
             dataType: 'xml',
             success: document.getElementById("alertResponse").innerHTML = " "
         }); // ajax
-    });// sendAlert
+    }); // sendAlert
 
 }); // $(document).ready
 
@@ -99,7 +99,7 @@ function logIn(workerName) {
 
 function logOut() {
     var currentUser = readCookie('currentUser');
-    window.alert("From cookie: " + currentUser);
+    window.alert("keksistä: " + currentUser);
     $.ajax({
         url: baseUrl + "/resources/Workers/LoggedOut",
         data: currentUser,
@@ -113,7 +113,7 @@ function logOut() {
     });
 }
 
-function loggedInOut(xml, status) {
+function loggedOut(xml, status) {
     console.log("listing messages");
     xmlString = (new XMLSerializer()).serializeToString(xml);
     console.log("XML: " + xmlString);
@@ -125,7 +125,36 @@ function loggedInOut(xml, status) {
                     + "<br>";
         });
     });
-    document.getElementById("outputField").innerHTML = content;
+    document.getElementById("outField").innerHTML = content;
+}
+
+function loggedIn(xml, status) {
+    console.log("listing messages");
+    xmlString = (new XMLSerializer()).serializeToString(xml);
+    console.log("XML: " + xmlString);
+    var $xml = $(xml);
+    var content = "";
+    $xml.find('workers').each(function () {
+        $xml.find('worker').each(function () {
+//var wid = $(this).find("id").text();
+            var wname = $(this).find("name").text();
+            console.log("Id name " + wname);
+            content += "<div class='onlines'><a href='' onclick='openChat(\"" + wname + "\")'\n\
+             value=" + $(this).find("id").text() + "\
+            > " + $(this).find("title").text() + ": " + $(this).find("name").text()
+                    + "</a></div><br>";
+        });
+    });
+    document.getElementById("inField").innerHTML = content;
+}
+
+
+function openChat(name) {
+
+    var url = baseUrl + "/chaWin.html";
+    //chatParticipantId = id;
+    sessionStorage.setItem("pname", name);
+    window.open(url);
 }
 
 function writeCookie(name, value, days) {
@@ -167,6 +196,7 @@ function adjustStyle(width) {
     }
 }
 
+
 /*
  function listMessages(xml, status) {
  console.log("listing messages");
@@ -182,3 +212,4 @@ function adjustStyle(width) {
  document.getElementById("outputField").innerHTML = content;
  }; // listMessages
  */
+
