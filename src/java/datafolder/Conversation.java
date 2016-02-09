@@ -20,13 +20,15 @@ public class Conversation {
     private String name2;
     private String topic;
     private ArrayList<Message> messages;
+    private IDIncrement instance;
     
     public Conversation(){
         
     }
     
     public Conversation(String name, String name2, String topic){
-        this.id = incrementID();
+        this.instance = IDIncrement.getInstance();
+        this.id = instance.conversationIncrement();
         this.name1 = name;
         this.name2 = name2;
         this.topic = topic;
@@ -50,13 +52,5 @@ public class Conversation {
     @XmlElement
     public ArrayList<Message> getMessages(){
         return this.messages;
-    }
-    
-    private int incrementID(){
-        return this.id++;
-    }
-    
-    public int getID(){
-        return this.id;
     }
 }

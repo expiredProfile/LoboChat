@@ -8,6 +8,14 @@ var baseUrl = "http://localhost:8080/LoboChat";
 var workerName;
 
 $(document).ready(function () {
+    
+    $(function () {
+        adjustStyle($(this).width());
+        $(window).resize(function () {
+            adjustStyle($(this).width());
+        });
+    });
+    
     /*
      $("#getAllMessagesButton").click(function () {
      $.ajax({
@@ -145,6 +153,18 @@ function readCookie(name) {
         }
     }
     return '';
+}
+
+function adjustStyle(width) {
+    width = parseInt(width);
+    console.log(width);
+    if (width < 701) {
+        $("#size-stylesheet").attr("href", "css/narrow.css");
+    } else if (width < 900) {
+        $("#size-stylesheet").attr("href", "css/medium.css");
+    } else {
+        $("#size-stylesheet").attr("href", "css/wide.css");
+    }
 }
 
 /*
