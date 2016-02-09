@@ -17,10 +17,8 @@ public class ChatSystem {
     private Message message;
     private Worker worker;
     private Alert alert;
-    private int messageIdIncrement;
-    private int workerIdIncerement;
     private int alertIdIncerement;
-    private HashMap<Integer, Message> messageList;
+    private HashMap<Integer, Conversation> conversations;
     private HashMap<Integer, Alert> alertList;
     private ArrayList<Worker> loggedIn;
     private ArrayList<Worker> loggedOut;
@@ -29,12 +27,10 @@ public class ChatSystem {
         this.message = new Message();
         this.worker = new Worker();
         this.alert = new Alert();
-        this.messageList = new HashMap<>();
+        this.conversations = new HashMap<>();
         this.loggedIn = new ArrayList<>();
         this.loggedOut = new ArrayList<>();
         this.alertList = new HashMap<>();
-        this.messageIdIncrement = 0;
-        this.workerIdIncerement = 0;
         this.alertIdIncerement = 0;
     }
     
@@ -42,21 +38,17 @@ public class ChatSystem {
         return instance;
     }
     
-    //Message methods
-    public void addMessage(Message m){
-        messageList.put(m.getID() , m);
-    }
-    
-    public HashMap<Integer, Message> getMessage(){
-        return messageList;
-    }
-    
-    public Message getMessageByID(int id){
-        return messageList.get(id);
+    //Conversation methods
+    public void addConversation(Conversation c){
+        conversations.put(c.getID() , c);
     }
 
-    public int getMessageIncrement(){
-        return this.messageIdIncrement++;
+    public ArrayList<Message> getConversationMessages(int id){
+        return conversations.get(id).getMessages();
+    }
+    
+    public void addMessageToConversation(int id, Message m){
+        conversations.get(id).addMessage(m);
     }
 
     //Worker methods
@@ -74,10 +66,6 @@ public class ChatSystem {
     
     public void workerLoggedOut(Worker w){
         loggedOut.add(w);
-    }
-
-    public int getWorkerIdIncerement() {
-        return workerIdIncerement++;
     }
  
     //Alert methods

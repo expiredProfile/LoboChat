@@ -30,27 +30,21 @@ public class MessageResources {
     }
     
     @GET
+    @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.APPLICATION_XML)
-    public ArrayList<Message> getMessageXML() {
-        ArrayList<Message> list = new ArrayList<>();
-        for (int i = 0; i < system.getMessage().size(); i++) {
-            list.add(system.getMessageByID(i));
-        }
-        return list;
+    public ArrayList<Message> getMessageXML(String s) {
+        int id = Integer.parseInt(s);
+        return system.getConversationMessages(id);
     }
     
     //Send username from browser when sending a new message
     @POST
     @Consumes(MediaType.APPLICATION_XML)
-    public void postMessage(String s) {
-        int id = system.getMessageIncrement();
-        //String name = system.getCurrentUser().getName();
-        //String title = system.getCurrentUser().getTitle();
-        //Message message = new Message(id, s, title, name);
-        //system.addMessage(message);
+    public void postMessage(Message m) {
+        //system.addMessageToConversation(m);
     }
-    //Simple version that does not require worker class interaction
     
+    //Simple version that does not require worker class interaction    
     /*
     @POST
     @Consumes("text/plain")
@@ -63,11 +57,12 @@ public class MessageResources {
     }
     */
     
+    /*
     @Path("/{messageid}")
     @GET
     @Produces(MediaType.APPLICATION_XML)
     public Message getMessageIdXML(@PathParam("messageid") int messageid) {
         return system.getMessageByID(messageid);
     }
-
+    */
 }

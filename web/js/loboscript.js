@@ -6,6 +6,9 @@
 
 var baseUrl = "http://localhost:8080/LoboChat";
 var workerName;
+//var chatParticipantId;
+var chatParticipantName;
+var chatID;
 
 $(document).ready(function () {
     /*
@@ -128,7 +131,10 @@ function loggedIn(xml, status) {
     var content = "";
     $xml.find('workers').each(function () {
         $xml.find('worker').each(function () {
-            content += "<div class='onlines'><a href='' onclick='openChat("+$(this).find("id").text()+")'\n\
+            //var wid = $(this).find("id").text();
+            var wname = $(this).find("name").text();
+            console.log("Id name "+wname);
+            content += "<div class='onlines'><a href='' onclick='openChat(\""+wname+"\")'\n\
              value="+$(this).find("id").text()+"\
             > "+$(this).find("title").text() + ": " + $(this).find("name").text()
                     + "</a></div><br>";
@@ -137,9 +143,13 @@ function loggedIn(xml, status) {
     document.getElementById("inField").innerHTML = content;
 }
 
-function openChat(id){
-    var url = baseUrl+"/chaWin";
-    window.open();
+
+function openChat(name){
+    
+    var url = baseUrl+"/chaWin.html";
+    //chatParticipantId = id;
+    sessionStorage.setItem("pname", name);
+    window.open(url);
 }
 
 function writeCookie(name, value, days) {

@@ -6,14 +6,54 @@ and open the template in the editor.
 -->
 <html>
     <head>
-        <title>TODO supply a title</title>
+        <title></title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
         <script src="./js/loboscript.js"></script>
+        <script>
+        function participant(){
+            
+            var currentUser = readCookie('currentUser');
+            var parUser = sessionStorage.getItem("pname");
+            document.getElementById("participants").innerHTML = currentUser +"<br>"+ parUser + "<br>";
+            }
+        
+        </script>
+        <style>
+            #chatArea {
+                display: block;
+                border-style: solid;
+                border-width: 2px;
+                width: 50%;
+                height: 5em;
+            }
+            
+            #participants {
+                display: block;
+                border-style: solid;
+                border-width: 2px 2px 2px 0px;
+                width: 15%;
+                height: 5em;
+                float: right;
+            }
+            
+            #inputField {
+                width: 65%;
+            }
+            
+            #container{
+                margin: 0 auto;
+                display: block;
+            }
+        </style>
     </head>
-    <body>
-        <div id="chatArea"></div>
-        <input type="text" id="inputField">
+    <body onload="participant()">
+        <div id="container">
+            <div id="chatArea"></div> 
+            <div id="participants"> </div>
+            <input type="text" id="inputField">
+            <button value="send"></button>
+        </div>
     </body>
 </html>

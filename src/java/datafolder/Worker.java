@@ -18,14 +18,13 @@ public class Worker {
     private int id;
     private String name;
     private String title;
-    private IDIncrement increment = IDIncrement.getInstance();
 
     public Worker() {
 
     }
 
     public Worker(String name, String title) {
-        this.id = increment.incrementID();
+        this.id = incrementID();
         this.name = name;
         this.title = title;
     }
@@ -43,5 +42,9 @@ public class Worker {
     @XmlElement
     public String getTitle() {
         return title;
+    }
+    
+    private int incrementID(){
+        return this.id++;
     }
 }
