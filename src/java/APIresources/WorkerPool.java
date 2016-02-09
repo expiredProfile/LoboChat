@@ -20,6 +20,9 @@ public class WorkerPool {
     private Worker tommi;
     private ChatSystem system = ChatSystem.getInstance();
     
+    //requires empty constructor so simpleton can be removed
+    //need parameter values for other constructor
+    
     private WorkerPool(){
         this.kim = new Worker("Kim", "Guard");
         this.henkka = new Worker("Henkka", "Doctor");

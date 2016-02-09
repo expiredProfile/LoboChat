@@ -42,7 +42,7 @@ $(document).ready(function () {
      */
 
     $("#loginButton").click(function () {
-        workerName = $('#inputField').val();
+        workerName = $('#inputField-id').val();
         writeCookie('currentUser', workerName, 3);
         logIn(workerName);
         // window.location = baseUrl + "/userlists.html";
@@ -187,7 +187,7 @@ function readCookie(name) {
 function adjustStyle(width) {
     width = parseInt(width);
     console.log(width);
-    if (width < 701) {
+    if (width < 501) {
         $("#size-stylesheet").attr("href", "css/narrow.css");
     } else if (width < 900) {
         $("#size-stylesheet").attr("href", "css/medium.css");

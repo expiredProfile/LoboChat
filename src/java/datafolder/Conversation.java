@@ -16,33 +16,21 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 public class Conversation {
     private int id;
-    private String name1;
-    private String name2;
     private String topic;
     private ArrayList<Message> messages;
+    private ArrayList<Worker> memberList;
     private IDIncrement instance;
     
     public Conversation(){
         
     }
     
-    public Conversation(String name, String name2, String topic){
+    public Conversation(String topic, ArrayList<Worker> list){
         this.instance = IDIncrement.getInstance();
         this.id = instance.conversationIncrement();
-        this.name1 = name;
-        this.name2 = name2;
         this.topic = topic;
-        this.messages = new ArrayList<>();       
-    }
-    
-    @XmlElement
-    public String getName1(){
-        return this.name1;
-    }
-    
-    @XmlElement
-    public String getName2(){
-        return this.name2;
+        this.messages = new ArrayList<>();
+        this.memberList = list;
     }
     
     public void addMessage(Message m){
@@ -52,5 +40,9 @@ public class Conversation {
     @XmlElement
     public ArrayList<Message> getMessages(){
         return this.messages;
+    }
+    
+    public int getID(){
+        return this.id;
     }
 }
