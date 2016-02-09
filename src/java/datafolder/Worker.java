@@ -47,4 +47,9 @@ public class Worker {
     private int incrementID(){
         return this.id++;
     }
+    
+    //Receive alert test
+    public void receiveAlert() {
+        //do something
+    }
 }

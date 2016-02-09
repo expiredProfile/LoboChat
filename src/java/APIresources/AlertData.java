@@ -7,14 +7,13 @@ package APIresources;
 
 import datafolder.Alert;
 import java.util.HashMap;
-import javax.xml.bind.annotation.XmlElement;
+//import javax.xml.bind.annotation.XmlElement;
 
 /**
  *
  * @author Kasper
  */
 public class AlertData {
-    //Order data with urgency?
     private HashMap<Integer, String> alertCategories;
     
     public AlertData() {
@@ -25,7 +24,8 @@ public class AlertData {
     }
     
     //Get alert info (value) with alert category id (key)
-    @XmlElement
+    //@XmlElement
+    //Get info id as param instead?
     public String getAlertInfo(Alert a) {
         int alertCat = a.getAlertCat();
         String info = alertCategories.get(alertCat);

@@ -18,15 +18,16 @@ public class Alert {
     private int id;
     private int alertCat;
     private String postName;
+    private String receiver;
     private String currentTime;
-    //Urgency level?
     
     public Alert(){}
     
-    public Alert(int id, int c, String n){
-        this.id = id;
+    public Alert(int id, int c, String n, String r){
+        this.id = incrementID();
         this.alertCat = c;
         this.postName = n;
+        this.receiver = r;
         this.currentTime = TimeResources.getInstance().getTimestamp();
     }
 
@@ -44,13 +45,18 @@ public class Alert {
     public String getPostName() {
         return postName;
     }
-
-    public void setPostName(String postName) {
-        this.postName = postName;
+    
+    @XmlElement
+    public String getReceiver(){
+        return this.receiver;
     }
     
     @XmlElement
     public String getCurrentTime(){
         return this.currentTime;
+    }
+    
+    private int incrementID(){
+        return this.id++;
     }
 }

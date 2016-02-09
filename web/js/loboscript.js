@@ -63,9 +63,10 @@ $(document).ready(function () {
 
     $("#sendAlertButton").click(function () {
         var alertCategory = $("#alert").val();
+        var receiverGroup = $("#receiverGroup").val();
         $.ajax({
             url: baseUrl + "/resources/Alerts",
-            data: alertCategory,
+            data: { alertCat : alertCategory, group : receiverGroup },
             type: 'POST',
             contentType: 'text/plain',
             dataType: 'xml',
