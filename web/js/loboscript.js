@@ -1,3 +1,4 @@
+
 /* 
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -11,6 +12,12 @@ var chatParticipantName;
 var chatID;
 
 $(document).ready(function () {
+    $(function () {
+        adjustStyle($(this).width());
+        $(window).resize(function () {
+            adjustStyle($(this).width());
+        });
+    });
     /*
      $("#getAllMessagesButton").click(function () {
      $.ajax({
@@ -38,14 +45,12 @@ $(document).ready(function () {
         workerName = $('#inputField').val();
         writeCookie('currentUser', workerName, 3);
         logIn(workerName);
-
         // window.location = baseUrl + "/userlists.html";
     });
     $("#logOutButton").click(function () {
         logOut();
         //window.location = baseUrl;
     });
-
     $("#loggedInUsers").click(function () {
         $.ajax({
             url: baseUrl + '/resources/Workers/LoggedIn',
@@ -74,7 +79,7 @@ $(document).ready(function () {
             dataType: 'xml',
             success: document.getElementById("alertResponse").innerHTML = " "
         }); // ajax
-    });// sendAlert
+    }); // sendAlert
 
 }); // $(document).ready
 
@@ -131,12 +136,12 @@ function loggedIn(xml, status) {
     var content = "";
     $xml.find('workers').each(function () {
         $xml.find('worker').each(function () {
-            //var wid = $(this).find("id").text();
+//var wid = $(this).find("id").text();
             var wname = $(this).find("name").text();
-            console.log("Id name "+wname);
-            content += "<div class='onlines'><a href='' onclick='openChat(\""+wname+"\")'\n\
-             value="+$(this).find("id").text()+"\
-            > "+$(this).find("title").text() + ": " + $(this).find("name").text()
+            console.log("Id name " + wname);
+            content += "<div class='onlines'><a href='' onclick='openChat(\"" + wname + "\")'\n\
+             value=" + $(this).find("id").text() + "\
+            > " + $(this).find("title").text() + ": " + $(this).find("name").text()
                     + "</a></div><br>";
         });
     });
@@ -144,9 +149,9 @@ function loggedIn(xml, status) {
 }
 
 
-function openChat(name){
-    
-    var url = baseUrl+"/chaWin.html";
+function openChat(name) {
+
+    var url = baseUrl + "/chaWin.html";
     //chatParticipantId = id;
     sessionStorage.setItem("pname", name);
     window.open(url);
@@ -179,6 +184,19 @@ function readCookie(name) {
     return '';
 }
 
+function adjustStyle(width) {
+    width = parseInt(width);
+    console.log(width);
+    if (width < 701) {
+        $("#size-stylesheet").attr("href", "css/narrow.css");
+    } else if (width < 900) {
+        $("#size-stylesheet").attr("href", "css/medium.css");
+    } else {
+        $("#size-stylesheet").attr("href", "css/wide.css");
+    }
+}
+
+
 /*
  function listMessages(xml, status) {
  console.log("listing messages");
@@ -194,3 +212,4 @@ function readCookie(name) {
  document.getElementById("outputField").innerHTML = content;
  }; // listMessages
  */
+

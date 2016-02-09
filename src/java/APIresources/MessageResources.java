@@ -29,6 +29,7 @@ public class MessageResources {
         this.system = ChatSystem.getInstance();
     }
     
+    //Send sender+receiver as string from server
     @GET
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.APPLICATION_XML)

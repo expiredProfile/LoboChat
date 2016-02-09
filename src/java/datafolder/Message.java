@@ -16,7 +16,6 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 public class Message {
 
-    private int id;
     private String content;
     private String postName;
     private String receiver;
@@ -25,16 +24,10 @@ public class Message {
     public Message() {}
 
     public Message(int id, String content, String name, String receiver) {
-        this.id = incrementID();
         this.content = content;
         this.postName = name;
         this.receiver = receiver;
         this.currentTime = TimeResources.getInstance().getTimestamp();
-    }
-
-    @XmlElement
-    public int getID() {
-        return id;
     }
 
     @XmlElement
@@ -63,9 +56,5 @@ public class Message {
     @XmlElement
     public String getCurrentTime(){
         return this.currentTime;
-    }
-    
-    private int incrementID(){
-        return this.id++;
     }
 }
