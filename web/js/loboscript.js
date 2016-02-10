@@ -83,6 +83,29 @@ $(document).ready(function () {
 
 }); // $(document).ready
 
+function onlineCheck(){
+    $.ajax({
+        url: baseUrl + '/resources/Workers/LoggedIn',
+        type: 'GET',
+        dataType: 'xml',
+        success: loggedIn
+    });
+}
+
+function offlineCheck(){
+    $.ajax({
+        url: baseUrl + '/resources/Workers/LoggedOut',
+        type: 'GET',
+        dataType: 'xml',
+        success: loggedOut
+    });
+}
+
+function refreshs(){
+   setInterval(onlineCheck,2000);
+   setInterval(offlineCheck,2000);
+}
+
 function logIn(workerName) {
     $.ajax({
         url: baseUrl + "/resources/Workers",

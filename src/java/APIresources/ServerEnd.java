@@ -9,6 +9,8 @@ import datafolder.ChatSystem;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
+import javax.websocket.OnClose;
+import javax.websocket.OnMessage;
 import javax.websocket.OnOpen;
 import javax.websocket.Session;
 import javax.websocket.server.ServerEndpoint;
@@ -23,8 +25,21 @@ public class ServerEnd {
     private ChatSystem sys = ChatSystem.getInstance();
     
     @OnOpen
-    public void open(Session s){
+    public void onOpen(Session s){
        wses.add(s);
+       
+    }
+    
+    @OnClose
+    public void onClose(Session s){
+        wses.remove(s);
+    }
+    
+    @OnMessage
+    public void onMessage(String msg){
+        for (Session s : wses){
+           
+        }
     }
 
 
