@@ -71,13 +71,17 @@ $(document).ready(function () {
 
     $("#sendAlertButton").click(function () {
         var alertCategory = $("#alert").val();
+        var receiverGroup = $("#receiverGroup").val();
         $.ajax({
             url: baseUrl + "/resources/Alerts",
-            data: alertCategory,
+            data: { alertCat : alertCategory, receiverGroup : receiverGroup, postName : workerName },
             type: 'POST',
-            contentType: 'text/plain',
-            dataType: 'xml',
-            success: document.getElementById("alertResponse").innerHTML = " "
+            contentType: 'xml',
+            //dataType: 'xml', //plain text?
+            success: document.getElementById("alertResponse").innerHTML = "Alert sent",
+            error: function (response) {
+                alert("Error in alert: " + response.statusText);
+            }
         }); // ajax
     }); // sendAlert
 

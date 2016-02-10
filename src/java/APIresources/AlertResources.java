@@ -7,11 +7,11 @@ package APIresources;
 
 import datafolder.ChatSystem;
 import datafolder.Alert;
+import datafolder.Worker;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
@@ -30,24 +30,21 @@ public class AlertResources {
     }
     
     @POST
-    //how this gets alertcategory (string in js)?
     @Consumes(MediaType.APPLICATION_XML)
-    public void postAlert(int alertCat){
-        int id = system.getAlertIncrement();
-        String name = "testUser";
-        Alert alert = new Alert(id, alertCat, name);
-        system.addAlert(alert);
-        id++;
-        system.setAlertIncrement(id);
+    public void postAlert(Alert a){
+        system.addAlert(a);
+        for(Worker w : system.getLoggedInList()) {
+            if(w.getTitle().equals(a.getReceiverGroup())) { //If title matches target group
+                w.receiveAlert(); //Notify about alert
+            }
+        }
     }
     
-    @Path("/{alertid}")
     @GET
-    //Get alert info and return plain text?
+    @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.APPLICATION_XML)
-    public String getAlertIdXML(@PathParam("alertid") int alertid){
-        Alert alert = system.getAlertByID(alertid);
-        String info = data.getAlertInfo(alert);
-        return info;
+    public Alert getAlertXML(int alertId){
+        Alert alert = system.getAlertByID(alertId);
+        return alert;
     }
 }

@@ -16,16 +16,17 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 public class Alert {
     private int id;
-    private int alertCat;
+    private String alertCat;
+    private String receiverGroup;
     private String postName;
     private String currentTime;
-    //Urgency level?
     
     public Alert(){}
     
-    public Alert(int id, int c, String n){
-        this.id = id;
+    public Alert(String c, String r, String n){
+        this.id = incrementID();
         this.alertCat = c;
+        this.receiverGroup = r;
         this.postName = n;
         this.currentTime = TimeResources.getInstance().getTimestamp();
     }
@@ -36,21 +37,26 @@ public class Alert {
     }
     
     @XmlElement
-    public int getAlertCat() {
+    public String getAlertCat() {
         return alertCat;
     }
-
+    
+    @XmlElement
+    public String getReceiverGroup(){
+        return this.receiverGroup;
+    }
+    
     @XmlElement
     public String getPostName() {
         return postName;
-    }
-
-    public void setPostName(String postName) {
-        this.postName = postName;
     }
     
     @XmlElement
     public String getCurrentTime(){
         return this.currentTime;
+    }
+    
+    private int incrementID(){
+        return this.id++;
     }
 }

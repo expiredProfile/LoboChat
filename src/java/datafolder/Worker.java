@@ -44,4 +44,9 @@ public class Worker {
     public String getTitle() {
         return title;
     }
+    
+    //Receive alert test
+    public void receiveAlert() {
+        //do something
+    }
 }
