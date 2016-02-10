@@ -51,23 +51,20 @@ $(document).ready(function () {
         logOut();
         //window.location = baseUrl;
     });
-    $("#loggedInUsers").click(function () {
+    $("#usersButton-id").click(function () {
         $.ajax({
             url: baseUrl + '/resources/Workers/LoggedIn',
             type: 'GET',
             dataType: 'xml',
             success: loggedIn
         });
-    }); //loggedInUsers
-
-    $("#loggedOutUsers").click(function () {
         $.ajax({
             url: baseUrl + '/resources/Workers/LoggedOut',
             type: 'GET',
             dataType: 'xml',
             success: loggedOut
         });
-    }); //loggedOutUsers
+    }); //loggedInUsers
 
     $("#sendAlertButton").click(function () {
         var alertCategory = $("#alert").val();
@@ -121,8 +118,10 @@ function loggedOut(xml, status) {
     var content = "";
     $xml.find('workers').each(function () {
         $xml.find('worker').each(function () {
-            content += $(this).find("title").text() + ": " + $(this).find("name").text()
-                    + "<br>";
+            content += "<div class='loggedOutUsersDiv-class'>" + 
+                    "<i class='fa fa-circle loggedOutBall-class'></i>" + 
+                    "<span>" + $(this).find("title").text() + ": " + $(this).find("name").text() + 
+                    "</span>" + "</div>";
         });
     });
     document.getElementById("outField").innerHTML = content;
@@ -139,10 +138,10 @@ function loggedIn(xml, status) {
 //var wid = $(this).find("id").text();
             var wname = $(this).find("name").text();
             console.log("Id name " + wname);
-            content += "<div class='onlines'><a href='' onclick='openChat(\"" + wname + "\")'\n\
-             value=" + $(this).find("id").text() + "\
-            > " + $(this).find("title").text() + ": " + $(this).find("name").text()
-                    + "</a></div><br>";
+            content += "<div class='loggedInUsersDiv-class'>" + 
+                    "<i class='fa fa-circle loggedInBall-class'></i>" + 
+                    "<span>" + $(this).find("title").text() + ": " 
+                    + $(this).find("name").text() + "</span>" + "</div>";
         });
     });
     document.getElementById("inField").innerHTML = content;

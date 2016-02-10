@@ -6,17 +6,30 @@ and open the template in the editor.
 -->
 <html>
     <head>
-        <title>TODO supply a title</title>
+        <title>Lobo Chat</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+        <link id="size-stylesheet" rel="stylesheet" type="text/css" href="css/narrow.css" />
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
         <script src="./js/loboscript.js"></script>
     </head>
     <body>
-        <button id="loggedOutUsers">Logged Out</button>
-        <button id="loggedInUsers">Logged In</button>
+        <div class="header-class">
+            <h3>Lobo Chat</h3>
+        </div>
+        <div class="content-class">
+            <div id="displayChoiceDiv-id">
+                <button id="usersButton-id"><i class="fa fa-user"></i></button>
+                <button id="topicsButton-id"><i class="fa fa-commenting-o"></i></button>
+                <button id="alertsButton-id"><i class="fa fa-exclamation-triangle"></i></button>
+            </div>
+            <div id="main-id">
+                <div id="inField"></div>
+                <div id="outField"></div>
+            </div>
+        </div>
         <button id="logOutButton">Log Out</button>
-        <div id="inField"></div><br>
-        <div id="outField"></div>
+
     </body>
 </html>
