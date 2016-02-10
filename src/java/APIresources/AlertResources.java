@@ -7,6 +7,7 @@ package APIresources;
 
 import datafolder.ChatSystem;
 import datafolder.Alert;
+import datafolder.TitleData;
 import datafolder.Worker;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -22,26 +23,30 @@ import javax.ws.rs.core.MediaType;
 @Path("/Alerts")
 public class AlertResources {
     private final ChatSystem system;
-    private AlertData data;
+    private AlertData alertData;
+    private TitleData titleData;
     
     public AlertResources() {
         this.system = ChatSystem.getInstance();
-        this.data = new AlertData();
+        this.alertData = new AlertData();
+        this.titleData = new TitleData();
     }
     
     @POST
     @Consumes(MediaType.APPLICATION_XML)
+    //@Produces(MediaType.TEXT_PLAIN)
     public void postAlert(Alert a){
         system.addAlert(a);
+        String recGroup = a.getReceiverGroup(); //Group number as string
         for(Worker w : system.getLoggedInList()) {
-            if(w.getTitle().equals(a.getReceiverGroup())) { //If title matches target group
+            if(w.getTitle().equals(titleData.getTitle(recGroup))) { //If title matches target group
                 w.receiveAlert(); //Notify about alert
             }
         }
     }
     
     @GET
-    @Consumes(MediaType.TEXT_PLAIN)
+    @Consumes(MediaType.APPLICATION_XML)
     @Produces(MediaType.APPLICATION_XML)
     public Alert getAlertXML(int alertId){
         Alert alert = system.getAlertByID(alertId);

@@ -70,14 +70,15 @@ $(document).ready(function () {
     }); //loggedOutUsers
 
     $("#sendAlertButton").click(function () {
+        console.log("Sending alert");
         var alertCategory = $("#alert").val();
         var receiverGroup = $("#receiverGroup").val();
         $.ajax({
             url: baseUrl + "/resources/Alerts",
-            data: { alertCat : alertCategory, receiverGroup : receiverGroup, postName : workerName },
+            data: alertCategory,
             type: 'POST',
             contentType: 'xml',
-            //dataType: 'xml', //plain text?
+            //dataType: 'text/plain',
             success: document.getElementById("alertResponse").innerHTML = "Alert sent",
             error: function (response) {
                 alert("Error in alert: " + response.statusText);

@@ -6,7 +6,6 @@
 package APIresources;
 
 import datafolder.Alert;
-import datafolder.Alert;
 import java.util.HashMap;
 //import javax.xml.bind.annotation.XmlElement;
 

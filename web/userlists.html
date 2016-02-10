@@ -20,16 +20,18 @@ and open the template in the editor.
         <div id="outField"></div>
         
         <div id="sendAlert">
-            <select id="alert">
-                <option value="0">Need assistance</option>
-                <option value="1">Disturbance</option>
-                <option value="2">Fire alert</option>
-            </select>
-            
-            <input type="radio" name="receiverGroup" value="0" checked="checked" /> Doctors
-            <input type="radio" name="receiverGroup" value="1" /> Guards
-            
-            <button id="sendAlertButton" >Alert</button>
+            <form name="alertForm" method="POST">
+                <select id="alert">
+                    <option value="0">Need assistance</option>
+                    <option value="1">Disturbance</option>
+                    <option value="2">Fire alert</option>
+                </select>
+
+                <input type="radio" name="receiverGroup" value="0" checked="checked" /> Doctors
+                <input type="radio" name="receiverGroup" value="1" /> Guards
+
+                <button id="sendAlertButton" >Alert</button>
+            </form>
             <div id="alertResponse"></div>
         </div>
     </body>
