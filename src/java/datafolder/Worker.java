@@ -19,7 +19,6 @@ public class Worker {
     private String name;
     private String title;
     private IDIncrement increment;
-
     public Worker() {
 
     }

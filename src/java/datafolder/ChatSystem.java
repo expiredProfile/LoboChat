@@ -17,9 +17,10 @@ public class ChatSystem {
     private Message message;
     private Worker worker;
     private Alert alert;
+    private Group group;
     private Conversation conversation;
     private int alertIdIncerement;
-    private HashMap<String, Conversation> conversations;
+    private HashMap<Integer, Conversation> conversations;
     private HashMap<Integer, Alert> alertList;
     private ArrayList<Worker> loggedIn;
     private ArrayList<Worker> loggedOut;
@@ -32,6 +33,7 @@ public class ChatSystem {
         this.conversations = new HashMap<>();
         this.loggedIn = new ArrayList<>();
         this.loggedOut = new ArrayList<>();
+        this.group = new Group();
         this.alertList = new HashMap<>();
         this.alertIdIncerement = 0;
     }
@@ -42,17 +44,28 @@ public class ChatSystem {
     
     //Conversation methods
     public void addConversation(Conversation c){
-        String key = c.getName1() + c.getName2();
-        conversations.put(key , c);
-    }
-
-    public ArrayList<Message> getConversationMessages(String names){
-        return conversations.get(names).getMessages();
+        conversations.put(c.getID(), c);
     }
     
-    public void addMessageToConversation(String names, Message m){
-        conversations.get(names).addMessage(m);
+    /*
+    public ArrayList<Conversation> getConversations(){
+        return conversations;
     }
+    */
+    
+    public ArrayList<Message> getConversationMessages(int id){
+        return conversations.get(id).getMessages();
+    }
+    
+    public void addMessageToConversation(int id, Message m){
+        conversations.get(id).addMessage(m);
+    }
+    
+    /*
+    public ArrayList<Worker> getGroupList(){
+        return group.getWorkerList();
+    }
+    */
 
     //Worker methods
     public ArrayList<Worker> getLoggedOutList(){

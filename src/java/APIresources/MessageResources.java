@@ -24,39 +24,28 @@ import javax.ws.rs.core.MediaType;
 public class MessageResources {
 
     private final ChatSystem system;
+    private String newMessage;
 
     public MessageResources() {
         this.system = ChatSystem.getInstance();
     }
     
-    //Send sender+receiver as string from server
+    //send conversation id from server as plain text
     @GET
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.APPLICATION_XML)
     public ArrayList<Message> getMessageXML(String s) {
-        return system.getConversationMessages(s);
+        int id = Integer.parseInt(s);
+        return system.getConversationMessages(id);
     }
     
     //Send username from browser when sending a new message
     @POST
     @Consumes(MediaType.APPLICATION_XML)
     public void postMessage(Message m) {
-        String names = m.getPostName() + m.getReceiver();
-        system.addMessageToConversation(names, m);
+        int id = m.getConversationID();
+        system.addMessageToConversation(id, m);     
     }
-    
-    //Simple version that does not require worker class interaction    
-    /*
-    @POST
-    @Consumes("text/plain")
-    public void postMessageXml(String s) {
-        int id = system.getMessageIncrement();
-        String name = "testUser";
-        String title = "title";
-        Message message = new Message(id, s, title, name);
-        system.addMessage(message);
-    }
-    */
     
     /*
     @Path("/{messageid}")

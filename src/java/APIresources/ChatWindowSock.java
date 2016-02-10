@@ -20,9 +20,9 @@ import javax.websocket.server.ServerEndpoint;
  * @author Hege
  */
 @ServerEndpoint("/chatend")
-public class ServerEnd {
+public class ChatWindowSock {
     private static Set<Session> wses = Collections.synchronizedSet(new HashSet<Session>());
-    private ChatSystem sys = ChatSystem.getInstance();
+    
     
     @OnOpen
     public void onOpen(Session s){
@@ -36,11 +36,17 @@ public class ServerEnd {
     }
     
     @OnMessage
-    public void onMessage(String msg){
+    public void onMessage(){
         for (Session s : wses){
-           
+            try{
+                s.getBasicRemote().sendText("true");
+            } catch (Exception e){
+                
+            }
         }
     }
+    
+    
 
 
 }

@@ -18,15 +18,15 @@ public class Message {
 
     private String content;
     private String postName;
-    private String receiver;
+    private int conversationID;
     private String currentTime;
 
     public Message() {}
 
-    public Message(int id, String content, String name, String receiver) {
+    public Message(String content, String name, int id) {
         this.content = content;
         this.postName = name;
-        this.receiver = receiver;
+        this.conversationID = id;
         this.currentTime = TimeResources.getInstance().getTimestamp();
     }
 
@@ -49,8 +49,8 @@ public class Message {
     }
     
     @XmlElement
-    public String getReceiver(){
-        return this.receiver;
+    public int getConversationID(){
+        return this.conversationID;
     }
         
     @XmlElement
