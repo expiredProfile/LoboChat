@@ -45,4 +45,8 @@ public class Conversation {
     public int getID(){
         return this.id;
     }
+    public String getTopic(){
+        return this.topic;
+    }
+    
 }

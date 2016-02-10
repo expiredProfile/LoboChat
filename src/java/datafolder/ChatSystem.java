@@ -100,4 +100,12 @@ public class ChatSystem {
     public int getAlertIncrement(){
         return this.alertIdIncerement;
     }
+
+    public ArrayList<Conversation> getConversation() {
+        ArrayList<Conversation> co = new ArrayList();
+        for(int i=0; i<this.conversations.size(); i++){
+            co.add(conversations.get(i));
+        }
+        return co;
+    }
 }

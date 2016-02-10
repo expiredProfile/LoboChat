@@ -195,8 +195,6 @@ function adjustStyle(width) {
         $("#size-stylesheet").attr("href", "css/wide.css");
     }
 }
-
-
 /*
  function listMessages(xml, status) {
  console.log("listing messages");
@@ -213,3 +211,27 @@ function adjustStyle(width) {
  }; // listMessages
  */
 
+// NEW
+function startConversation() {
+    //var messageContent = $("#inputField").val();
+    //window.alert(1);
+    var xmlGroupObject = '<group><topic>kkkk</topic><workerList><id></id><name>Tommi</name><title></title></workerList><workerList><id></id><name>Henkka</name><title></title></workerList></group>';
+    var messageXmlDoc = $.parseXML(xmlGroupObject);
+    var $messageXml = $(messageXmlDoc);
+    // $messageXml.find("content").append(messageContent);
+//    $messageXml.find("content").append(messageContent);
+    $.ajax({
+        url: "http://localhost:8080/LoboChat/resources/Conversations",
+        data: messageXmlDoc,
+        processData: false,
+        type: 'POST',
+        contentType: 'application/xml', // datatype sent
+        dataType: 'xml', // datatype received
+        //success: document.getElementById("outputField").innerHTML = ".. ",
+        error: function (response) {
+            console.log("Error: " + response.statusText);
+        }
+    }); // ajax
+
+}
+; // function
