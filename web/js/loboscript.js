@@ -186,7 +186,7 @@ function readCookie(name) {
 function adjustStyle(width) {
     width = parseInt(width);
     console.log(width);
-    if (width < 501) {
+    if (width < 701) {
         $("#size-stylesheet").attr("href", "css/narrow.css");
     } else if (width < 900) {
         $("#size-stylesheet").attr("href", "css/medium.css");

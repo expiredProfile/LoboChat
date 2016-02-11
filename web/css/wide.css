@@ -1,0 +1,109 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : 09-Feb-2016, 10:48:08
+    Author     : kimmo
+*/
+* {
+    margin: 0em;
+    font-family: "Palatino Linotype";
+}
+
+html {
+    height: 100%;
+}
+
+body {
+    background-image: url("graycircles.jpg");
+    height: 100%;
+}
+
+.wrapper-class {
+    height: 100%;
+    width: 60%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.header-class {
+    background-color: #990000;
+    height: 5em;
+    text-align: center;
+}
+
+.header-class h3 {
+    font-size: 3em;
+    color: white;
+    padding-top: 0.2em;
+}
+
+.content-class {
+    background-color: white;
+    height: 100%;
+    margin-bottom: -5em;
+}
+
+.login-class {
+    margin-left: auto;
+    margin-right: auto;
+    width: 40%;
+}
+
+.login-class p {
+    padding-top: 5em;
+    font-size: 2em;
+}
+
+.login-class input {
+    width: 100%;
+    height: 2em;
+    padding-left: 1em;
+    border-radius: 1em;
+    border: 0.1em solid;
+}
+
+.login-class input:active {
+    outline: none;
+}
+
+.login-class input:focus {
+    outline: none;
+}
+
+:placeholder-shown {
+    padding-left: 1em;
+}
+
+#loginButton-id {
+    width: 100%;
+    text-align: center;
+    margin-top: 0.5em;
+}
+
+#loginButton-id button {
+    width: 4em;
+    border-radius: 1em;
+    border: 0.1em solid;
+    background-color: #990000;
+    border-color: #990000;
+    color: white;
+    font-size: 1.5em;
+}
+
+.footer-class {
+    background-color: #990000;
+    height: 5em;
+    text-align: center;
+    position: absolute;
+    bottom: 0;
+    width: 60%;
+}
+
+.footer-class h4 {
+    font-size: 2em;
+    color: white;
+    padding-top: 0.5em;
+}
