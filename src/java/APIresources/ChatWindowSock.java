@@ -27,12 +27,14 @@ public class ChatWindowSock {
     @OnOpen
     public void onOpen(Session s){
        wses.add(s);
+       messageAll("Online man.");
        
     }
     
     @OnClose
     public void onClose(Session s){
         wses.remove(s);
+        messageAll("Offline man.");
     }
     
     @OnMessage
@@ -41,6 +43,17 @@ public class ChatWindowSock {
             try{
                 s.getBasicRemote().sendText("true");
             } catch (Exception e){
+                
+            }
+        }
+    }
+    
+    
+    public void messageAll(String ss){
+        for (Session s : wses){
+            try {
+                s.getBasicRemote().sendText(ss);
+            } catch (Exception e) {
                 
             }
         }
