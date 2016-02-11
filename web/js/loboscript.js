@@ -78,12 +78,13 @@ $(document).ready(function () {
         //Get user input
         var alertCat = $("#alert").val();
         var recGroup = $('input[name="receiverGroup"]:checked').val();
+        var sender = readCookie("currentUser");
         //Print for test purposes
         alert("alertCat: " + alertCat + ", recGroup: " + recGroup);
         //append data
         $alertXml.find("alertCat").append(alertCat);
         $alertXml.find("receiverGroup").append(recGroup);
-        $alertXml.find("postName").append("kikkihiiri");
+        $alertXml.find("postName").append(sender);
         
         $.ajax({
             url: baseUrl + "/resources/Alerts",
