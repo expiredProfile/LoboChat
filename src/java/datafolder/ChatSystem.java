@@ -16,10 +16,8 @@ public class ChatSystem {
     private static ChatSystem instance = new ChatSystem();
     private Message message;
     private Worker worker;
-    private Alert alert;
     private Group group;
     private Conversation conversation;
-    private int alertIdIncerement;
     private HashMap<Integer, Conversation> conversations;
     private HashMap<Integer, Alert> alertHistory;
     private ArrayList<Worker> loggedIn;
@@ -28,13 +26,12 @@ public class ChatSystem {
     private ChatSystem(){
         this.message = new Message();
         this.worker = new Worker();
+        this.group = new Group();
         this.conversation = new Conversation();
         this.conversations = new HashMap<>();
+        this.alertHistory = new HashMap<>();
         this.loggedIn = new ArrayList<>();
         this.loggedOut = new ArrayList<>();
-        this.group = new Group();
-        this.alertHistory = new HashMap<>();
-        this.alertIdIncerement = 0;
     }
     
     public static ChatSystem getInstance() {

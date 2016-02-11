@@ -67,21 +67,35 @@ $(document).ready(function () {
     }); //loggedInUsers
 
     $("#sendAlertButton").click(function () {
-        var alertCategory = $("#alert").val();
-        var receiverGroup = $("#receiverGroup").val();
+        console.log("Sending alert");
+        //Xml object
+        var xmlAlertObject = "<alert><alertCat></alertCat><receiverGroup></receiverGroup><postName></postName></alert>";
+        var alertXmlDoc = $.parseXML(xmlAlertObject);
+        var $alertXml = $(alertXmlDoc);
+        //Get user input
+        var alertCat = $("#alert").val(); //Alert category dropdown
+        var recGroup = $('input[name="receiverGroup"]:checked').val(); //Receiver group radio
+        var sender = readCookie("currentUser"); //Read current user from cookie (alert sender)
+        //Print for test purposes
+        alert("alertCat: " + alertCat + ", recGroup: " + recGroup);
+        //Append input data to xml
+        $alertXml.find("alertCat").append(alertCat);
+        $alertXml.find("receiverGroup").append(recGroup);
+        $alertXml.find("postName").append(sender);
+        
         $.ajax({
             url: baseUrl + "/resources/Alerts",
-            data: { alertCat : alertCategory, receiverGroup : receiverGroup, postName : workerName },
+            data: alertXmlDoc,
+            processData: false, //already xml doc!
             type: 'POST',
-            contentType: 'xml',
-            //dataType: 'xml', //plain text?
+            contentType: 'application/xml',
+            //dataType: 'text/plain',
             success: document.getElementById("alertResponse").innerHTML = "Alert sent",
             error: function (response) {
                 alert("Error in alert: " + response.statusText);
             }
         }); // ajax
     }); // sendAlert
-
 }); // $(document).ready
 
 function logIn(workerName) {

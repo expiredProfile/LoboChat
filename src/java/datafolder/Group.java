@@ -19,9 +19,7 @@ public class Group {
     private String topic;
     private ArrayList<Worker> workerList;
     
-    public Group(){
-        
-    }
+    public Group(){}
     
     public Group(String topic){
         this.topic = topic;
