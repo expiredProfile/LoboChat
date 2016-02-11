@@ -13,50 +13,59 @@ import javax.xml.bind.annotation.XmlRootElement;
  *
  * @author Kasper
  */
-@XmlRootElement
+@XmlRootElement//(name = "alert")
 public class Alert {
     private int id;
-    private String alertCat;
-    private String receiverGroup;
-    private String postName;
     private String currentTime;
+    @XmlElement//(name = "alertCat")
+    private String alertCat;
+    @XmlElement//(name = "receiverGroup")
+    private String receiverGroup;
+    @XmlElement//(name = "postName")
+    private String postName;
     
     public Alert(){}
     
+    /*
     public Alert(String c, String r, String n){
-        this.id = incrementID();
+        this.id = IDIncrement.getInstance().alertIncrement();
         this.alertCat = c;
         this.receiverGroup = r;
         this.postName = n;
         this.currentTime = TimeResources.getInstance().getTimestamp();
     }
+    */
 
-    @XmlElement
+    //@XmlElement
     public int getID() {
         return id;
     }
     
-    @XmlElement
-    public String getAlertCat() {
-        return alertCat;
+    public void setID() {
+        this.id = IDIncrement.getInstance().alertIncrement();
     }
     
-    @XmlElement
-    public String getReceiverGroup(){
-        return this.receiverGroup;
-    }
-    
-    @XmlElement
-    public String getPostName() {
-        return postName;
-    }
-    
-    @XmlElement
+    //@XmlElement
     public String getCurrentTime(){
         return this.currentTime;
     }
     
-    private int incrementID(){
-        return this.id++;
+    public void setCurrentTime() {
+        this.currentTime = TimeResources.getInstance().getTimestamp();
+    }
+    
+    //@XmlElement
+    public String getAlertCat() {
+        return alertCat;
+    }
+    
+    //@XmlElement
+    public String getReceiverGroup(){
+        return this.receiverGroup;
+    }
+    
+    //@XmlElement
+    public String getPostName() {
+        return postName;
     }
 }

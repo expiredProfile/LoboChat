@@ -36,13 +36,24 @@ public class AlertResources {
     @Consumes(MediaType.APPLICATION_XML)
     //@Produces(MediaType.TEXT_PLAIN)
     public void postAlert(Alert a){
+        String alertCat = a.getAlertCat();
+        String recGroup = a.getReceiverGroup();
+        String user = a.getPostName();
+        System.out.println("alertCat: " + alertCat + ", recGroup: " + recGroup + ", postName: " + user);
+        //id and timestamp test
+        a.setID();
+        a.setCurrentTime();
+        int id = a.getID();
+        String time = a.getCurrentTime();
+        System.out.println("id: " + id + ", time: " + time);
+        //Add alert to history
         system.addAlert(a);
-        String recGroup = a.getReceiverGroup(); //Group number as string
-        for(Worker w : system.getLoggedInList()) {
-            if(w.getTitle().equals(titleData.getTitle(recGroup))) { //If title matches target group
-                w.receiveAlert(); //Notify about alert
-            }
-        }
+//        for(Worker w : system.getLoggedInList()) {
+//            if(w.getTitle().equals(titleData.getTitle(recGroup))) { //If title matches target group
+//                w.receiveAlert(); //Notify about alert
+//                System.out.println("Notifying group " + recGroup);
+//            }
+//        }
     }
     
     @GET

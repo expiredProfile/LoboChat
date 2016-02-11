@@ -71,13 +71,26 @@ $(document).ready(function () {
 
     $("#sendAlertButton").click(function () {
         console.log("Sending alert");
-        var alertCategory = $("#alert").val();
-        var receiverGroup = $("#receiverGroup").val();
+        //Xml object test
+        var xmlAlertObject = "<alert><alertCat></alertCat><receiverGroup></receiverGroup><postName></postName></alert>";
+        var alertXmlDoc = $.parseXML(xmlAlertObject);
+        var $alertXml = $(alertXmlDoc);
+        //Get user input
+        var alertCat = $("#alert").val();
+        var recGroup = $('input[name="receiverGroup"]:checked').val();
+        //Print for test purposes
+        alert("alertCat: " + alertCat + ", recGroup: " + recGroup);
+        //append data
+        $alertXml.find("alertCat").append(alertCat);
+        $alertXml.find("receiverGroup").append(recGroup);
+        $alertXml.find("postName").append("kikkihiiri");
+        
         $.ajax({
             url: baseUrl + "/resources/Alerts",
-            data: alertCategory,
+            data: alertXmlDoc,
+            processData: false, //already doc!
             type: 'POST',
-            contentType: 'xml',
+            contentType: 'application/xml',
             //dataType: 'text/plain',
             success: document.getElementById("alertResponse").innerHTML = "Alert sent",
             error: function (response) {
@@ -85,7 +98,6 @@ $(document).ready(function () {
             }
         }); // ajax
     }); // sendAlert
-
 }); // $(document).ready
 
 function logIn(workerName) {
