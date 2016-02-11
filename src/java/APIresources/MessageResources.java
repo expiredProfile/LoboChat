@@ -24,6 +24,7 @@ import javax.ws.rs.core.MediaType;
 public class MessageResources {
 
     private final ChatSystem system;
+    private String newMessage;
 
     public MessageResources() {
         this.system = ChatSystem.getInstance();
