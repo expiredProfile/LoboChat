@@ -120,8 +120,8 @@ function loggedOut(xml, status) {
         $xml.find('worker').each(function () {
             content += "<div class='loggedOutUsersDiv-class'>" + 
                     "<i class='fa fa-circle loggedOutBall-class'></i>" + 
-                    "<span>" + $(this).find("title").text() + ": " + $(this).find("name").text() + 
-                    "</span>" + "</div>";
+                    "<span>" + $(this).find("name").text() + 
+                    "</span>" + "<span class='leftSide-class'>" + $(this).find("title").text() + "</span>" + "</div>";
         });
     });
     document.getElementById("outField").innerHTML = content;
@@ -140,8 +140,8 @@ function loggedIn(xml, status) {
             console.log("Id name " + wname);
             content += "<div class='loggedInUsersDiv-class'>" + 
                     "<i class='fa fa-circle loggedInBall-class'></i>" + 
-                    "<span>" + $(this).find("title").text() + ": " 
-                    + $(this).find("name").text() + "</span>" + "</div>";
+                    "<span>" + $(this).find("name").text() + "</span>" + 
+                    "<span class='leftSide-class'>" + $(this).find("title").text() + "</span>" + "</div>";
         });
     });
     document.getElementById("inField").innerHTML = content;
