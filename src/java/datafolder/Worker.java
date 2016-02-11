@@ -19,9 +19,8 @@ public class Worker {
     private String name;
     private String title;
     private IDIncrement increment;
-    public Worker() {
-
-    }
+    
+    public Worker() {}
 
     public Worker(String name, String title) {
         this.increment = IDIncrement.getInstance();
@@ -48,5 +47,6 @@ public class Worker {
     //Receive alert test
     public void receiveAlert() {
         //do something
+        System.out.println(this.name + ": alert received");
     }
 }

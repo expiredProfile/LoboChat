@@ -83,7 +83,6 @@ public class ChatSystem {
     //Alert methods
     public void addAlert(Alert a){
         alertHistory.put(a.getID() , a);
-        //alertHistory.put(0, a);
     }
     
     public Alert getAlertByID(int id){

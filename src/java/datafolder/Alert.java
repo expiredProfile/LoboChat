@@ -13,28 +13,18 @@ import javax.xml.bind.annotation.XmlRootElement;
  *
  * @author Kasper
  */
-@XmlRootElement//(name = "alert")
+@XmlRootElement
 public class Alert {
     private int id;
     private String currentTime;
-    @XmlElement//(name = "alertCat")
+    @XmlElement
     private String alertCat;
-    @XmlElement//(name = "receiverGroup")
+    @XmlElement
     private String receiverGroup;
-    @XmlElement//(name = "postName")
+    @XmlElement
     private String postName;
     
     public Alert(){}
-    
-    /*
-    public Alert(String c, String r, String n){
-        this.id = IDIncrement.getInstance().alertIncrement();
-        this.alertCat = c;
-        this.receiverGroup = r;
-        this.postName = n;
-        this.currentTime = TimeResources.getInstance().getTimestamp();
-    }
-    */
 
     //@XmlElement
     public int getID() {

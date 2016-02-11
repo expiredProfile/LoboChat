@@ -25,7 +25,7 @@ public class AlertData {
     
     //Get alert info (value) with alert category id (key)
     //@XmlElement
-    //Get info id as param instead?
+    //Get info id as parameter instead?
     public String getAlertInfo(Alert a) {
         int alertCat = Integer.parseInt(a.getAlertCat());
         String info = alertCategories.get(alertCat);
