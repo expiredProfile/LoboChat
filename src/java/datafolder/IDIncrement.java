@@ -13,10 +13,12 @@ public class IDIncrement {
     private static IDIncrement instance = new IDIncrement();
     private int workerIncrement;
     private int conversationIncrement;
+    private int alertIncrement;
     
     private IDIncrement(){
         this.workerIncrement = 0;
         this.conversationIncrement = 0;
+        this.alertIncrement = 0;
     }
     
     public static IDIncrement getInstance(){
@@ -29,5 +31,9 @@ public class IDIncrement {
     
     public int conversationIncrement(){
         return this.conversationIncrement++;
+    }
+    
+    public int alertIncrement(){
+        return this.alertIncrement++;
     }
 }

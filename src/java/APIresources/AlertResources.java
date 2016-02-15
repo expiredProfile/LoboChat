@@ -7,11 +7,12 @@ package APIresources;
 
 import datafolder.ChatSystem;
 import datafolder.Alert;
+import datafolder.TitleData;
+import datafolder.Worker;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
@@ -22,32 +23,45 @@ import javax.ws.rs.core.MediaType;
 @Path("/Alerts")
 public class AlertResources {
     private final ChatSystem system;
-    private AlertData data;
+    private AlertData alertData;
+    private TitleData titleData;
     
     public AlertResources() {
         this.system = ChatSystem.getInstance();
-        this.data = new AlertData();
+        this.alertData = new AlertData();
+        this.titleData = new TitleData();
     }
     
     @POST
-    //how this gets alertcategory (string in js)?
     @Consumes(MediaType.APPLICATION_XML)
-    public void postAlert(int alertCat){
-        int id = system.getAlertIncrement();
-        String name = "testUser";
-        Alert alert = new Alert(id, alertCat, name);
-        system.addAlert(alert);
-        id++;
-        system.setAlertIncrement(id);
+    //@Produces(MediaType.TEXT_PLAIN)
+    public void postAlert(Alert a){
+        //Test print
+        String alertCat = a.getAlertCat();
+        String recGroup = a.getReceiverGroup();
+        String user = a.getPostName();
+        System.out.println("alertCat: " + alertCat + ", recGroup: " + recGroup + ", postName: " + user);
+        //Add id and timestamp test
+        a.setID();
+        a.setCurrentTime();
+        //Test print
+        int id = a.getID();
+        String time = a.getCurrentTime();
+        System.out.println("id: " + id + ", time: " + time);
+        //Add alert to history
+        system.addAlert(a);
+        //Notify test
+        for(Worker w : system.getLoggedInList()) {
+            System.out.println("Notifying group " + recGroup);
+            w.receiveAlert(); //Notify about alert
+        }
     }
     
-    @Path("/{alertid}")
     @GET
-    //Get alert info and return plain text?
+    @Consumes(MediaType.APPLICATION_XML)
     @Produces(MediaType.APPLICATION_XML)
-    public String getAlertIdXML(@PathParam("alertid") int alertid){
-        Alert alert = system.getAlertByID(alertid);
-        String info = data.getAlertInfo(alert);
-        return info;
+    public Alert getAlertXML(int alertId){
+        Alert alert = system.getAlertByID(alertId);
+        return alert;
     }
 }

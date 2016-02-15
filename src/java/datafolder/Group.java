@@ -19,9 +19,7 @@ public class Group {
     private String topic;
     private ArrayList<Worker> workerList;
     
-    public Group(){
-        
-    }
+    public Group(){}
     
     public Group(String topic){
         this.topic = topic;
@@ -32,9 +30,14 @@ public class Group {
     public ArrayList<Worker> getWorkerList(){
         return this.workerList;
     }    
-    
+    public void setWorkerList(ArrayList<Worker> a){
+        this.workerList = a;
+    }
     @XmlElement
     public String getTopic(){
         return this.topic;
+    }
+    public void setTopic(String s){
+        this.topic = s;
     }
 }

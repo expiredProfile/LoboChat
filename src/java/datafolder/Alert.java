@@ -16,41 +16,46 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 public class Alert {
     private int id;
-    private int alertCat;
-    private String postName;
     private String currentTime;
-    //Urgency level?
+    @XmlElement
+    private String alertCat;
+    @XmlElement
+    private String receiverGroup;
+    @XmlElement
+    private String postName;
     
     public Alert(){}
-    
-    public Alert(int id, int c, String n){
-        this.id = id;
-        this.alertCat = c;
-        this.postName = n;
-        this.currentTime = TimeResources.getInstance().getTimestamp();
-    }
 
-    @XmlElement
+    //@XmlElement
     public int getID() {
         return id;
     }
     
-    @XmlElement
-    public int getAlertCat() {
-        return alertCat;
-    }
-
-    @XmlElement
-    public String getPostName() {
-        return postName;
-    }
-
-    public void setPostName(String postName) {
-        this.postName = postName;
+    public void setID() {
+        this.id = IDIncrement.getInstance().alertIncrement();
     }
     
-    @XmlElement
+    //@XmlElement
     public String getCurrentTime(){
         return this.currentTime;
+    }
+    
+    public void setCurrentTime() {
+        this.currentTime = TimeResources.getInstance().getTimestamp();
+    }
+    
+    //@XmlElement
+    public String getAlertCat() {
+        return alertCat;
+    }
+    
+    //@XmlElement
+    public String getReceiverGroup(){
+        return this.receiverGroup;
+    }
+    
+    //@XmlElement
+    public String getPostName() {
+        return postName;
     }
 }

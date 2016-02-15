@@ -10,8 +10,12 @@ var workerName;
 //var chatParticipantId;
 var chatParticipantName;
 var chatID;
+var wsUri = "ws://localhost:8080/LoboChat/chatend";
+//var wsUri = "ws://localhost:8080/LoboChat/resources/chatend/";
+var websocket;
 
 $(document).ready(function () {
+
     $(function () {
         adjustStyle($(this).width());
         $(window).resize(function () {
@@ -67,17 +71,39 @@ $(document).ready(function () {
     }); //loggedInUsers
 
     $("#sendAlertButton").click(function () {
-        var alertCategory = $("#alert").val();
+        console.log("Sending alert");
+        //Xml object
+        var xmlAlertObject = "<alert><alertCat></alertCat><receiverGroup></receiverGroup><postName></postName></alert>";
+        var alertXmlDoc = $.parseXML(xmlAlertObject);
+        var $alertXml = $(alertXmlDoc);
+        //Get user input
+        var alertCat = $("#alert").val(); //Alert category dropdown
+        var recGroup = $('input[name="receiverGroup"]:checked').val(); //Receiver group radio
+        var sender = readCookie("currentUser"); //Read current user from cookie (alert sender)
+        //Print for test purposes
+        alert("alertCat: " + alertCat + ", recGroup: " + recGroup);
+        //Append input data to xml
+        $alertXml.find("alertCat").append(alertCat);
+        $alertXml.find("receiverGroup").append(recGroup);
+        $alertXml.find("postName").append(sender);
+        
         $.ajax({
             url: baseUrl + "/resources/Alerts",
-            data: alertCategory,
+            data: alertXmlDoc,
+            processData: false, //already xml doc!
             type: 'POST',
-            contentType: 'text/plain',
-            dataType: 'xml',
-            success: document.getElementById("alertResponse").innerHTML = " "
+            contentType: 'application/xml',
+            //dataType: 'text/plain',
+            success: document.getElementById("alertResponse").innerHTML = "Alert sent",
+            error: function (response) {
+                alert("Error in alert: " + response.statusText);
+            }
         }); // ajax
     }); // sendAlert
-
+    
+     $("#topicsButton-id").click(function () {
+        getConversations();
+    });
 }); // $(document).ready
 
 function logIn(workerName) {
@@ -96,7 +122,7 @@ function logIn(workerName) {
 
 function logOut() {
     var currentUser = readCookie('currentUser');
-    window.alert("keksistä: " + currentUser);
+    //window.alert("logged out: " + currentUser);
     $.ajax({
         url: baseUrl + "/resources/Workers/LoggedOut",
         data: currentUser,
@@ -127,6 +153,7 @@ function loggedOut(xml, status) {
     document.getElementById("outField").innerHTML = content;
 }
 
+
 function loggedIn(xml, status) {
     console.log("listing messages");
     xmlString = (new XMLSerializer()).serializeToString(xml);
@@ -148,11 +175,11 @@ function loggedIn(xml, status) {
 }
 
 
-function openChat(name) {
+function openChat(id) {
 
     var url = baseUrl + "/chaWin.html";
     //chatParticipantId = id;
-    sessionStorage.setItem("pname", name);
+    sessionStorage.setItem("cid", id);
     window.open(url);
 }
 
@@ -168,7 +195,7 @@ function writeCookie(name, value, days) {
     document.cookie = name + "=" + value + expires + "; path=/";
 }
 
-function readCookie(name) {
+function readCookie(name) { //readCookie('currentUser')
     var i, c, ca, nameEQ = name + "=";
     ca = document.cookie.split(';');
     for (i = 0; i < ca.length; i++) {
@@ -195,20 +222,230 @@ function adjustStyle(width) {
     }
 }
 
+function startConversation(receiver) {
+    var xmlGroupObject = '<group><topic>example topic</topic><workerList><id></id><name>' + readCookie("currentUser") + '</name><title></title></workerList>'
+            + '<workerList><id></id><name>' + receiver + '</name><title></title></workerList></group>';
+    var GroupXmlDoc = $.parseXML(xmlGroupObject);
+    var $groupXml = $(GroupXmlDoc);
+    $.ajax({
+        url: "http://localhost:8080/LoboChat/resources/Conversations",
+        data: GroupXmlDoc,
+        processData: false,
+        type: 'POST',
+        contentType: 'application/xml', // datatype sent
+        dataType: 'xml', // datatype received
+        //success: document.getElementById("outputField").innerHTML = ".. ",
+        error: function (response) {
+            console.log("Error: " + response.statusText);
+        }
+    }); // ajax
+}
+; // function
 
-/*
- function listMessages(xml, status) {
- console.log("listing messages");
- xmlString = (new XMLSerializer()).serializeToString(xml);
- console.log("XML: " + xmlString);
- var $xml = $(xml);
- var content = "";
- $xml.find("message").each(function () {
- content += $(this).find("id").text() + " " + $(this).find("postTitle").text() + " " 
- + $(this).find("postName").text() + ": "
- + $(this).find("content").text() + "<br>";
- });
- document.getElementById("outputField").innerHTML = content;
- }; // listMessages
- */
+function loggedIn(xml, status) {
+    console.log("listing users");
+    xmlString = (new XMLSerializer()).serializeToString(xml);
+    console.log("XML: " + xmlString);
+    var $xml = $(xml);
+    var content = "";
+    $xml.find('workers').each(function () {
+        $xml.find('worker').each(function () {
+            var wname = $(this).find("name").text();
+            console.log("Id name " + wname);
+            if (wname !== readCookie('currentUser')) {
+                content += "<div class='onlines'><button onclick='startConversation(\"" + wname + "\")'\n\
+             value=" + $(this).find("id").text() + "\
+            > " + $(this).find("title").text() + ": " + $(this).find("name").text()
+                        + "</button></div><br>";
+            }
+        });
+    });
+    document.getElementById("inField").innerHTML = content;
+}
+;// loggedIn??
+
+function getConversations() {
+    var user = readCookie('currentUser');
+    $.ajax({
+        url: baseUrl + "/resources/Conversations/" + user,
+        type: 'GET',
+        contentType: 'text/plain',
+        dataType: 'xml',
+        success: listConversations,
+        error: function (response) {
+            alert(response.statusText + " wn: " + workerName);
+        }
+    });
+}
+function listConversations(xml, status) {
+    console.log("listing Conversations");
+//    xmlString = (new XMLSerializer()).serializeToString(xml);
+//    console.log("XML: " + xmlString);
+    var $xml = $(xml);
+    var content = "";
+    $xml.find('conversations').each(function () {
+        $xml.find('conversation').each(function () {
+            var conversationID = $(this).find("ID").text();
+            console.log("conversationID " + conversationID);
+            content += "<div class='onlines'><button onclick='openChat(\"" + conversationID + "\")'\n\
+             value='" + $(this).find("topic").text() +
+                    "'> " + $(this).find("topic").text() + ": " + $(this).find("ID").text()
+                    + "</button></div><br>";
+        });
+    });
+    document.getElementById("inField").innerHTML = content;
+}
+;// listConversations
+
+function getParticipants() {
+    var cid = sessionStorage.getItem("cid");
+    $.ajax({
+        url: baseUrl + "/resources/Conversations/conversationID/" + cid,
+        type: 'GET',
+        contentType: 'text/plain',
+        dataType: 'xml',
+        success: listParticipant,
+        error: function (response) {
+            alert(response.statusText + " wn: " + workerName);
+        }
+    });
+    if (websocket !== undefined && websocket.readyState !== WebSocket.CLOSED) {
+
+    } else {
+        websocket = new WebSocket(wsUri);
+        websocket.onopen = function (event) {
+            onOpen(event);
+        };
+        websocket.onmessage = function (event) {
+            onMessage(event);
+        };
+
+        websocket.onclose = function (event) {
+            onClose(event);
+        };
+    }
+
+
+
+}
+
+function listParticipant(xml, status) {
+    console.log("listing participants");
+    var $xml = $(xml);
+    var content = "";
+    var messages = "";
+    var cid = $xml.find('ID').text();
+    $xml.find('memberList').each(function () {
+        var memberName = $(this).find("name").text();
+        content += memberName + "<br>";
+    });
+
+    $xml.find('messages').each(function () {
+        var postName = $(this).find("postName").text();
+        var msgs = $(this).find("content").text();
+        messages += postName + ": " + msgs + "<br>";
+    });
+    document.getElementById("participants").innerHTML = content;
+    document.getElementById("chatArea").innerHTML = messages;
+    document.getElementById("conversationID").innerHTML = cid;
+}
+;// listParticipants
+
+function onMessage(event) {
+    var cid = document.getElementById("conversationID").innerHTML;
+    if (event.data === cid) {
+        loadMessages();
+    }
+}//onMessage
+
+function onOpen(event) {
+    systemMessage(readCookie('currentUser') + " connected!");
+}
+function onClose(event) {
+    systemMessage(readCookie('currentUser') + " disconnected!");
+}
+function loadMessages() {
+    var cid = document.getElementById("conversationID").innerHTML;
+    $.ajax({
+        url: baseUrl + "/resources/Messages/" + cid,
+        type: 'GET',
+        contentType: 'text/plain',
+        dataType: 'xml',
+        success: listMessages,
+        error: function (response) {
+            alert(response.statusText + " wn: " + workerName);
+        }
+    });
+}//loadMessages()
+
+function listMessages(xml, status) {
+    var $xml = $(xml);
+    var content = "";
+    $xml.find('message').each(function () {
+        var postName = $(this).find("postName").text();
+        var msgs = $(this).find("content").text();
+        content += postName + ": " + msgs + "<br>";
+    });
+    document.getElementById("chatArea").innerHTML = content;
+}
+
+function sendMessage() {
+
+    var messageContent = $("#inputField").val();
+    var d = new Date();
+
+    var dd = d.getDate() + "-" + (d.getMonth() + 1) + "-" + d.getFullYear() + " " + d.getHours() + ":" + d.getMinutes() + ":" + d.getSeconds();
+
+    var cid = document.getElementById("conversationID").innerHTML;
+
+    var sender = readCookie('currentUser');
+
+    var messageObject = "  <message><content>" + messageContent + "</content>"
+            + "<conversationID> " + cid + "</conversationID>"
+            + " <currentTime>" + dd + "</currentTime>"
+            + "<postName>" + sender + "</postName></message> ";
+    var messageXml = $.parseXML(messageObject);
+    $.ajax({
+        url: baseUrl + "/resources/Messages",
+        data: messageXml,
+        processData: false,
+        type: 'POST',
+        contentType: 'application/xml', // datatype sent
+
+        //success: document.getElementById("outputField").innerHTML = ".. ",
+        error: function (response) {
+            console.log("Error: " + response.statusText);
+        }//error
+    }); // ajax
+
+    websocket.send(cid);
+}// function
+
+function systemMessage(content) {
+
+    var d = 1;
+    var cid = document.getElementById("conversationID").innerHTML;
+    var sender = "System";
+    var messageObject = "  <message><content>" + content + "</content>"
+            + "<conversationID> " + cid + "</conversationID>"
+            + " <currentTime>" + d + "</currentTime>"
+            + "<postName>" + sender + "</postName></message> ";
+    var messageXml = $.parseXML(messageObject);
+
+    $.ajax({
+        url: baseUrl + "/resources/Messages",
+        data: messageXml,
+        processData: false,
+        type: 'POST',
+        contentType: 'application/xml', // datatype sent
+        dataType: 'xml', // datatype received
+        //success: document.getElementById("outputField").innerHTML = ".. ",
+        error: function (response) {
+            console.log("Error: " + response.statusText);
+        }//error
+    }); // ajax
+    websocket.send(cid);
+
+
+}// function
 

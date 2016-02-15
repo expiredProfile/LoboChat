@@ -18,18 +18,39 @@ and open the template in the editor.
         <div class="header-class">
             <h3>Lobo Chat</h3>
         </div>
+
         <div class="content-class">
             <div id="displayChoiceDiv-id">
                 <button id="usersButton-id"><i class="fa fa-user"></i></button>
                 <button id="topicsButton-id"><i class="fa fa-commenting-o"></i></button>
                 <button id="alertsButton-id"><i class="fa fa-exclamation-triangle"></i></button>
             </div>
+
             <div id="main-id">
+                <!-- are these buttons needed? -->
+                <button id="loggedOutUsers">Logged Out</button>
+                <button id="loggedInUsers">Logged In</button>
                 <div id="inField"></div>
                 <div id="outField"></div>
             </div>
+
+            <div id="sendAlert">
+                <select id="alert">
+                    <option value="0">Need assistance</option>
+                    <option value="1">Disturbance</option>
+                    <option value="2">Fire alert</option>
+                </select>
+
+                <input type="radio" name="receiverGroup" value="0" checked="checked" /> Doctors
+                <input type="radio" name="receiverGroup" value="1" /> Guards
+
+                <button id="sendAlertButton" >Alert</button>
+                <div id="alertResponse"></div>
+            </div>
         </div>
+
         <div class="footer-class">
             <button id="logOutButton">Log Out</button>
         </div>
 </html>
+
