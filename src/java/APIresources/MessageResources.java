@@ -29,24 +29,33 @@ public class MessageResources {
     public MessageResources() {
         this.system = ChatSystem.getInstance();
     }
-    
+
     //send conversation id from server as plain text
     @GET
+    @Path("/{id}")
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.APPLICATION_XML)
-    public ArrayList<Message> getMessageXML(String s) {
+    public ArrayList<Message> getMessageXML(@PathParam("id") String s) {
         int id = Integer.parseInt(s);
         return system.getConversationMessages(id);
     }
-    
-    //Send username from browser when sending a new message
+
+//    Send username from browser when sending a new message
     @POST
     @Consumes(MediaType.APPLICATION_XML)
     public void postMessage(Message m) {
         int id = m.getConversationID();
-        system.addMessageToConversation(id, m);     
+        system.addMessageToConversation(id, m);
     }
-    
+//    @POST
+//    @Consumes(MediaType.APPLICATION_XML)
+//    public ArrayList<Message> postMessage(String s) {
+//       
+//        system.addMessageToConversation(0, new Message("ayy", "kk", 0));
+//        return system.getConversationMessages(0);
+//    }
+
+
     /*
     @Path("/{messageid}")
     @GET
@@ -54,5 +63,5 @@ public class MessageResources {
     public Message getMessageIdXML(@PathParam("messageid") int messageid) {
         return system.getMessageByID(messageid);
     }
-    */
+     */
 }

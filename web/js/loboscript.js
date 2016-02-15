@@ -10,8 +10,12 @@ var workerName;
 //var chatParticipantId;
 var chatParticipantName;
 var chatID;
+var wsUri = "ws://localhost:8080/LoboChat/chatend";
+//var wsUri = "ws://localhost:8080/LoboChat/resources/chatend/";
+var websocket;
 
 $(document).ready(function () {
+
     $(function () {
         adjustStyle($(this).width());
         $(window).resize(function () {
@@ -250,7 +254,6 @@ function loggedIn(xml, status) {
             > " + $(this).find("title").text() + ": " + $(this).find("name").text()
                         + "</button></div><br>";
             }
-
         });
     });
     document.getElementById("inField").innerHTML = content;
@@ -302,7 +305,26 @@ function getParticipants() {
             alert(response.statusText + " wn: " + workerName);
         }
     });
+    if (websocket !== undefined && websocket.readyState !== WebSocket.CLOSED) {
+
+    } else {
+        websocket = new WebSocket(wsUri);
+        websocket.onopen = function (event) {
+            onOpen(event);
+        };
+        websocket.onmessage = function (event) {
+            onMessage(event);
+        };
+
+        websocket.onclose = function (event) {
+            onClose(event);
+        };
+    }
+
+
+
 }
+
 function listParticipant(xml, status) {
     console.log("listing participants");
     var $xml = $(xml);
@@ -323,4 +345,103 @@ function listParticipant(xml, status) {
     document.getElementById("chatArea").innerHTML = messages;
     document.getElementById("conversationID").innerHTML = cid;
 }
-;// listConversations
+;// listParticipants
+
+function onMessage(event) {
+    var cid = document.getElementById("conversationID").innerHTML;
+    if (event.data === cid) {
+        loadMessages();
+    }
+}//onMessage
+
+function onOpen(event) {
+    systemMessage(readCookie('currentUser') + " connected!");
+}
+function onClose(event) {
+    systemMessage(readCookie('currentUser') + " disconnected!");
+}
+function loadMessages() {
+    var cid = document.getElementById("conversationID").innerHTML;
+    $.ajax({
+        url: baseUrl + "/resources/Messages/" + cid,
+        type: 'GET',
+        contentType: 'text/plain',
+        dataType: 'xml',
+        success: listMessages,
+        error: function (response) {
+            alert(response.statusText + " wn: " + workerName);
+        }
+    });
+}//loadMessages()
+
+function listMessages(xml, status) {
+    var $xml = $(xml);
+    var content = "";
+    $xml.find('message').each(function () {
+        var postName = $(this).find("postName").text();
+        var msgs = $(this).find("content").text();
+        content += postName + ": " + msgs + "<br>";
+    });
+    document.getElementById("chatArea").innerHTML = content;
+}
+
+function sendMessage() {
+
+    var messageContent = $("#inputField").val();
+    var d = new Date();
+
+    var dd = d.getDate() + "-" + (d.getMonth() + 1) + "-" + d.getFullYear() + " " + d.getHours() + ":" + d.getMinutes() + ":" + d.getSeconds();
+
+    var cid = document.getElementById("conversationID").innerHTML;
+
+    var sender = readCookie('currentUser');
+
+    var messageObject = "  <message><content>" + messageContent + "</content>"
+            + "<conversationID> " + cid + "</conversationID>"
+            + " <currentTime>" + dd + "</currentTime>"
+            + "<postName>" + sender + "</postName></message> ";
+    var messageXml = $.parseXML(messageObject);
+    $.ajax({
+        url: baseUrl + "/resources/Messages",
+        data: messageXml,
+        processData: false,
+        type: 'POST',
+        contentType: 'application/xml', // datatype sent
+
+        //success: document.getElementById("outputField").innerHTML = ".. ",
+        error: function (response) {
+            console.log("Error: " + response.statusText);
+        }//error
+    }); // ajax
+
+    websocket.send(cid);
+}// function
+
+function systemMessage(content) {
+
+    var d = 1;
+    var cid = document.getElementById("conversationID").innerHTML;
+    var sender = "System";
+    var messageObject = "  <message><content>" + content + "</content>"
+            + "<conversationID> " + cid + "</conversationID>"
+            + " <currentTime>" + d + "</currentTime>"
+            + "<postName>" + sender + "</postName></message> ";
+    var messageXml = $.parseXML(messageObject);
+
+    $.ajax({
+        url: baseUrl + "/resources/Messages",
+        data: messageXml,
+        processData: false,
+        type: 'POST',
+        contentType: 'application/xml', // datatype sent
+        dataType: 'xml', // datatype received
+        //success: document.getElementById("outputField").innerHTML = ".. ",
+        error: function (response) {
+            console.log("Error: " + response.statusText);
+        }//error
+    }); // ajax
+    websocket.send(cid);
+
+
+}// function
+
