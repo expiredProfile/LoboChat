@@ -41,8 +41,18 @@ public class Conversation {
     public ArrayList<Message> getMessages(){
         return this.messages;
     }
-    
+    @XmlElement
     public int getID(){
         return this.id;
     }
+    @XmlElement
+    public String getTopic(){
+        return this.topic;
+    }
+
+    @XmlElement
+    public ArrayList<Worker> getMemberList() {
+        return memberList;
+    }
+    
 }

@@ -12,12 +12,7 @@ and open the template in the editor.
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
         <script src="./js/loboscript.js"></script>
         <script>
-        function participant(){
-            
-            var currentUser = readCookie('currentUser');
-            var parUser = sessionStorage.getItem("pname");
-            document.getElementById("participants").innerHTML = currentUser +"<br>"+ parUser + "<br>";
-            }
+       
         
         </script>
         <style>
@@ -48,12 +43,13 @@ and open the template in the editor.
             }
         </style>
     </head>
-    <body onload="participant()">
+    <body onload="getParticipants()">
         <div id="container">
             <div id="chatArea"></div> 
             <div id="participants"> </div>
+             <div id="conversationID"> </div>
             <input type="text" id="inputField">
-            <button value="send"></button>
+            <button onclick="sendMessage()" value="send">lähetä</button>
         </div>
     </body>
 </html>
