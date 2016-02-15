@@ -19,7 +19,6 @@ public class ChatSystem {
     private Alert alert;
     private Group group;
     private Conversation conversation;
-    private int alertIdIncerement;
     private HashMap<Integer, Conversation> conversations;
     private HashMap<Integer, Alert> alertList;
     private ArrayList<Worker> loggedIn;
@@ -35,7 +34,6 @@ public class ChatSystem {
         this.loggedOut = new ArrayList<>();
         this.group = new Group();
         this.alertList = new HashMap<>();
-        this.alertIdIncerement = 0;
     }
     
     public static ChatSystem getInstance() {
@@ -91,13 +89,5 @@ public class ChatSystem {
     
     public Alert getAlertByID(int id){
         return alertList.get(id);
-    }
-    
-    public void setAlertIncrement(int id){
-        this.alertIdIncerement = id;
-    }
-    
-    public int getAlertIncrement(){
-        return this.alertIdIncerement;
     }
 }
