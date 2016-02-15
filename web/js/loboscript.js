@@ -152,27 +152,26 @@ function loggedOut(xml, status) {
     document.getElementById("outField").innerHTML = content;
 }
 
-
 function loggedIn(xml, status) {
-    console.log("listing messages");
+    console.log("listing users");
     xmlString = (new XMLSerializer()).serializeToString(xml);
     console.log("XML: " + xmlString);
     var $xml = $(xml);
     var content = "";
     $xml.find('workers').each(function () {
         $xml.find('worker').each(function () {
-//var wid = $(this).find("id").text();
             var wname = $(this).find("name").text();
             console.log("Id name " + wname);
-            content += "<div class='loggedInUsersDiv-class'>" + 
+            if (wname !== readCookie('currentUser')) {
+                content += "<div class='loggedInUsersDiv-class'>" + 
                     "<i class='fa fa-circle loggedInBall-class'></i>" + 
                     "<span>" + $(this).find("name").text() + "</span>" + 
                     "<span class='leftSide-class'>" + $(this).find("title").text() + "</span>" + "</div>";
+            }
         });
     });
     document.getElementById("inField").innerHTML = content;
-}
-
+};
 
 function openChat(id) {
 
@@ -240,28 +239,6 @@ function startConversation(receiver) {
     }); // ajax
 }
 ; // function
-
-function loggedIn(xml, status) {
-    console.log("listing users");
-    xmlString = (new XMLSerializer()).serializeToString(xml);
-    console.log("XML: " + xmlString);
-    var $xml = $(xml);
-    var content = "";
-    $xml.find('workers').each(function () {
-        $xml.find('worker').each(function () {
-            var wname = $(this).find("name").text();
-            console.log("Id name " + wname);
-            if (wname !== readCookie('currentUser')) {
-                content += "<div class='onlines'><button onclick='startConversation(\"" + wname + "\")'\n\
-             value=" + $(this).find("id").text() + "\
-            > " + $(this).find("title").text() + ": " + $(this).find("name").text()
-                        + "</button></div><br>";
-            }
-        });
-    });
-    document.getElementById("inField").innerHTML = content;
-}
-;// loggedIn??
 
 function getConversations() {
     var user = readCookie('currentUser');
