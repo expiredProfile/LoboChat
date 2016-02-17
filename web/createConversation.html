@@ -1,88 +1,19 @@
-<h3>Create conversation</h3>
-Topic:
-<input type="text" name="topic"><br>
-<button id="topicButton-id">Add topic</button><br>
-<div class="dropdown">
-    <!--
-    <button onclick="myFunction()" class="dropbtn">Dropdown</button>
-    <div id="myDropdown" class="dropdown-content">
+<div id="crtConvDiv-id">
+    <h3>Create conversation</h3>
+    <input id="topicInput-id" type="text" name="topic"><br>
+    <button id="topicButton-id">Add topic</button><br>
+    <div class="dropdown">
+        <p>Select users</p>
+        <select id="dropDownMenu">
 
-    </div>-->
-    <select id="dropDownMenu">
-
-    </select>
+        </select>
+    </div>
+    <div id="topicPlacement-id">
+        <p>Topic to add</p>
+        <div id="topic-id"></div>
+    </div>
+    <div id="userPlacement-id">
+        <p>Users to add</p>
+    </div>
+    <button id="createButton-id">Create Conversation</button>
 </div>
-<div id="topicPlacement-id">
-    <h3>Topic to add</h3>
-    <div id="topic-id"></div>
-</div>
-<div id="userPlacement-id">
-    <h3>Users to add!</h3>
-</div>
-<button id="createButton-id">Create Conversation</button>
-<script>
-    /*
-    var number = 0;
-    var check = true;
-    $(document).ready(function () {
-        ajaxGet();
-
-        $(document).on("click", "option", function () {
-            var text = $(this).text();
-            console.log("text to place: " + text);
-            $("#userPlacement-id").append("<p id='user" + number + "'>" + text + "</p>");
-            number++;
-        });
-
-        $("#topicButton-id").click(function () {
-            var text = $("input").val();
-            document.getElementById("topic-id").innerHTML = text;
-        });
-    });
-
-    function ajaxGet() {
-        if (check === true) {
-            $("#myDropdown").empty();
-            console.log("ajax get");
-            $.ajax({
-                url: baseUrl + '/resources/Workers/LoggedIn',
-                type: 'GET',
-                dataType: 'xml',
-                async: false,
-                success: loggedInDropDown
-            });
-            $.ajax({
-                url: baseUrl + '/resources/Workers/LoggedOut',
-                type: 'GET',
-                dataType: 'xml',
-                async: false,
-                success: loggedOutDropDown
-            });
-            console.log("ajax get done");
-            check = false;
-        }
-    }
-*/
-    /*
-     function myFunction() {
-     document.getElementById("myDropdown").classList.toggle("show");
-     }
-     
-     // Close the dropdown menu if the user clicks outside of it
-     window.onclick = function (event) {
-     if (!event.target.matches('.dropbtn')) {
-     
-     var dropdowns = document.getElementsByClassName("dropdown-content");
-     console.log("dropdowns: " + dropdowns);
-     var i;
-     for (i = 0; i < dropdowns.length; i++) {
-     var openDropdown = dropdowns[i];
-     console.log("open dropdown: " + openDropdown);
-     if (openDropdown.classList.contains('show')) {
-     openDropdown.classList.remove('show');
-     }
-     }
-     }
-     };
-     */
-</script>

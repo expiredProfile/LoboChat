@@ -45,7 +45,7 @@ $(document).ready(function () {
     });
 
     $(document).on("click", "option", function () {
-        var text = $(this).text();
+        var text = $(this).val();
         console.log("text to place: " + text);
         $("#userPlacement-id").append("<p id='user" + number + "'>" + text + "</p>");
         number++;

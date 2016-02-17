@@ -225,4 +225,76 @@ body {
     font-family: "Palatino Linotype";
 }
 
+#crtConvDiv-id {
+    text-align: center;
+    width: 100%;
+}
+
+#crtConvDiv-id p {
+    font-size: 1.5em;
+}
+
+#crtConvDiv-id h3 {
+    font-size: 2em;
+    margin-bottom: 0.5em;
+}
+
+#crtConvDiv-id input {
+    width: 85%;
+    border-radius: 0.5em;
+    border: 0.1em solid;
+    height: 2em;
+}
+
+#crtConvDiv-id #topicButton-id {
+    background-color: #990000;
+    border-color: transparent;
+    border-radius: 0.5em;
+    color: white;
+    width: 8em;
+    margin-top: 0.3em;
+    font-size: 1.1em;
+}
+
+#crtConvDiv-id .dropdown {
+    margin-top: 1em;
+    margin-bottom: 2em;
+}
+
+#crtConvDiv-id .dropdown p {
+    font-size: 1.7em;
+}
+
+#crtConvDiv-id .dropdown #dropDownMenu {
+    width: 30%;
+    height: 2em;
+}
+
+#crtConvDiv-id #topicPlacement-id {
+    margin-bottom: 1em;
+    background-color: #d9d9d9;
+    width: 60%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#crtConvDiv-id #userPlacement-id {
+    background-color: #d9d9d9;
+    width: 60%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#crtConvDiv-id #createButton-id {
+    margin-top: 1.5em;
+    border-color: transparent;
+    background-color: #990000;
+    border-radius: 0.5em;
+    color: white;
+    width: 70%;
+    height: 2em;
+    font-size: 1.5em;
+}
+
+
 
