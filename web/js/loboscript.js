@@ -117,7 +117,7 @@ function logIn(workerName) {
             alert(response.statusText + " wn: " + workerName);
         }
     });
-}
+} // logIn
 
 function logOut() {
     var currentUser = readCookie('currentUser');
@@ -133,7 +133,7 @@ function logOut() {
             alert('Error ' + response.statusText);
         }
     });
-}
+} //logOut
 
 function loggedOut(xml, status) {
     console.log("listing messages");
@@ -150,7 +150,7 @@ function loggedOut(xml, status) {
         });
     });
     document.getElementById("outField").innerHTML = content;
-}
+} //loggedOut
 
 function loggedIn(xml, status) {
     console.log("listing users");
@@ -171,7 +171,7 @@ function loggedIn(xml, status) {
         });
     });
     document.getElementById("inField").innerHTML = content;
-};
+} //loggedIn
 
 function openChat(id) {
 
@@ -237,8 +237,27 @@ function startConversation(receiver) {
             console.log("Error: " + response.statusText);
         }
     }); // ajax
-}
-; // function
+} // startConversation function
+
+//!!!!!!!!!!!!!!!!
+function startProfGroupConversation(receiver) {
+    var xmlGroupObject = "";
+    var GroupXmlDoc = $.parseXML(xmlGroupObject);
+    var $groupXml = $(GroupXmlDoc);
+    $.ajax({
+        url: "http://localhost:8080/LoboChat/resources/Conversations",
+        data: GroupXmlDoc,
+        processData: false,
+        type: 'POST',
+        contentType: 'application/xml', // datatype sent
+        dataType: 'xml', // datatype received
+        //success: document.getElementById("outputField").innerHTML = ".. ",
+        error: function (response) {
+            console.log("Error: " + response.statusText);
+        }
+    }); // ajax
+} // startProfGroupConversation function
+//!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 function getConversations() {
     var user = readCookie('currentUser');
@@ -252,7 +271,8 @@ function getConversations() {
             alert(response.statusText + " wn: " + workerName);
         }
     });
-}
+} // getConversations
+
 function listConversations(xml, status) {
     console.log("listing Conversations");
 //    xmlString = (new XMLSerializer()).serializeToString(xml);
@@ -270,8 +290,7 @@ function listConversations(xml, status) {
         });
     });
     document.getElementById("inField").innerHTML = content;
-}
-;// listConversations
+} // listConversations
 
 function getParticipants() {
     var cid = sessionStorage.getItem("cid");
@@ -300,13 +319,10 @@ function getParticipants() {
             onClose(event);
         };
     }
-
-
-
-}
+} // getParticipants
 
 function listParticipant(xml, status) {
-    console.log("listing participants");
+    console.log("listing participant");
     var $xml = $(xml);
     var content = "";
     var messages = "";
@@ -324,15 +340,14 @@ function listParticipant(xml, status) {
     document.getElementById("participants").innerHTML = content;
     document.getElementById("chatArea").innerHTML = messages;
     document.getElementById("conversationID").innerHTML = cid;
-}
-;// listParticipants
+} // listParticipant
 
 function onMessage(event) {
     var cid = document.getElementById("conversationID").innerHTML;
     if (event.data === cid) {
         loadMessages();
     }
-}//onMessage
+} //onMessage
 
 function onOpen(event) {
     systemMessage(readCookie('currentUser') + " connected!");
@@ -363,7 +378,7 @@ function listMessages(xml, status) {
         content += postName + ": " + msgs + "<br>";
     });
     document.getElementById("chatArea").innerHTML = content;
-}
+} //listMessages
 
 function sendMessage() {
 
@@ -395,7 +410,7 @@ function sendMessage() {
     }); // ajax
 
     websocket.send(cid);
-}// function
+}// sendMessage function
 
 function systemMessage(content) {
 
@@ -421,6 +436,4 @@ function systemMessage(content) {
         }//error
     }); // ajax
     websocket.send(cid);
-
-
-}// function
+}// systemMessage function
