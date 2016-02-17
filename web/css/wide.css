@@ -7,6 +7,36 @@ and open the template in the editor.
     Created on : 09-Feb-2016, 10:48:08
     Author     : kimmo
 */
+html {
+    background-color: #c2c2c2;
+    background: url("images/maxresdefault.jpg") no-repeat center center fixed;
+    background-size: cover;
+    font-family: sans-serif;
+}
 body {
-    background-color: blue;
+    
+}
+::selection {
+    background: #c2c2c2;
+}
+::-moz-selection {
+    background: #c2c2c2;
+}
+.login-class {
+    background-color: #fff;
+    border: 1px solid #c2c2c2;
+    border-radius: 25px;
+    margin: auto;
+    width: 35%;
+    min-height: 15em;
+    padding: 1em;
+}
+.content-class {
+    background-color: #fff;
+    margin: auto;
+    width: 80%;
+    padding: 1em;
+}
+.content-class button {
+    margin: 0.5em;
 }
