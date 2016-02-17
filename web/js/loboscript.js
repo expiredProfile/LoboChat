@@ -10,8 +10,10 @@ var workerName;
 var chatParticipantName;
 var chatID;
 var wsUri = "ws://localhost:8080/LoboChat/chatend";
+var mainUri = "ws://localhost:8080/LoboChat/main";
 //var wsUri = "ws://localhost:8080/LoboChat/resources/chatend/";
 var websocket;
+var mainsocket;
 
 $(document).ready(function () {
 
@@ -85,7 +87,7 @@ $(document).ready(function () {
         $alertXml.find("alertCat").append(alertCat);
         $alertXml.find("receiverGroup").append(recGroup);
         $alertXml.find("postName").append(sender);
-        
+
         $.ajax({
             url: baseUrl + "/resources/Alerts",
             data: alertXmlDoc,
@@ -99,11 +101,69 @@ $(document).ready(function () {
             }
         }); // ajax
     }); // sendAlert
-    
-     $("#topicsButton-id").click(function () {
+
+    $("#topicsButton-id").click(function () {
         getConversations();
     });
 }); // $(document).ready
+
+function logToMainsocket() {
+    
+    if (mainsocket.readyState !== mainsocket.CLOSED) {
+        
+    } else {
+        mainsocket = new WebSocket(mainUri);
+        mainsocket.onopen = function (event) {
+            onOpenMain(event);
+        };
+        mainsocket.onmessage = function (event) {
+            onMessageMain(event);
+        };
+
+        mainsocket.onclose = function (event) {
+            onCloseMain(event);
+        };
+
+    }
+}
+
+function onMessageMain(event) {
+    if (document.getElementById(event.data) === null){
+        
+    } else {
+        
+    }
+}//onMessage
+
+function onOpenMain(event) {
+    console.log("Connected to mainsocket.");
+}
+function onCloseMain(event) {
+    console.log("Disconnected from mainsocket.");
+}
+
+function loadLatest(cid){
+    $.ajax({
+        url: baseUrl + "/resources/Messages/latest" + cid,
+        type: 'GET',
+        contentType: 'text/plain',
+        dataType: 'xml',
+        success: listMessage,
+        error: function (response) {
+            alert(response.statusText + " wn: " + workerName);
+        }
+    });
+}
+
+function listMessage(xml, status){
+    var $xml = $(xml);
+    var content = "";
+    $xml.find('message').each(function () {
+        var postName = $(this).find("postName").text();
+        var msgs = $(this).find("content").text();
+        content += postName + ": " + msgs + "<br>";
+    });
+}
 
 function logIn(workerName) {
     $.ajax({
@@ -143,9 +203,9 @@ function loggedOut(xml, status) {
     var content = "";
     $xml.find('workers').each(function () {
         $xml.find('worker').each(function () {
-            content += "<div class='loggedOutUsersDiv-class'>" + 
-                    "<i class='fa fa-circle loggedOutBall-class'></i>" + 
-                    "<span>" + $(this).find("name").text() + 
+            content += "<div class='loggedOutUsersDiv-class'>" +
+                    "<i class='fa fa-circle loggedOutBall-class'></i>" +
+                    "<span>" + $(this).find("name").text() +
                     "</span>" + "<span class='leftSide-class'>" + $(this).find("title").text() + "</span>" + "</div>";
         });
     });
@@ -163,15 +223,16 @@ function loggedIn(xml, status) {
             var wname = $(this).find("name").text();
             console.log("Id name " + wname);
             if (wname !== readCookie('currentUser')) {
-                content += "<div class='loggedInUsersDiv-class'>" + 
-                    "<i class='fa fa-circle loggedInBall-class'></i>" + 
-                    "<span>" + $(this).find("name").text() + "</span>" + 
-                    "<span class='leftSide-class'>" + $(this).find("title").text() + "</span>" + "</div>";
+                content += "<div class='loggedInUsersDiv-class'>" +
+                        "<i class='fa fa-circle loggedInBall-class'></i>" +
+                        "<span>" + $(this).find("name").text() + "</span>" +
+                        "<span class='leftSide-class'>" + $(this).find("title").text() + "</span>" + "</div>";
             }
         });
     });
     document.getElementById("inField").innerHTML = content;
-};
+}
+;
 
 function openChat(id) {
 
@@ -285,7 +346,7 @@ function getParticipants() {
             alert(response.statusText + " wn: " + workerName);
         }
     });
-    if (websocket !== undefined && websocket.readyState !== WebSocket.CLOSED) {
+     if (websocket.readyState !== websocket.CLOSED) {
 
     } else {
         websocket = new WebSocket(wsUri);
@@ -340,6 +401,7 @@ function onOpen(event) {
 function onClose(event) {
     systemMessage(readCookie('currentUser') + " disconnected!");
 }
+
 function loadMessages() {
     var cid = document.getElementById("conversationID").innerHTML;
     $.ajax({
