@@ -15,12 +15,32 @@ var websocket;
 
 $(document).ready(function () {
 
-    $(function () {
-        adjustStyle($(this).width());
-        $(window).resize(function () {
-            adjustStyle($(this).width());
-        });
+    $(window).load(function () {
+        $("#main-id").load("userlist.html");
+        var state = true;
+        if (state === true) {
+            $.ajax({
+                url: baseUrl + '/resources/Workers/LoggedIn',
+                type: 'GET',
+                dataType: 'xml',
+                success: loggedIn
+            });
+            $.ajax({
+                url: baseUrl + '/resources/Workers/LoggedOut',
+                type: 'GET',
+                dataType: 'xml',
+                success: loggedOut
+            });
+            state = false;
+        }
     });
+
+    $(window).resize(function () {
+        adjustStyle($(this).width());
+    });
+
+
+
     /*
      $("#getAllMessagesButton").click(function () {
      $.ajax({
@@ -50,11 +70,9 @@ $(document).ready(function () {
         logIn(workerName);
         // window.location = baseUrl + "/userlists.html";
     });
-    $("#logOutButton").click(function () {
-        logOut();
-        //window.location = baseUrl;
-    });
+
     $("#usersButton-id").click(function () {
+        $("#main-id").load("userlist.html");
         $.ajax({
             url: baseUrl + '/resources/Workers/LoggedIn',
             type: 'GET',
@@ -68,6 +86,19 @@ $(document).ready(function () {
             success: loggedOut
         });
     }); //loggedInUsers
+
+    $("#createConversation-id").click(function () {
+        $("#main-id").load("createConversation.html");
+    });
+
+    $("#logOutButton").click(function () {
+        logOut();
+        //window.location = baseUrl;
+    });
+
+    $("#alertsButton-id").click(function () {
+        $("#main-id").load("alert.html");
+    });
 
     $("#sendAlertButton").click(function () {
         console.log("Sending alert");
@@ -85,7 +116,7 @@ $(document).ready(function () {
         $alertXml.find("alertCat").append(alertCat);
         $alertXml.find("receiverGroup").append(recGroup);
         $alertXml.find("postName").append(sender);
-        
+
         $.ajax({
             url: baseUrl + "/resources/Alerts",
             data: alertXmlDoc,
@@ -99,8 +130,8 @@ $(document).ready(function () {
             }
         }); // ajax
     }); // sendAlert
-    
-     $("#topicsButton-id").click(function () {
+
+    $("#topicsButton-id").click(function () {
         getConversations();
     });
 }); // $(document).ready
@@ -112,7 +143,7 @@ function logIn(workerName) {
         type: 'POST',
         contentType: 'text/plain',
         //success: alert('Logged In ' + workerName),
-        success: window.location = baseUrl + "/userlists.html",
+        success: window.location = baseUrl + "/mainpage.html",
         error: function (response) {
             alert(response.statusText + " wn: " + workerName);
         }
@@ -143,9 +174,9 @@ function loggedOut(xml, status) {
     var content = "";
     $xml.find('workers').each(function () {
         $xml.find('worker').each(function () {
-            content += "<div class='loggedOutUsersDiv-class'>" + 
-                    "<i class='fa fa-circle loggedOutBall-class'></i>" + 
-                    "<span>" + $(this).find("name").text() + 
+            content += "<div class='loggedOutUsersDiv-class'>" +
+                    "<i class='fa fa-circle loggedOutBall-class'></i>" +
+                    "<span>" + $(this).find("name").text() +
                     "</span>" + "<span class='leftSide-class'>" + $(this).find("title").text() + "</span>" + "</div>";
         });
     });
@@ -163,15 +194,47 @@ function loggedIn(xml, status) {
             var wname = $(this).find("name").text();
             console.log("Id name " + wname);
             if (wname !== readCookie('currentUser')) {
-                content += "<div class='loggedInUsersDiv-class'>" + 
-                    "<i class='fa fa-circle loggedInBall-class'></i>" + 
-                    "<span>" + $(this).find("name").text() + "</span>" + 
-                    "<span class='leftSide-class'>" + $(this).find("title").text() + "</span>" + "</div>";
+                content += "<div class='loggedInUsersDiv-class'>" +
+                        "<i class='fa fa-circle loggedInBall-class'></i>" +
+                        "<span>" + $(this).find("name").text() + "</span>" +
+                        "<span class='leftSide-class'>" + $(this).find("title").text() + "</span>" + "</div>";
             }
         });
     });
     document.getElementById("inField").innerHTML = content;
-};
+}
+
+function loggedOutDropDown(xml, status) {
+    console.log("listing messages");
+    xmlString = (new XMLSerializer()).serializeToString(xml);
+    console.log("XML: " + xmlString);
+    var $xml = $(xml);
+    var content = "";
+    $xml.find('workers').each(function () {
+        $xml.find('worker').each(function () {
+            content += "<p class='users-class'>" + $(this).find("name").text() + "</p>";
+        });
+    });
+    document.getElementById("myDropdown").innerHTML = content;
+}
+
+function loggedInDropDown(xml, status) {
+    console.log("listing users");
+    xmlString = (new XMLSerializer()).serializeToString(xml);
+    console.log("XML: " + xmlString);
+    var $xml = $(xml);
+    var content = "";
+    $xml.find('workers').each(function () {
+        $xml.find('worker').each(function () {
+            var wname = $(this).find("name").text();
+            console.log("Id name " + wname);
+            if (wname !== readCookie('currentUser')) {
+                content += "<p class='users-class'>" + $(this).find("name").text() + "</p>";
+            }
+        });
+    });
+    document.getElementById("myDropdown").innerHTML = content;
+}
 
 function openChat(id) {
 
@@ -210,7 +273,6 @@ function readCookie(name) { //readCookie('currentUser')
 
 function adjustStyle(width) {
     width = parseInt(width);
-    console.log(width);
     if (width < 701) {
         $("#size-stylesheet").attr("href", "css/narrow.css");
     } else if (width < 900) {
@@ -237,8 +299,7 @@ function startConversation(receiver) {
             console.log("Error: " + response.statusText);
         }
     }); // ajax
-}
-; // function
+} // function
 
 function getConversations() {
     var user = readCookie('currentUser');
@@ -253,6 +314,7 @@ function getConversations() {
         }
     });
 }
+
 function listConversations(xml, status) {
     console.log("listing Conversations");
 //    xmlString = (new XMLSerializer()).serializeToString(xml);
@@ -270,8 +332,7 @@ function listConversations(xml, status) {
         });
     });
     document.getElementById("inField").innerHTML = content;
-}
-;// listConversations
+}// listConversations
 
 function getParticipants() {
     var cid = sessionStorage.getItem("cid");
@@ -300,9 +361,6 @@ function getParticipants() {
             onClose(event);
         };
     }
-
-
-
 }
 
 function listParticipant(xml, status) {
@@ -424,3 +482,4 @@ function systemMessage(content) {
 
 
 }// function
+

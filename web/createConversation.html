@@ -1,0 +1,66 @@
+<h3>Create conversation</h3>
+Topic:
+<input type="text" name="topic"><br>
+<button id="topicButton-id">Add topic</button><br>
+<div class="dropdown">
+    <button onclick="myFunction()" class="dropbtn">Dropdown</button>
+    <div id="myDropdown" class="dropdown-content">
+
+    </div>
+</div>
+<div id="topicPlacement-id">
+    <h3>Topic to add</h3>
+    <div id="topic-id"></div>
+</div>
+<div id="userPlacement-id">
+    <h3>Users to add!</h3>
+</div>
+<button id="createButton-id">Create Conversation</button>
+<script>
+    var number = 0;
+    $(document).ready(function () {
+        $.ajax({
+            url: baseUrl + '/resources/Workers/LoggedIn',
+            type: 'GET',
+            dataType: 'xml',
+            success: loggedInDropDown
+        });
+        $.ajax({
+            url: baseUrl + '/resources/Workers/LoggedOut',
+            type: 'GET',
+            dataType: 'xml',
+            success: loggedOutDropDown
+        });
+        alert("OK");
+        
+        $(document).on("click", "p", function () {
+            var text = $(this).text();
+            $("#userPlacement-id").append("<p id='user" + number + "'>" + text + "</p>");
+            number++;
+        });
+        
+        $("#topicButton-id").click(function() {
+            var text = $("input").val();
+            document.getElementById("topic-id").innerHTML = text;
+        }); 
+    });
+
+    function myFunction() {
+        document.getElementById("myDropdown").classList.toggle("show");
+    }
+
+// Close the dropdown menu if the user clicks outside of it
+    window.onclick = function (event) {
+        if (!event.target.matches('.dropbtn')) {
+
+            var dropdowns = document.getElementsByClassName("dropdown-content");
+            var i;
+            for (i = 0; i < dropdowns.length; i++) {
+                var openDropdown = dropdowns[i];
+                if (openDropdown.classList.contains('show')) {
+                    openDropdown.classList.remove('show');
+                }
+            }
+        }
+    };
+</script>
