@@ -44,6 +44,14 @@ public class ChatSystem {
     public void addConversation(Conversation c) {
         this.conversations.add(c);
     }
+    
+    public ArrayList<Conversation> getConversation() {
+        ArrayList<Conversation> co = new ArrayList();
+        for (int i = 0; i < this.conversations.size(); i++) {
+            co.add(conversations.get(i));
+        }
+        return co;
+    }
 
     public ArrayList<Conversation> getConversations(String name) {
         ArrayList<Conversation> tempConversations = new ArrayList<>();
@@ -103,13 +111,5 @@ public class ChatSystem {
     
     public Alert getAlertByID(int id) {
         return alertHistory.get(id);
-    }
-
-    public ArrayList<Conversation> getConversation() {
-        ArrayList<Conversation> co = new ArrayList();
-        for (int i = 0; i < this.conversations.size(); i++) {
-            co.add(conversations.get(i));
-        }
-        return co;
     }
 }

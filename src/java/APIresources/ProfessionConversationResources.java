@@ -8,6 +8,7 @@ package APIresources;
 import datafolder.ChatSystem;
 import datafolder.Conversation;
 import datafolder.Group;
+import datafolder.ProfConvData;
 import datafolder.ProfessionGroup;
 import datafolder.Worker;
 import java.util.ArrayList;
@@ -36,25 +37,29 @@ public class ProfessionConversationResources {
     @POST
     @Consumes(MediaType.APPLICATION_XML)
     @Produces(MediaType.APPLICATION_XML)
-    public ArrayList<Worker> postConversation(String profGroup) {
-        //Get correct target group
-        ProfessionGroup targetGroup = pool.getProfessionGroup(profGroup);
+    public ArrayList<Worker> postConversation(ProfConvData pcd) {
+        //Get data
+        String topic = pcd.getTopic();
+        String targetGroup = pcd.getProfGroup();
+        ProfessionGroup profGroup = pool.getProfessionGroup(targetGroup);
+        String postName = pcd.getPostName(); //TODO Add current user to list too!
         //Get workers in target group as arraylist
-        ArrayList<Worker> workersInProfGroup = targetGroup.getWorkersByProf();
-        Group profConversationGroup = new Group();
-        //Add all from profession to group
-        profConversationGroup.setWorkerList(workersInProfGroup);
+        ArrayList<Worker> workersInProfGroup = profGroup.getWorkersByProf();
+        //Add all from profession to new group object
+        Group profConvGroup = new Group();
+        profConvGroup.setWorkerList(workersInProfGroup);
+        //Add list of workers to variable
+        ArrayList<Worker> workerList = profConvGroup.getWorkerList();
         
-        String topic = g.getTopic();
-        String s = "";
-        for (Worker w : list) {
-            s += w.getName() + ", ";
+        String names = "";
+        for (Worker w : workerList) {
+            names += w.getName() + ", ";
         }
-        System.out.println("new group: " + g.getTopic() + ", nimet; " + s);
-        Conversation c = new Conversation(topic, list);
+        System.out.println("new group: " + topic + ", nimet; " + names);
+        Conversation c = new Conversation(topic, workerList);
         System.out.println("new conversation: " + c.getTopic() + ", c-id: " + c.getID());
         system.addConversation(c);
-        return g.getWorkerList();
+        return workerList;
     }
     
     /*

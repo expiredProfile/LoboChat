@@ -239,14 +239,13 @@ function startConversation(receiver) {
     }); // ajax
 } // startConversation function
 
-//!!!!!!!!!!!!!!!!
-function startProfGroupConversation(receiver) {
-    var xmlGroupObject = "";
-    var GroupXmlDoc = $.parseXML(xmlGroupObject);
-    var $groupXml = $(GroupXmlDoc);
+function startProfGroupConversation(receiverProfession) {
+    var xmlProfConvDataObject = "<profConvData><topic></topic><professionGroup></professionGroup><postName>" + readCookie("currentUser") + "</postName></profConvData>";
+    var ProfXmlDoc = $.parseXML(xmlProfConvDataObject);
+    var $profXml = $(ProfXmlDoc);
     $.ajax({
-        url: "http://localhost:8080/LoboChat/resources/Conversations",
-        data: GroupXmlDoc,
+        url: baseUrl + "/resources/ProfessionConversations",
+        data: ProfXmlDoc,
         processData: false,
         type: 'POST',
         contentType: 'application/xml', // datatype sent
@@ -257,7 +256,6 @@ function startProfGroupConversation(receiver) {
         }
     }); // ajax
 } // startProfGroupConversation function
-//!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 function getConversations() {
     var user = readCookie('currentUser');
