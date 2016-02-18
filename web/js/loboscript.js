@@ -155,6 +155,11 @@ $(document).ready(function () {
     $("#topicsButton-id").click(function () {
         getConversations();
     });
+
+    $(document).on("click", "#createButton-id", function () {
+        startConversation();
+    });
+
 }); // $(document).ready
 
 function ajaxGet() {
@@ -179,7 +184,7 @@ function ajaxGet() {
 
 function logToMainsocket() {
     console.log("Mainsocket");
-    if  (mainsocket){
+    if (mainsocket) {
         if (mainsocket.readyState !== mainsocket.CLOSED) {
             console.log("Already socket.");
         } else {
@@ -224,7 +229,7 @@ function onCloseMain(event) {
     console.log("Disconnected from mainsocket.");
 }
 
-function loadLatest(cid){
+function loadLatest(cid) {
     $.ajax({
         url: baseUrl + "/resources/Messages/latest" + cid,
         type: 'GET',
@@ -237,15 +242,22 @@ function loadLatest(cid){
     });
 }
 
-function listMessage(xml, status){
+function listMessage(xml, status) {
     var $xml = $(xml);
     var content = "";
     $xml.find('message').each(function () {
         var postName = $(this).find("postName").text();
         var msgs = $(this).find("content").text();
-        content += postName + ": " + msgs + "<br>";
+        content += postName + ": " + msgs;
     });
-}
+    cid = $xml.find('conversationID').text();
+    var target = "msgconv" + cid;
+
+    if (document.getElementById(target) !== null) {
+        document.getElementById(target).innerHTML = content;
+    } else {
+    }
+}// listMessage
 
 function logIn(workerName) {
     $.ajax({
@@ -265,21 +277,21 @@ function logOut() {
     var currentUser = readCookie('currentUser');
     //window.alert("logged out: " + currentUser);
     if (!mainsocket) {
-        
+
     } else if (mainsocket.readyState === mainsocket.CLOSED) {
-               
+
     } else {
         mainsocket.close();
     }
-    
+
     if (!websocket) {
-        
+
     } else if (websocket.readyState === websocket.CLOSED) {
-               
+
     } else {
         websocket.close();
     }
-    
+
     $.ajax({
         url: baseUrl + "/resources/Workers/LoggedOut",
         data: currentUser,
@@ -408,13 +420,22 @@ function adjustStyle(width) {
     }
 }
 
-function startConversation(receiver) {
-    var xmlGroupObject = '<group><topic>example topic</topic><workerList><id></id><name>' + readCookie("currentUser") + '</name><title></title></workerList>'
-            + '<workerList><id></id><name>' + receiver + '</name><title></title></workerList></group>';
+function startConversation() {
+    var topic = $('#topic-id').text();
+    if (topic.length === 0) {
+        window.alert("Topic missing!");
+        return null;
+    }
+    // group object with an arraylist of participants ->(workerlist tags).
+    var xmlGroupObject = "<group><topic>" + topic + "</topic><workerList><id></id><name>" + readCookie('currentUser') + "</name><title></title></workerList>";
+    $('#userPlacement-id').children('p').each(function () { // iterates through the selected workers
+        xmlGroupObject += '<workerList><id></id><name>' + $(this).text() + '</name><title></title></workerList>';
+    });
+    xmlGroupObject += "</group>"; // adds end tag for the xml document.
+//    window.alert(xmlGroupObject);
     var GroupXmlDoc = $.parseXML(xmlGroupObject);
-    var $groupXml = $(GroupXmlDoc);
     $.ajax({
-        url: baseUrl + "/resources/Conversations",
+        url: "http://localhost:8080/LoboChat/resources/Conversations",
         data: GroupXmlDoc,
         processData: false,
         type: 'POST',
@@ -423,9 +444,9 @@ function startConversation(receiver) {
         //success: document.getElementById("outputField").innerHTML = ".. ",
         error: function (response) {
             console.log("Error: " + response.statusText);
-        }
+        }//error
     }); // ajax
-} // startConversation function
+} // startConversation()
 
 function startProfGroupConversation(receiverProfession) {
     var xmlProfConvDataObject = "<profConvData><topic></topic><professionGroup></professionGroup><postName>" + readCookie("currentUser") + "</postName></profConvData>";
@@ -464,8 +485,6 @@ function getConversations() {
 
 function listConversations(xml, status) {
     console.log("listing Conversations");
-//    xmlString = (new XMLSerializer()).serializeToString(xml);
-//    console.log("XML: " + xmlString);
     var $xml = $(xml);
     var content = "";
     $xml.find('conversations').each(function () {
@@ -493,8 +512,23 @@ function getParticipants() {
             alert(response.statusText + " wn: " + workerName);
         }
     });
-    if (websocket.readyState !== websocket.CLOSED || websocket) {
+    if (websocket) {
+        if (websocket.readyState !== websocket.CLOSED) {
+            console.log("Already socket.");
+        } else {
+            websocket = new WebSocket(wsUri);
+            websocket.onopen = function (event) {
+                onOpen(event);
+            };
+            websocket.onmessage = function (event) {
+                onMessage(event);
+            };
 
+            websocket.onclose = function (event) {
+                onClose(event);
+            };
+            console.log("Logged");
+        }
     } else {
         websocket = new WebSocket(wsUri);
         websocket.onopen = function (event) {
@@ -503,31 +537,46 @@ function getParticipants() {
         websocket.onmessage = function (event) {
             onMessage(event);
         };
+
         websocket.onclose = function (event) {
             onClose(event);
         };
+        console.log("Logged");
     }
-} // getParticipants
+}// getParticipants
 
-function listParticipant(xml, status) {
-    console.log("listing participant");
+
+function listParticipant(xml, status) { // also lists messages !
+    console.log("listing participants");
     var $xml = $(xml);
     var content = "";
     var messages = "";
+    var topic = $xml.find('topic').text();
     var cid = $xml.find('ID').text();
+
     $xml.find('memberList').each(function () {
         var memberName = $(this).find("name").text();
         content += memberName + "<br>";
     });
+    var limiter = 0;
     $xml.find('messages').each(function () {
-        var postName = $(this).find("postName").text();
-        var msgs = $(this).find("content").text();
-        messages += postName + ": " + msgs + "<br>";
+        limiter++;
+    });
+//    window.alert(limiter);
+    var messageCount = 0;
+    $xml.find('messages').each(function () {
+        if (messageCount >= limiter - 10) { // how many messages are displayed.
+            var postName = $(this).find("postName").text();
+            var msgs = $(this).find("content").text();
+            messages += postName + ": " + msgs + "<br>";
+        }
+        messageCount++;
     });
     document.getElementById("participants").innerHTML = content;
     document.getElementById("chatArea").innerHTML = messages;
     document.getElementById("conversationID").innerHTML = cid;
-} // listParticipant
+    document.getElementById("topic-banner").innerHTML = topic;
+}//listParticipants(xml, status)
 
 function onMessage(event) {
     var cid = document.getElementById("conversationID").innerHTML;
@@ -558,18 +607,28 @@ function loadMessages() {
 
 function listMessages(xml, status) {
     var $xml = $(xml);
+    var limiter = 0;
+    $xml.find('message').each(function () {
+        limiter++;
+    });
+    var messageCount = 0;
     var content = "";
     $xml.find('message').each(function () {
-        var postName = $(this).find("postName").text();
-        var msgs = $(this).find("content").text();
-        content += postName + ": " + msgs + "<br>";
+        if (messageCount >= limiter - 10) { // how many messages are displayed
+            var postName = $(this).find("postName").text();
+            var msgs = $(this).find("content").text();
+            content += postName + ": " + msgs + "<br>";
+        }
+        messageCount++;
     });
     document.getElementById("chatArea").innerHTML = content;
-} //listMessages
+} // listMessages
 
 function sendMessage() {
-
     var messageContent = $("#inputField").val();
+    if (messageContent.length === 0) {
+        return null;
+    }
     var d = new Date();
     var dd = d.getDate() + "-" + (d.getMonth() + 1) + "-" + d.getFullYear() + " " + d.getHours() + ":" + d.getMinutes() + ":" + d.getSeconds();
     var cid = document.getElementById("conversationID").innerHTML;
@@ -596,7 +655,6 @@ function sendMessage() {
 }// sendMessage function
 
 function systemMessage(content) {
-
     var d = 1;
     var cid = document.getElementById("conversationID").innerHTML;
     var sender = "System";
