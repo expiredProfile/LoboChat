@@ -44,19 +44,27 @@ $(document).ready(function () {
         adjustStyle($(this).width());
     });
 
-    $(document).on("click", "option", function () {
-        var text = $(this).val();
+    $(document).on("click", ".usersToAdd-class", function () {
+        console.log("Test");
+        var text = $(this).text();
         console.log("text to place: " + text);
-        $("#userPlacement-id").append("<p id='user" + number + "'>" + text + "</p>");
+        $("#userPlacement-id").append("<span id='user" + number + "'>" 
+                + text + "<i class='fa fa-times'></i></span>");
         number++;
+        $(this).remove();
     });
 
     $(document).on("click", "#topicButton-id", function () {
         var text = $("input").val();
-        document.getElementById("topic-id").innerHTML = text;
+        $("#topic-id").html("<span id='topicValue-id'>" + text + "</span>");
     });
 
-
+    $(document).on("click", ".fa-times", function() {
+        var toRemove = $(this).parent("span");
+        $(toRemove).remove();
+        console.log("toRemove: " + toRemove.text());
+        $("#myDropdown").append("<p class='usersToAdd-class'>" + toRemove.text() + "</p>");
+    });
 
 
 
@@ -111,9 +119,9 @@ $(document).ready(function () {
                 ajaxGet();
                 check = false;
             }
-            $("#dropDownMenu").append(dropdownlogin);
+            $("#myDropdown").append(dropdownlogin);
             console.log(dropdownlogin);
-            $("#dropDownMenu").append(dropdownlogout);
+            $("#myDropdown").append(dropdownlogout);
             console.log(dropdownlogout);
         });
     });
@@ -256,7 +264,7 @@ function loggedOutDropDown(xml, status) {
     var content = "";
     $xml.find('workers').each(function () {
         $xml.find('worker').each(function () {
-            dropdownlogout += "<option value=' " + $(this).find("name").text() + "'>" + $(this).find("name").text() + "</option>";
+            dropdownlogout += "<p class='usersToAdd-class'>" + $(this).find("name").text() + "</p>";
         });
     });
     //document.getElementById("dropDownMenu").innerHTML = content;
@@ -273,7 +281,7 @@ function loggedInDropDown(xml, status) {
             var wname = $(this).find("name").text();
             console.log("Id name " + wname);
             if (wname !== readCookie('currentUser')) {
-                dropdownlogin += "<option value=' " + $(this).find("name").text() + "'>" + $(this).find("name").text() + "</option>";
+                dropdownlogin += "<p class='usersToAdd-class>" + $(this).find("name").text() + "</p>";
             }
         });
     });

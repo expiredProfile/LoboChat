@@ -1,12 +1,13 @@
 <div id="crtConvDiv-id">
     <h3>Create conversation</h3>
-    <input id="topicInput-id" type="text" name="topic"><br>
+    <input placeholder="Insert topic here" id="topicInput-id" type="text" name="topic"><br>
     <button id="topicButton-id">Add topic</button><br>
-    <div class="dropdown">
-        <p>Select users</p>
-        <select id="dropDownMenu">
+    <p id="userP-id">Select users to add</p>
+    <div id="dropDownDiv-id">
+        <button onclick="myFunction()" class="dropbtn">Dropdown</button>
+        <div id="myDropdown" class="dropdown-content">
 
-        </select>
+        </div>
     </div>
     <div id="topicPlacement-id">
         <p>Topic to add</p>
@@ -17,3 +18,23 @@
     </div>
     <button id="createButton-id">Create Conversation</button>
 </div>
+<script>
+    function myFunction() {
+        document.getElementById("myDropdown").classList.toggle("show");
+    }
+
+// Close the dropdown menu if the user clicks outside of it
+    window.onclick = function (event) {
+        if (!event.target.matches('.dropbtn')) {
+
+            var dropdowns = document.getElementsByClassName("dropdown-content");
+            var i;
+            for (i = 0; i < dropdowns.length; i++) {
+                var openDropdown = dropdowns[i];
+                if (openDropdown.classList.contains('show')) {
+                    openDropdown.classList.remove('show');
+                }
+            }
+        }
+    };
+</script>
