@@ -100,7 +100,7 @@ $(document).ready(function () {
         }); // ajax
     }); // sendAlert
     
-     $("#topicsButton-id").click(function () {
+    $("#topicsButton-id").click(function () {
         getConversations();
     });
 }); // $(document).ready
@@ -226,7 +226,7 @@ function startConversation(receiver) {
     var GroupXmlDoc = $.parseXML(xmlGroupObject);
     var $groupXml = $(GroupXmlDoc);
     $.ajax({
-        url: "http://localhost:8080/LoboChat/resources/Conversations",
+        url: baseUrl + "/resources/Conversations",
         data: GroupXmlDoc,
         processData: false,
         type: 'POST',
