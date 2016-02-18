@@ -178,8 +178,24 @@ function ajaxGet() {
 }
 
 function logToMainsocket() {
-    if (mainsocket.readyState !== mainsocket.CLOSED) {
-        
+    console.log("Mainsocket");
+    if  (mainsocket){
+        if (mainsocket.readyState !== mainsocket.CLOSED) {
+            console.log("Already socket.");
+        } else {
+            mainsocket = new WebSocket(mainUri);
+            mainsocket.onopen = function (event) {
+                onOpenMain(event);
+            };
+            mainsocket.onmessage = function (event) {
+                onMessageMain(event);
+            };
+
+            mainsocket.onclose = function (event) {
+                onCloseMain(event);
+            };
+            console.log("Logged");
+        }
     } else {
         mainsocket = new WebSocket(mainUri);
         mainsocket.onopen = function (event) {
@@ -192,15 +208,12 @@ function logToMainsocket() {
         mainsocket.onclose = function (event) {
             onCloseMain(event);
         };
+        console.log("Logged");
     }
 }
 
 function onMessageMain(event) {
-    if (document.getElementById(event.data) === null){
-        
-    } else {
-        
-    }
+    console.log("Alert lol");
 }//onMessage
 
 function onOpenMain(event) {
@@ -251,6 +264,22 @@ function logIn(workerName) {
 function logOut() {
     var currentUser = readCookie('currentUser');
     //window.alert("logged out: " + currentUser);
+    if (!mainsocket) {
+        
+    } else if (mainsocket.readyState === mainsocket.CLOSED) {
+               
+    } else {
+        mainsocket.close();
+    }
+    
+    if (!websocket) {
+        
+    } else if (websocket.readyState === websocket.CLOSED) {
+               
+    } else {
+        websocket.close();
+    }
+    
     $.ajax({
         url: baseUrl + "/resources/Workers/LoggedOut",
         data: currentUser,
@@ -262,7 +291,7 @@ function logOut() {
             alert('Error ' + response.statusText);
         }
     });
-} //logOut
+} // logOut
 
 function loggedOut(xml, status) {
     console.log("listing messages");
@@ -464,7 +493,7 @@ function getParticipants() {
             alert(response.statusText + " wn: " + workerName);
         }
     });
-    if (websocket !== undefined && websocket.readyState !== WebSocket.CLOSED) {
+    if (websocket.readyState !== websocket.CLOSED || websocket) {
 
     } else {
         websocket = new WebSocket(wsUri);

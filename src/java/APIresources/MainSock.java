@@ -20,7 +20,7 @@ import javax.ws.rs.PathParam;
  * @author Hege
  */
 //@ServerEndpoint("/chatend/{conv}")
-@ServerEndpoint("/main")
+@ServerEndpoint("/mainsock")
 public class MainSock {
 
     private static Set<Session> wses = Collections.synchronizedSet(new HashSet<Session>());
@@ -41,21 +41,18 @@ public class MainSock {
     }
 
     @OnMessage
-    public void onMessage(String alertID, String convID) {
+    public void onMessage(String alertID) {
         int aid = 0;
-        int cid = 0;
         
         try {
             aid = Integer.parseInt(alertID);
-            cid = Integer.parseInt(convID);
         } catch (Exception e){
             
         }
         
-        if (aid != 0 && cid == 0){
+        if (aid != 0){
             messageAll(alertID);
-        } else if (aid == 0 && cid != 0){
-            messageAll("conv"+convID);
+        
         } else {
             
         }
