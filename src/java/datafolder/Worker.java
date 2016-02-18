@@ -14,11 +14,10 @@ import javax.xml.bind.annotation.XmlRootElement;
  */
 @XmlRootElement
 public class Worker {
-
+    private IDIncrement increment;
     private int id;
     private String name;
     private String title;
-    private IDIncrement increment;
     
     public Worker() {}
 
@@ -44,12 +43,13 @@ public class Worker {
     public void setName(String s ){
         this.name = s;
     }
-    public void setTitle(String s){
-        this.title = s;
-    }
+    
     @XmlElement
     public String getTitle() {
         return title;
+    }
+    public void setTitle(String s){
+        this.title = s;
     }
     
     //Receive alert test
