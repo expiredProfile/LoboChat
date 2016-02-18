@@ -12,6 +12,8 @@ var chatID;
 var wsUri = "ws://localhost:8080/LoboChat/chatend";
 //var wsUri = "ws://localhost:8080/LoboChat/resources/chatend/";
 var websocket;
+var mainUri = "ws://localhost:8080/LoboChat/main";
+var mainsocket;
 
 var number = 0;
 var check = true;
@@ -21,24 +23,28 @@ var dropdownlogout;
 $(document).ready(function () {
 
     $(window).load(function () {
-        $("#main-id").load("userlist.html");
-        var state = true;
-        if (state === true) {
-            $.ajax({
-                url: baseUrl + '/resources/Workers/LoggedIn',
-                type: 'GET',
-                dataType: 'xml',
-                success: loggedIn
-            });
-            $.ajax({
-                url: baseUrl + '/resources/Workers/LoggedOut',
-                type: 'GET',
-                dataType: 'xml',
-                success: loggedOut
-            });
-            state = false;
+        var location = window.location.href;
+        if (location !== ("http://localhost:8080/LoboChat/")) {
+            $("#main-id").load("userlist.html");
+            var state = true;
+            if (state === true) {
+                $.ajax({
+                    url: baseUrl + '/resources/Workers/LoggedIn',
+                    type: 'GET',
+                    dataType: 'xml',
+                    success: loggedIn
+                });
+                $.ajax({
+                    url: baseUrl + '/resources/Workers/LoggedOut',
+                    type: 'GET',
+                    dataType: 'xml',
+                    success: loggedOut
+                });
+                state = false;
+            }
         }
     });
+
 
     $(window).resize(function () {
         adjustStyle($(this).width());
@@ -48,7 +54,7 @@ $(document).ready(function () {
         console.log("Test");
         var text = $(this).text();
         console.log("text to place: " + text);
-        $("#userPlacement-id").append("<span id='user" + number + "'>" 
+        $("#userPlacement-id").append("<span id='user" + number + "'>"
                 + text + "<i class='fa fa-times'></i></span>");
         number++;
         $(this).remove();
@@ -59,37 +65,12 @@ $(document).ready(function () {
         $("#topic-id").html("<span id='topicValue-id'>" + text + "</span>");
     });
 
-    $(document).on("click", ".fa-times", function() {
+    $(document).on("click", ".fa-times", function () {
         var toRemove = $(this).parent("span");
         $(toRemove).remove();
         console.log("toRemove: " + toRemove.text());
         $("#myDropdown").append("<p class='usersToAdd-class'>" + toRemove.text() + "</p>");
     });
-
-
-
-    /*
-     $("#getAllMessagesButton").click(function () {
-     $.ajax({
-     url: baseUrl + "/resources/Messages",
-     method: 'GET',
-     dataType: 'xml', // returned datatype
-     success: listMessages
-     });
-     });//getAllMessages
-     
-     $("#sendMessageButton").click(function () {
-     var messageContent = $("#inputField").val();
-     $.ajax({
-     url: baseUrl + "/resources/Messages",
-     data: messageContent,
-     type: 'POST',
-     contentType: 'text/plain',
-     dataType: 'xml',
-     success: document.getElementById("outputField").innerHTML = " "
-     }); // ajax
-     });// sendMessage
-     */
 
     $("#loginButton").click(function () {
         workerName = $('#inputField-id').val();
@@ -165,6 +146,11 @@ $(document).ready(function () {
     $("#topicsButton-id").click(function () {
         getConversations();
     });
+
+    $(document).on("click", "#createButton-id", function () {
+        startConversation();
+    });
+
 }); // $(document).ready
 
 function ajaxGet() {
@@ -187,6 +173,82 @@ function ajaxGet() {
     console.log("ajax get done");
 }
 
+function logToMainsocket() {
+    console.log("Mainsocket");
+    if (mainsocket) {
+        if (mainsocket.readyState !== mainsocket.CLOSED) {
+            console.log("Already socket.");
+        } else {
+            mainsocket = new WebSocket(mainUri);
+            mainsocket.onopen = function (event) {
+                onOpenMain(event);
+            };
+            mainsocket.onmessage = function (event) {
+                onMessageMain(event);
+            };
+
+            mainsocket.onclose = function (event) {
+                onCloseMain(event);
+            };
+            console.log("Logged");
+        }
+    } else {
+        mainsocket = new WebSocket(mainUri);
+        mainsocket.onopen = function (event) {
+            onOpenMain(event);
+        };
+        mainsocket.onmessage = function (event) {
+            onMessageMain(event);
+        };
+
+        mainsocket.onclose = function (event) {
+            onCloseMain(event);
+        };
+        console.log("Logged");
+    }
+}
+
+function onMessageMain(event) {
+    console.log("Alert lol");
+}//onMessage
+
+function onOpenMain(event) {
+    console.log("Connected to mainsocket.");
+}
+
+function onCloseMain(event) {
+    console.log("Disconnected from mainsocket.");
+}
+
+function loadLatest(cid) {
+    $.ajax({
+        url: baseUrl + "/resources/Messages/latest" + cid,
+        type: 'GET',
+        contentType: 'text/plain',
+        dataType: 'xml',
+        success: listMessage,
+        error: function (response) {
+            alert(response.statusText + " wn: " + workerName);
+        }
+    });
+}
+
+function listMessage(xml, status) {
+    var $xml = $(xml);
+    var content = "";
+    $xml.find('message').each(function () {
+        var postName = $(this).find("postName").text();
+        var msgs = $(this).find("content").text();
+        content += postName + ": " + msgs;
+    });
+    cid = $xml.find('conversationID').text();
+    var target = "msgconv" + cid;
+
+    if (document.getElementById(target) !== null) {
+        document.getElementById(target).innerHTML = content;
+    } else {
+    }
+}// listMessage
 
 function logIn(workerName) {
     $.ajax({
@@ -200,11 +262,27 @@ function logIn(workerName) {
             alert(response.statusText + " wn: " + workerName);
         }
     });
-}
+} // logIn
 
 function logOut() {
     var currentUser = readCookie('currentUser');
     //window.alert("logged out: " + currentUser);
+    if (!mainsocket) {
+
+    } else if (mainsocket.readyState === mainsocket.CLOSED) {
+
+    } else {
+        mainsocket.close();
+    }
+
+    if (!websocket) {
+
+    } else if (websocket.readyState === websocket.CLOSED) {
+
+    } else {
+        websocket.close();
+    }
+
     $.ajax({
         url: baseUrl + "/resources/Workers/LoggedOut",
         data: currentUser,
@@ -216,7 +294,7 @@ function logOut() {
             alert('Error ' + response.statusText);
         }
     });
-}
+} // logOut
 
 function loggedOut(xml, status) {
     console.log("listing messages");
@@ -233,7 +311,7 @@ function loggedOut(xml, status) {
         });
     });
     document.getElementById("outField").innerHTML = content;
-}
+} //loggedOut
 
 function loggedIn(xml, status) {
     console.log("listing users");
@@ -254,7 +332,7 @@ function loggedIn(xml, status) {
         });
     });
     document.getElementById("inField").innerHTML = content;
-}
+} //loggedIn
 
 function loggedOutDropDown(xml, status) {
     console.log("listing logged out users");
@@ -289,7 +367,6 @@ function loggedInDropDown(xml, status) {
 }
 
 function openChat(id) {
-
     var url = baseUrl + "/chaWin.html";
     //chatParticipantId = id;
     sessionStorage.setItem("cid", id);
@@ -334,11 +411,20 @@ function adjustStyle(width) {
     }
 }
 
-function startConversation(receiver) {
-    var xmlGroupObject = '<group><topic>example topic</topic><workerList><id></id><name>' + readCookie("currentUser") + '</name><title></title></workerList>'
-            + '<workerList><id></id><name>' + receiver + '</name><title></title></workerList></group>';
+function startConversation() {
+    var topic = $('#topic-id').text();
+    if (topic.length === 0) {
+        window.alert("Topic missing!");
+        return null;
+    }
+    // group object with an arraylist of participants ->(workerlist tags).
+    var xmlGroupObject = "<group><topic>" + topic + "</topic><workerList><id></id><name>" + readCookie('currentUser') + "</name><title></title></workerList>";
+    $('#userPlacement-id').children('p').each(function () { // iterates through the selected workers
+        xmlGroupObject += '<workerList><id></id><name>' + $(this).text() + '</name><title></title></workerList>';
+    });
+    xmlGroupObject += "</group>"; // adds end tag for the xml document.
+//    window.alert(xmlGroupObject);
     var GroupXmlDoc = $.parseXML(xmlGroupObject);
-    var $groupXml = $(GroupXmlDoc);
     $.ajax({
         url: "http://localhost:8080/LoboChat/resources/Conversations",
         data: GroupXmlDoc,
@@ -349,9 +435,30 @@ function startConversation(receiver) {
         //success: document.getElementById("outputField").innerHTML = ".. ",
         error: function (response) {
             console.log("Error: " + response.statusText);
+        }//error
+    }); // ajax
+} // startConversation()
+
+function startProfGroupConversation(receiverProfession) {
+    var xmlProfConvDataObject = "<profConvData><topic></topic><professionGroup></professionGroup><postName>" + readCookie("currentUser") + "</postName></profConvData>";
+    var ProfXmlDoc = $.parseXML(xmlProfConvDataObject);
+    var $profXml = $(ProfXmlDoc);
+    //Append input data to xml
+    $profXml.find("topic").append("");
+    $profXml.find("professionGroup").append("");
+    $.ajax({
+        url: baseUrl + "/resources/ProfessionConversations",
+        data: ProfXmlDoc,
+        processData: false,
+        type: 'POST',
+        contentType: 'application/xml', // datatype sent
+        dataType: 'xml', // datatype received
+        //success: document.getElementById("outputField").innerHTML = ".. ",
+        error: function (response) {
+            console.log("Error: " + response.statusText);
         }
     }); // ajax
-} // function
+} // startProfGroupConversation function
 
 function getConversations() {
     var user = readCookie('currentUser');
@@ -365,12 +472,10 @@ function getConversations() {
             alert(response.statusText + " wn: " + workerName);
         }
     });
-}
+} // getConversations
 
 function listConversations(xml, status) {
     console.log("listing Conversations");
-//    xmlString = (new XMLSerializer()).serializeToString(xml);
-//    console.log("XML: " + xmlString);
     var $xml = $(xml);
     var content = "";
     $xml.find('conversations').each(function () {
@@ -398,8 +503,23 @@ function getParticipants() {
             alert(response.statusText + " wn: " + workerName);
         }
     });
-    if (websocket !== undefined && websocket.readyState !== WebSocket.CLOSED) {
+    if (websocket) {
+        if (websocket.readyState !== websocket.CLOSED) {
+            console.log("Already socket.");
+        } else {
+            websocket = new WebSocket(wsUri);
+            websocket.onopen = function (event) {
+                onOpen(event);
+            };
+            websocket.onmessage = function (event) {
+                onMessage(event);
+            };
 
+            websocket.onclose = function (event) {
+                onClose(event);
+            };
+            console.log("Logged");
+        }
     } else {
         websocket = new WebSocket(wsUri);
         websocket.onopen = function (event) {
@@ -408,39 +528,53 @@ function getParticipants() {
         websocket.onmessage = function (event) {
             onMessage(event);
         };
+
         websocket.onclose = function (event) {
             onClose(event);
         };
+        console.log("Logged");
     }
-}
+}// getParticipants
 
-function listParticipant(xml, status) {
+
+function listParticipant(xml, status) { // also lists messages !
     console.log("listing participants");
     var $xml = $(xml);
     var content = "";
     var messages = "";
+    var topic = $xml.find('topic').text();
     var cid = $xml.find('ID').text();
+
     $xml.find('memberList').each(function () {
         var memberName = $(this).find("name").text();
         content += memberName + "<br>";
     });
+    var limiter = 0;
     $xml.find('messages').each(function () {
-        var postName = $(this).find("postName").text();
-        var msgs = $(this).find("content").text();
-        messages += postName + ": " + msgs + "<br>";
+        limiter++;
+    });
+//    window.alert(limiter);
+    var messageCount = 0;
+    $xml.find('messages').each(function () {
+        if (messageCount >= limiter - 10) { // how many messages are displayed.
+            var postName = $(this).find("postName").text();
+            var msgs = $(this).find("content").text();
+            messages += postName + ": " + msgs + "<br>";
+        }
+        messageCount++;
     });
     document.getElementById("participants").innerHTML = content;
     document.getElementById("chatArea").innerHTML = messages;
     document.getElementById("conversationID").innerHTML = cid;
-}
-; // listParticipants
+    document.getElementById("topic-banner").innerHTML = topic;
+}//listParticipants(xml, status)
 
 function onMessage(event) {
     var cid = document.getElementById("conversationID").innerHTML;
     if (event.data === cid) {
         loadMessages();
     }
-}//onMessage
+} //onMessage
 
 function onOpen(event) {
     systemMessage(readCookie('currentUser') + " connected!");
@@ -464,18 +598,28 @@ function loadMessages() {
 
 function listMessages(xml, status) {
     var $xml = $(xml);
+    var limiter = 0;
+    $xml.find('message').each(function () {
+        limiter++;
+    });
+    var messageCount = 0;
     var content = "";
     $xml.find('message').each(function () {
-        var postName = $(this).find("postName").text();
-        var msgs = $(this).find("content").text();
-        content += postName + ": " + msgs + "<br>";
+        if (messageCount >= limiter - 10) { // how many messages are displayed
+            var postName = $(this).find("postName").text();
+            var msgs = $(this).find("content").text();
+            content += postName + ": " + msgs + "<br>";
+        }
+        messageCount++;
     });
     document.getElementById("chatArea").innerHTML = content;
-}
+} // listMessages
 
 function sendMessage() {
-
     var messageContent = $("#inputField").val();
+    if (messageContent.length === 0) {
+        return null;
+    }
     var d = new Date();
     var dd = d.getDate() + "-" + (d.getMonth() + 1) + "-" + d.getFullYear() + " " + d.getHours() + ":" + d.getMinutes() + ":" + d.getSeconds();
     var cid = document.getElementById("conversationID").innerHTML;
@@ -499,10 +643,9 @@ function sendMessage() {
     }); // ajax
 
     websocket.send(cid);
-}// function
+}// sendMessage function
 
 function systemMessage(content) {
-
     var d = 1;
     var cid = document.getElementById("conversationID").innerHTML;
     var sender = "System";
@@ -524,5 +667,4 @@ function systemMessage(content) {
         }//error
     }); // ajax
     websocket.send(cid);
-}// function
-
+}// systemMessage function

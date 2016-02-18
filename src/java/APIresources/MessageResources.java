@@ -39,6 +39,23 @@ public class MessageResources {
         int id = Integer.parseInt(s);
         return system.getConversationMessages(id);
     }
+    
+    //send the latest message from a particular converation
+    @GET
+    @Path("/latest/{id}")
+    @Consumes(MediaType.TEXT_PLAIN)
+    @Produces(MediaType.APPLICATION_XML)
+    public Message getLatest(@PathParam("id") String id){
+        int intid = Integer.parseInt(id);
+        int latest = system.getConversationMessages(intid).size() - 1;
+        if (latest == 0){
+            return new Message();
+        } else {
+           Message m = system.getConversationMessages(intid).get(latest);
+           return m; 
+        }
+        
+    }
 
 //    Send username from browser when sending a new message
     @POST
