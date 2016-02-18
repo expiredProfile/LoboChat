@@ -41,21 +41,30 @@ public class WorkerPool {
         this.henkka = new Worker("Henkka", "Doctor");
         this.kasper = new Worker("Kasper", "Psychotherapist");
         this.tommi = new Worker("Tommi", "Nurse");
+        //Add to logged out list
+        this.addToLoggedOut();
+        //Add to all workers
+        this.addToAllWorkers();
         //Add workers to profession groups
         this.addToProfessionGroups();
-        //Add to logged out list
-        this.addToWorkers();
     }
     
     public static WorkerPool getInstance(){
         return instance;
     }
     
-    private void addToWorkers(){
+    private void addToLoggedOut(){
         system.workerLoggedOut(kim);
         system.workerLoggedOut(henkka);
         system.workerLoggedOut(kasper);
         system.workerLoggedOut(tommi);
+    }
+    
+    private void addToAllWorkers() {
+        system.addToAllWorkers(kim);
+        system.addToAllWorkers(henkka);
+        system.addToAllWorkers(kasper);
+        system.addToAllWorkers(tommi);
     }
     
     private void addToProfessionGroups() {

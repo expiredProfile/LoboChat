@@ -243,6 +243,9 @@ function startProfGroupConversation(receiverProfession) {
     var xmlProfConvDataObject = "<profConvData><topic></topic><professionGroup></professionGroup><postName>" + readCookie("currentUser") + "</postName></profConvData>";
     var ProfXmlDoc = $.parseXML(xmlProfConvDataObject);
     var $profXml = $(ProfXmlDoc);
+    //Append input data to xml
+    $profXml.find("topic").append("");
+    $profXml.find("professionGroup").append("");
     $.ajax({
         url: baseUrl + "/resources/ProfessionConversations",
         data: ProfXmlDoc,

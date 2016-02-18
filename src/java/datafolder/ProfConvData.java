@@ -20,17 +20,13 @@ public class ProfConvData {
     
     public ProfConvData() {}
     
-    public void setTopic(String topic) {
-        this.topic = topic;
-    }
-    
     @XmlElement
     public String getTopic() {
         return this.topic;
     }
     
-    public void setProfGroup(String pg) {
-        this.professionGroup = pg;
+    public void setTopic(String topic) {
+        this.topic = topic;
     }
     
     @XmlElement
@@ -38,12 +34,16 @@ public class ProfConvData {
         return this.professionGroup;
     }
     
-    public void setPostName(String n) {
-        this.postName = n;
+    public void setProfGroup(String pg) {
+        this.professionGroup = pg;
     }
     
     @XmlElement
     public String getPostName() {
         return this.postName;
+    }
+    
+    public void setPostName(String n) {
+        this.postName = n;
     }
 }

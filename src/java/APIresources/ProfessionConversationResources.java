@@ -42,27 +42,32 @@ public class ProfessionConversationResources {
         String topic = pcd.getTopic();
         String targetGroup = pcd.getProfGroup();
         ProfessionGroup profGroup = pool.getProfessionGroup(targetGroup);
-        String postName = pcd.getPostName(); //TODO Add current user to list too!
+        String postName = pcd.getPostName();
         //Get workers in target group as arraylist
         ArrayList<Worker> workersInProfGroup = profGroup.getWorkersByProf();
-        //Add all from profession to new group object
+        //Add also current user to be part of conversation
+        for(Worker w : system.getAllWorkers()) {
+            if(w.getName().equals(postName)) {
+                workersInProfGroup.add(w);
+            }
+        }
+        //Add all from profession and current user to new group object
         Group profConvGroup = new Group();
         profConvGroup.setWorkerList(workersInProfGroup);
-        //Add list of workers to variable
+        //Add list of workers in conversation to variable
         ArrayList<Worker> workerList = profConvGroup.getWorkerList();
         
         String names = "";
         for (Worker w : workerList) {
             names += w.getName() + ", ";
         }
-        System.out.println("new group: " + topic + ", nimet; " + names);
+        System.out.println("new group: " + topic + ", names: " + names);
         Conversation c = new Conversation(topic, workerList);
         System.out.println("new conversation: " + c.getTopic() + ", c-id: " + c.getID());
         system.addConversation(c);
         return workerList;
     }
     
-    /*
     @GET
     @Path("/{userName}")
     @Consumes(MediaType.TEXT_PLAIN)
@@ -80,5 +85,4 @@ public class ProfessionConversationResources {
 //       system.getConversationByID(id).addMessage(new Message("kkk", "kkk2", 2));
        return system.getConversationByID(id);
     }
-    */
 }
