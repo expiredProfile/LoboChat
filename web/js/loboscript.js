@@ -12,6 +12,8 @@ var chatID;
 var wsUri = "ws://localhost:8080/LoboChat/chatend";
 //var wsUri = "ws://localhost:8080/LoboChat/resources/chatend/";
 var websocket;
+var mainUri = "ws://localhost:8080/LoboChat/main";
+var mainsocket;
 
 var number = 0;
 var check = true;
@@ -175,6 +177,62 @@ function ajaxGet() {
     console.log("ajax get done");
 }
 
+function logToMainsocket() {
+    if (mainsocket.readyState !== mainsocket.CLOSED) {
+        
+    } else {
+        mainsocket = new WebSocket(mainUri);
+        mainsocket.onopen = function (event) {
+            onOpenMain(event);
+        };
+        mainsocket.onmessage = function (event) {
+            onMessageMain(event);
+        };
+
+        mainsocket.onclose = function (event) {
+            onCloseMain(event);
+        };
+    }
+}
+
+function onMessageMain(event) {
+    if (document.getElementById(event.data) === null){
+        
+    } else {
+        
+    }
+}//onMessage
+
+function onOpenMain(event) {
+    console.log("Connected to mainsocket.");
+}
+
+function onCloseMain(event) {
+    console.log("Disconnected from mainsocket.");
+}
+
+function loadLatest(cid){
+    $.ajax({
+        url: baseUrl + "/resources/Messages/latest" + cid,
+        type: 'GET',
+        contentType: 'text/plain',
+        dataType: 'xml',
+        success: listMessage,
+        error: function (response) {
+            alert(response.statusText + " wn: " + workerName);
+        }
+    });
+}
+
+function listMessage(xml, status){
+    var $xml = $(xml);
+    var content = "";
+    $xml.find('message').each(function () {
+        var postName = $(this).find("postName").text();
+        var msgs = $(this).find("content").text();
+        content += postName + ": " + msgs + "<br>";
+    });
+}
 
 function logIn(workerName) {
     $.ajax({
@@ -277,7 +335,6 @@ function loggedInDropDown(xml, status) {
 }
 
 function openChat(id) {
-
     var url = baseUrl + "/chaWin.html";
     //chatParticipantId = id;
     sessionStorage.setItem("cid", id);
