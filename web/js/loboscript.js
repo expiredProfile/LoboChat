@@ -10,19 +10,58 @@ var workerName;
 var chatParticipantName;
 var chatID;
 var wsUri = "ws://localhost:8080/LoboChat/chatend";
-var mainUri = "ws://localhost:8080/LoboChat/main";
 //var wsUri = "ws://localhost:8080/LoboChat/resources/chatend/";
 var websocket;
+var mainUri = "ws://localhost:8080/LoboChat/main";
 var mainsocket;
+
+var number = 0;
+var check = true;
+var dropdownlogin;
+var dropdownlogout;
 
 $(document).ready(function () {
 
-    $(function () {
-        adjustStyle($(this).width());
-        $(window).resize(function () {
-            adjustStyle($(this).width());
-        });
+    $(window).load(function () {
+        $("#main-id").load("userlist.html");
+        var state = true;
+        if (state === true) {
+            $.ajax({
+                url: baseUrl + '/resources/Workers/LoggedIn',
+                type: 'GET',
+                dataType: 'xml',
+                success: loggedIn
+            });
+            $.ajax({
+                url: baseUrl + '/resources/Workers/LoggedOut',
+                type: 'GET',
+                dataType: 'xml',
+                success: loggedOut
+            });
+            state = false;
+        }
     });
+
+    $(window).resize(function () {
+        adjustStyle($(this).width());
+    });
+
+    $(document).on("click", "option", function () {
+        var text = $(this).text();
+        console.log("text to place: " + text);
+        $("#userPlacement-id").append("<p id='user" + number + "'>" + text + "</p>");
+        number++;
+    });
+
+    $(document).on("click", "#topicButton-id", function () {
+        var text = $("input").val();
+        document.getElementById("topic-id").innerHTML = text;
+    });
+
+
+
+
+
     /*
      $("#getAllMessagesButton").click(function () {
      $.ajax({
@@ -52,11 +91,8 @@ $(document).ready(function () {
         logIn(workerName);
         // window.location = baseUrl + "/userlists.html";
     });
-    $("#logOutButton").click(function () {
-        logOut();
-        //window.location = baseUrl;
-    });
     $("#usersButton-id").click(function () {
+        $("#main-id").load("userlist.html");
         $.ajax({
             url: baseUrl + '/resources/Workers/LoggedIn',
             type: 'GET',
@@ -71,6 +107,25 @@ $(document).ready(function () {
         });
     }); //loggedInUsers
 
+    $("#createConversation-id").click(function () {
+        $("#main-id").load("createConversation.html", function () {
+            if (check === true) {
+                ajaxGet();
+                check = false;
+            }
+            $("#dropDownMenu").append(dropdownlogin);
+            console.log(dropdownlogin);
+            $("#dropDownMenu").append(dropdownlogout);
+            console.log(dropdownlogout);
+        });
+    });
+    $("#logOutButton").click(function () {
+        logOut();
+        //window.location = baseUrl;
+    });
+    $("#alertsButton-id").click(function () {
+        $("#main-id").load("alert.html");
+    });
     $("#sendAlertButton").click(function () {
         console.log("Sending alert");
         //Xml object
@@ -87,7 +142,6 @@ $(document).ready(function () {
         $alertXml.find("alertCat").append(alertCat);
         $alertXml.find("receiverGroup").append(recGroup);
         $alertXml.find("postName").append(sender);
-
         $.ajax({
             url: baseUrl + "/resources/Alerts",
             data: alertXmlDoc,
@@ -106,6 +160,26 @@ $(document).ready(function () {
         getConversations();
     });
 }); // $(document).ready
+
+function ajaxGet() {
+    $("#myDropdown").empty();
+    console.log("ajax get");
+    $.ajax({
+        url: baseUrl + '/resources/Workers/LoggedIn',
+        type: 'GET',
+        dataType: 'xml',
+        async: false,
+        success: loggedInDropDown
+    });
+    $.ajax({
+        url: baseUrl + '/resources/Workers/LoggedOut',
+        type: 'GET',
+        dataType: 'xml',
+        async: false,
+        success: loggedOutDropDown
+    });
+    console.log("ajax get done");
+}
 
 function logToMainsocket() {
     
@@ -138,6 +212,7 @@ function onMessageMain(event) {
 function onOpenMain(event) {
     console.log("Connected to mainsocket.");
 }
+
 function onCloseMain(event) {
     console.log("Disconnected from mainsocket.");
 }
@@ -172,7 +247,7 @@ function logIn(workerName) {
         type: 'POST',
         contentType: 'text/plain',
         //success: alert('Logged In ' + workerName),
-        success: window.location = baseUrl + "/userlists.html",
+        success: window.location = baseUrl + "/mainpage.html",
         error: function (response) {
             alert(response.statusText + " wn: " + workerName);
         }
@@ -232,7 +307,38 @@ function loggedIn(xml, status) {
     });
     document.getElementById("inField").innerHTML = content;
 }
-;
+
+function loggedOutDropDown(xml, status) {
+    console.log("listing logged out users");
+    xmlString = (new XMLSerializer()).serializeToString(xml);
+    console.log("XML: " + xmlString);
+    var $xml = $(xml);
+    var content = "";
+    $xml.find('workers').each(function () {
+        $xml.find('worker').each(function () {
+            dropdownlogout += "<option value=' " + $(this).find("name").text() + "'>" + $(this).find("name").text() + "</option>";
+        });
+    });
+    //document.getElementById("dropDownMenu").innerHTML = content;
+}
+
+function loggedInDropDown(xml, status) {
+    console.log("listing logged in users");
+    xmlString = (new XMLSerializer()).serializeToString(xml);
+    console.log("XML: " + xmlString);
+    var $xml = $(xml);
+    var content = "";
+    $xml.find('workers').each(function () {
+        $xml.find('worker').each(function () {
+            var wname = $(this).find("name").text();
+            console.log("Id name " + wname);
+            if (wname !== readCookie('currentUser')) {
+                dropdownlogin += "<option value=' " + $(this).find("name").text() + "'>" + $(this).find("name").text() + "</option>";
+            }
+        });
+    });
+    //document.getElementById("dropDownMenu").innerHTML = content;
+}
 
 function openChat(id) {
 
@@ -271,7 +377,6 @@ function readCookie(name) { //readCookie('currentUser')
 
 function adjustStyle(width) {
     width = parseInt(width);
-    console.log(width);
     if (width < 701) {
         $("#size-stylesheet").attr("href", "css/narrow.css");
     } else if (width < 900) {
@@ -298,8 +403,7 @@ function startConversation(receiver) {
             console.log("Error: " + response.statusText);
         }
     }); // ajax
-}
-; // function
+} // function
 
 function getConversations() {
     var user = readCookie('currentUser');
@@ -314,6 +418,7 @@ function getConversations() {
         }
     });
 }
+
 function listConversations(xml, status) {
     console.log("listing Conversations");
 //    xmlString = (new XMLSerializer()).serializeToString(xml);
@@ -331,8 +436,7 @@ function listConversations(xml, status) {
         });
     });
     document.getElementById("inField").innerHTML = content;
-}
-;// listConversations
+}// listConversations
 
 function getParticipants() {
     var cid = sessionStorage.getItem("cid");
@@ -346,7 +450,7 @@ function getParticipants() {
             alert(response.statusText + " wn: " + workerName);
         }
     });
-     if (websocket.readyState !== websocket.CLOSED) {
+    if (websocket.readyState !== websocket.CLOSED) {
 
     } else {
         websocket = new WebSocket(wsUri);
@@ -356,14 +460,10 @@ function getParticipants() {
         websocket.onmessage = function (event) {
             onMessage(event);
         };
-
         websocket.onclose = function (event) {
             onClose(event);
         };
     }
-
-
-
 }
 
 function listParticipant(xml, status) {
@@ -376,7 +476,6 @@ function listParticipant(xml, status) {
         var memberName = $(this).find("name").text();
         content += memberName + "<br>";
     });
-
     $xml.find('messages').each(function () {
         var postName = $(this).find("postName").text();
         var msgs = $(this).find("content").text();
@@ -386,7 +485,7 @@ function listParticipant(xml, status) {
     document.getElementById("chatArea").innerHTML = messages;
     document.getElementById("conversationID").innerHTML = cid;
 }
-;// listParticipants
+; // listParticipants
 
 function onMessage(event) {
     var cid = document.getElementById("conversationID").innerHTML;
@@ -401,7 +500,6 @@ function onOpen(event) {
 function onClose(event) {
     systemMessage(readCookie('currentUser') + " disconnected!");
 }
-
 function loadMessages() {
     var cid = document.getElementById("conversationID").innerHTML;
     $.ajax({
@@ -431,13 +529,9 @@ function sendMessage() {
 
     var messageContent = $("#inputField").val();
     var d = new Date();
-
     var dd = d.getDate() + "-" + (d.getMonth() + 1) + "-" + d.getFullYear() + " " + d.getHours() + ":" + d.getMinutes() + ":" + d.getSeconds();
-
     var cid = document.getElementById("conversationID").innerHTML;
-
     var sender = readCookie('currentUser');
-
     var messageObject = "  <message><content>" + messageContent + "</content>"
             + "<conversationID> " + cid + "</conversationID>"
             + " <currentTime>" + dd + "</currentTime>"
@@ -469,7 +563,6 @@ function systemMessage(content) {
             + " <currentTime>" + d + "</currentTime>"
             + "<postName>" + sender + "</postName></message> ";
     var messageXml = $.parseXML(messageObject);
-
     $.ajax({
         url: baseUrl + "/resources/Messages",
         data: messageXml,
@@ -483,6 +576,5 @@ function systemMessage(content) {
         }//error
     }); // ajax
     websocket.send(cid);
-
-
 }// function
+
