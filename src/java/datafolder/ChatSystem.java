@@ -6,7 +6,6 @@
 package datafolder;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 /**
  *
@@ -20,7 +19,7 @@ public class ChatSystem {
     private Group group;
     private Conversation conversation;
     private ArrayList<Conversation> conversations;
-    private HashMap<Integer, Alert> alertHistory;
+    private ArrayList<Alert> alertHistory;
     private ArrayList<Worker> loggedIn;
     private ArrayList<Worker> loggedOut;
     private ArrayList<Worker> allWorkers;
@@ -31,7 +30,7 @@ public class ChatSystem {
         this.group = new Group();
         this.conversation = new Conversation();
         this.conversations = new ArrayList<>();
-        this.alertHistory = new HashMap<>();
+        this.alertHistory = new ArrayList<>();
         this.loggedIn = new ArrayList<>();
         this.loggedOut = new ArrayList<>();
         this.group = new Group();
@@ -116,10 +115,14 @@ public class ChatSystem {
 
     //Alert methods
     public void addAlert(Alert a) {
-        alertHistory.put(a.getID(), a);
+        alertHistory.add(a);
     }
     
     public Alert getAlertByID(int id) {
         return alertHistory.get(id);
+    }
+    
+    public ArrayList<Alert> getAlertHistory() {
+        return alertHistory;
     }
 }

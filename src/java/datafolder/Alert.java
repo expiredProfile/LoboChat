@@ -17,16 +17,13 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class Alert {
     private int id;
     private String currentTime;
-    @XmlElement
-    private String alertCat;
-    @XmlElement
-    private String receiverGroup;
-    @XmlElement
+    private int alertCat;
+    private int receiverGroup;
     private String postName;
     
     public Alert(){}
 
-    //@XmlElement
+    @XmlElement
     public int getID() {
         return id;
     }
@@ -35,7 +32,7 @@ public class Alert {
         this.id = IDIncrement.getInstance().alertIncrement();
     }
     
-    //@XmlElement
+    @XmlElement
     public String getCurrentTime(){
         return this.currentTime;
     }
@@ -44,17 +41,17 @@ public class Alert {
         this.currentTime = TimeResources.getInstance().getTimestamp();
     }
     
-    //@XmlElement
-    public String getAlertCat() {
+    @XmlElement
+    public int getAlertCat() {
         return alertCat;
     }
     
-    //@XmlElement
-    public String getReceiverGroup(){
+    @XmlElement
+    public int getReceiverGroup(){
         return this.receiverGroup;
     }
     
-    //@XmlElement
+    @XmlElement
     public String getPostName() {
         return postName;
     }

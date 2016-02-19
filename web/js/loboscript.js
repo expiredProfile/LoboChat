@@ -58,29 +58,6 @@ $(document).ready(function () {
         document.getElementById("topic-id").innerHTML = text;
     });
 
-    /*
-     $("#getAllMessagesButton").click(function () {
-     $.ajax({
-     url: baseUrl + "/resources/Messages",
-     method: 'GET',
-     dataType: 'xml', // returned datatype
-     success: listMessages
-     });
-     });//getAllMessages
-     
-     $("#sendMessageButton").click(function () {
-     var messageContent = $("#inputField").val();
-     $.ajax({
-     url: baseUrl + "/resources/Messages",
-     data: messageContent,
-     type: 'POST',
-     contentType: 'text/plain',
-     dataType: 'xml',
-     success: document.getElementById("outputField").innerHTML = " "
-     }); // ajax
-     });// sendMessage
-     */
-
     $("#loginButton").click(function () {
         workerName = $('#inputField-id').val();
         writeCookie('currentUser', workerName, 3);
