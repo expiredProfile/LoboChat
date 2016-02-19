@@ -24,8 +24,8 @@ public class AlertData {
     
     //Get alert info (value) with alert category id (key)
     //Get info id as parameter instead?
-    public String getAlertInfo(Alert a) {
-        String info = alertCategories.get(a.getAlertCat());
+    public String getAlertInfo(int id) {
+        String info = alertCategories.get(id);
         return info;
     }
 }

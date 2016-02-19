@@ -18,6 +18,7 @@ public class Alert {
     private int id;
     private String currentTime;
     private int alertCat;
+    private String alertTopic;
     private int receiverGroup;
     private String postName;
     
@@ -54,5 +55,41 @@ public class Alert {
     @XmlElement
     public String getPostName() {
         return postName;
+    }
+
+    /**
+     * @param alertCat the alertCat to set
+     */
+    public void setAlertCat(int alertCat) {
+        this.alertCat = alertCat;
+    }
+
+    /**
+     * @param receiverGroup the receiverGroup to set
+     */
+    public void setReceiverGroup(int receiverGroup) {
+        this.receiverGroup = receiverGroup;
+    }
+
+    /**
+     * @param postName the postName to set
+     */
+    public void setPostName(String postName) {
+        this.postName = postName;
+    }
+
+    /**
+     * @return the alertTopic
+     */
+    @XmlElement
+    public String getAlertTopic() {
+        return alertTopic;
+    }
+
+    /**
+     * @param alertTopic the alertTopic to set
+     */
+    public void setAlertTopic(String alertTopic) {
+        this.alertTopic = alertTopic;
     }
 }

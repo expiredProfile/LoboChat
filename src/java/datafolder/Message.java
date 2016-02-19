@@ -21,7 +21,8 @@ public class Message {
     private int conversationID;
     private String currentTime;
 
-    public Message() {}
+    public Message() {
+    }
 
     public Message(String content, String name, int id) {
         this.content = content;

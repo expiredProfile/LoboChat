@@ -12,6 +12,7 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
@@ -31,14 +32,15 @@ public class AlertResources {
     
     @POST
     @Consumes(MediaType.APPLICATION_XML)
-    @Produces(MediaType.APPLICATION_XML)
-    public void postAlert(Alert a){
+    @Produces(MediaType.TEXT_PLAIN)
+    public String postAlert(Alert a){
         //Test print
         int alertCat = a.getAlertCat();
         int recGroup = a.getReceiverGroup();
         String user = a.getPostName();
         System.out.println("alertCat: " + alertCat + ", recGroup: " + recGroup + ", postName: " + user);
         //Add id and timestamp
+        a.setAlertTopic(alertData.getAlertInfo(alertCat));
         a.setID();
         a.setCurrentTime();
         //Test print
@@ -54,14 +56,17 @@ public class AlertResources {
             w.receiveAlert(); //Notify about alert
         }
         */
+        return Integer.toString(id);
     }
-    /*
+    
     @GET
+    @Path("/{alertid}")
     @Consumes(MediaType.APPLICATION_XML)
     @Produces(MediaType.APPLICATION_XML)
-    public Alert getAlertXML(int alertId){
-        Alert alert = system.getAlertByID(alertId);
+    public Alert getAlertXML(@PathParam("alertid") String alertID){
+        int id = Integer.parseInt(alertID);
+        Alert alert = system.getAlertByID(id);
         return alert;
     }
-    */
+    
 }

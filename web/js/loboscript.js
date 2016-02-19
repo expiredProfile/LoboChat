@@ -6,6 +6,7 @@
 
 var baseUrl = "http://localhost:8080/LoboChat";
 var workerName;
+var groupID;
 //var chatParticipantId;
 var chatParticipantName;
 var chatID;
@@ -74,7 +75,7 @@ $(document).ready(function () {
 
     $("#loginButton").click(function () {
         workerName = $('#inputField-id').val();
-        writeCookie('currentUser', workerName, 3);
+        
         logIn(workerName);
         // window.location = baseUrl + "/userlists.html";
     });
@@ -117,27 +118,26 @@ $(document).ready(function () {
     $(document).on("click", "#sendAlertButton", function () {
         console.log("Sending alert");
         //Xml object
-        var xmlAlertObject = "<alert><alertCat></alertCat><receiverGroup></receiverGroup><postName></postName></alert>";
-        var alertXmlDoc = $.parseXML(xmlAlertObject);
-        var $alertXml = $(alertXmlDoc);
         //Get user input
         var alertCat = $("#alert").val(); //Alert category dropdown
         var recGroup = $('input[name="receiverGroup"]:checked').val(); //Receiver group radio
         var sender = readCookie("currentUser"); //Read current user from cookie (alert sender)
         //Print for test purposes
         alert("alertCat: " + alertCat + ", recGroup: " + recGroup);
-        //Append input data to xml
-        $alertXml.find("alertCat").append(alertCat);
-        $alertXml.find("receiverGroup").append(recGroup);
-        $alertXml.find("postName").append(sender);
+        var xmlAlertObject = "<alert><alertCat>"+alertCat+"</alertCat><receiverGroup>"+recGroup+"</receiverGroup><postName>"+sender+"</postName></alert>";
+        var alertXmlDoc = $.parseXML(xmlAlertObject);
+        //console.log(alertXmlDoc);
+        
         $.ajax({
             url: baseUrl + "/resources/Alerts",
             data: alertXmlDoc,
             processData: false, //already xml doc!
             type: 'POST',
             contentType: 'application/xml',
-            //dataType: 'text/plain',
-            success: document.getElementById("alertResponse").innerHTML = "Alert sent",
+            dataType: 'text',
+            success: function(data){
+                mainsocket.send(data);
+            },
             error: function (response) {
                 alert("Error in alert: " + response.statusText);
             }
@@ -210,8 +210,40 @@ function logToMainsocket() {
 }
 
 function onMessageMain(event) {
-    console.log("Alert lol");
+        
+    $.ajax({
+        url: baseUrl + "/resources/Alerts/" + event.data,
+        type: 'GET',
+        //contentType: 'text/plain',
+        dataType: 'xml',
+        success: handleAlert,
+        error: function (response) {
+            alert(response.statusText + " wn: " + workerName);
+        }
+    });
 }//onMessage
+
+function handleAlert(xml, status){
+    xmlString = (new XMLSerializer()).serializeToString(xml);
+    console.log("ALERT: " + xmlString);
+    var $xml = $(xml);
+    
+    var target = $xml.find('receiverGroup').text();
+    var topic = $xml.find('alertTopic').text();
+    console.log(target);
+    groupID = readCookie('groupID');
+    console.log(groupID);
+    if (target === "0"){
+        alert("AUTA HOMO NYT ON TÄLLÄNE HÄTÄ: "+ topic);
+    } else if(target === groupID)  {
+        alert("AUTA HOMO "+groupID+" NYT ON TÄLLÄNE HÄTÄ: "+ topic);
+    } else {
+        alert("ÄLÄ");
+    }
+    
+    
+    
+}
 
 function onOpenMain(event) {
     console.log("Connected to mainsocket.");
@@ -223,7 +255,7 @@ function onCloseMain(event) {
 
 function loadLatest(cid) {
     $.ajax({
-        url: baseUrl + "/resources/Messages/latest" + cid,
+        url: baseUrl + "/resources/Messages/latest/" + cid,
         type: 'GET',
         contentType: 'text/plain',
         dataType: 'xml',
@@ -257,8 +289,16 @@ function logIn(workerName) {
         data: workerName,
         type: 'POST',
         contentType: 'text/plain',
+        dataType: 'text',
         //success: alert('Logged In ' + workerName),
-        success: window.location = baseUrl + "/mainpage.html",
+        success: function (data) {
+            writeCookie('currentUser', workerName, 3);
+            console.log(data);
+            writeCookie('groupID', data, 3);
+            
+            window.location = baseUrl + "/mainpage.html";
+            
+        },
         error: function (response) {
             alert(response.statusText + " wn: " + workerName);
         }

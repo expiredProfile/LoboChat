@@ -18,14 +18,16 @@ public class Worker {
     private int id;
     private String name;
     private String title;
+    private int groupID;
     
     public Worker() {}
 
-    public Worker(String name, String title) {
+    public Worker(String name, String title, int gid) {
         this.increment = IDIncrement.getInstance();
         this.id = increment.workerIncrement();
         this.name = name;
         this.title = title;
+        this.groupID = gid;
     }
 
     @XmlElement
@@ -56,5 +58,20 @@ public class Worker {
     public void receiveAlert() {
         //do something
         System.out.println(this.name + ": alert received");
+    }
+
+    /**
+     * @return the groupID
+     */
+    @XmlElement
+    public int getGroupID() {
+        return groupID;
+    }
+
+    /**
+     * @param groupID the groupID to set
+     */
+    public void setGroupID(int groupID) {
+        this.groupID = groupID;
     }
 }
