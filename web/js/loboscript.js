@@ -117,14 +117,14 @@ $(document).ready(function () {
     
     $(document).on("click", "#sendAlertButton", function () {
         console.log("Sending alert");
-        //Xml object
         //Get user input
         var alertCat = $("#alert").val(); //Alert category dropdown
         var recGroup = $('input[name="receiverGroup"]:checked').val(); //Receiver group radio
         var sender = readCookie("currentUser"); //Read current user from cookie (alert sender)
         //Print for test purposes
         alert("alertCat: " + alertCat + ", recGroup: " + recGroup);
-        var xmlAlertObject = "<alert><alertCat>"+alertCat+"</alertCat><receiverGroup>"+recGroup+"</receiverGroup><postName>"+sender+"</postName></alert>";
+        //Xml object
+        var xmlAlertObject = "<alert><alertCat>" + alertCat + "</alertCat><receiverGroup>" + recGroup + "</receiverGroup><postName>" + sender + "</postName></alert>";
         var alertXmlDoc = $.parseXML(xmlAlertObject);
         //console.log(alertXmlDoc);
         
@@ -210,39 +210,35 @@ function logToMainsocket() {
 }
 
 function onMessageMain(event) {
-        
     $.ajax({
         url: baseUrl + "/resources/Alerts/" + event.data,
         type: 'GET',
-        //contentType: 'text/plain',
         dataType: 'xml',
         success: handleAlert,
         error: function (response) {
-            alert(response.statusText + " wn: " + workerName);
+            alert("Error in handleAlert: " + response.statusText);
         }
     });
 }//onMessage
 
 function handleAlert(xml, status){
     xmlString = (new XMLSerializer()).serializeToString(xml);
-    console.log("ALERT: " + xmlString);
+    console.log("Alert: " + xmlString);
     var $xml = $(xml);
     
     var target = $xml.find('receiverGroup').text();
     var topic = $xml.find('alertTopic').text();
-    console.log(target);
+    console.log("Alert target: " + target);
     groupID = readCookie('groupID');
-    console.log(groupID);
+    console.log("GroupID: " + groupID);
     if (target === "0"){
-        alert("AUTA HOMO NYT ON TÄLLÄNE HÄTÄ: "+ topic);
+        alert("Alert: " + topic);
     } else if(target === groupID)  {
-        alert("AUTA HOMO "+groupID+" NYT ON TÄLLÄNE HÄTÄ: "+ topic);
+        alert("Alert: " + topic + ", groupID: " + groupID);
     } else {
-        alert("ÄLÄ");
+        //Test alert
+        alert("Alert not for you");
     }
-    
-    
-    
 }
 
 function onOpenMain(event) {
@@ -290,14 +286,11 @@ function logIn(workerName) {
         type: 'POST',
         contentType: 'text/plain',
         dataType: 'text',
-        //success: alert('Logged In ' + workerName),
         success: function (data) {
             writeCookie('currentUser', workerName, 3);
             console.log(data);
             writeCookie('groupID', data, 3);
-            
             window.location = baseUrl + "/mainpage.html";
-            
         },
         error: function (response) {
             alert(response.statusText + " wn: " + workerName);
@@ -467,7 +460,7 @@ function startConversation() {
 //    window.alert(xmlGroupObject);
     var GroupXmlDoc = $.parseXML(xmlGroupObject);
     $.ajax({
-        url: "http://localhost:8080/LoboChat/resources/Conversations",
+        url: baseUrl + "/resources/Conversations",
         data: GroupXmlDoc,
         processData: false,
         type: 'POST',
@@ -484,9 +477,6 @@ function startProfGroupConversation(receiverProfession) {
     var xmlProfConvDataObject = "<profConvData><topic></topic><professionGroup></professionGroup><postName>" + readCookie("currentUser") + "</postName></profConvData>";
     var ProfXmlDoc = $.parseXML(xmlProfConvDataObject);
     var $profXml = $(ProfXmlDoc);
-    //Append input data to xml
-    $profXml.find("topic").append("");
-    $profXml.find("professionGroup").append("");
     $.ajax({
         url: baseUrl + "/resources/ProfessionConversations",
         data: ProfXmlDoc,

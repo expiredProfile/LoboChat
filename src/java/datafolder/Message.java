@@ -48,12 +48,14 @@ public class Message {
     public void setPostName(String postName) {
         this.postName = postName;
     }
-    public void setConversationID(int id){
-        this.conversationID = id;
-    }
+    
     @XmlElement
     public int getConversationID(){
         return this.conversationID;
+    }
+    
+    public void setConversationID(int id){
+        this.conversationID = id;
     }
         
     @XmlElement

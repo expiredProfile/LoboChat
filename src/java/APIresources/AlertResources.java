@@ -7,7 +7,6 @@ package APIresources;
 
 import datafolder.ChatSystem;
 import datafolder.Alert;
-import datafolder.Worker;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -39,7 +38,7 @@ public class AlertResources {
         int recGroup = a.getReceiverGroup();
         String user = a.getPostName();
         System.out.println("alertCat: " + alertCat + ", recGroup: " + recGroup + ", postName: " + user);
-        //Add id and timestamp
+        //Add topic, id and timestamp
         a.setAlertTopic(alertData.getAlertInfo(alertCat));
         a.setID();
         a.setCurrentTime();
@@ -49,13 +48,6 @@ public class AlertResources {
         System.out.println("id: " + id + ", time: " + time);
         //Add alert to history
         system.addAlert(a);
-        //Notify test
-        /*
-        for(Worker w : system.getLoggedInList()) {
-            System.out.println("Notifying group " + recGroup);
-            w.receiveAlert(); //Notify about alert
-        }
-        */
         return Integer.toString(id);
     }
     

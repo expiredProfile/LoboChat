@@ -5,7 +5,6 @@
  */
 package APIresources;
 
-import datafolder.Alert;
 import java.util.HashMap;
 
 /**
@@ -23,7 +22,6 @@ public class AlertData {
     }
     
     //Get alert info (value) with alert category id (key)
-    //Get info id as parameter instead?
     public String getAlertInfo(int id) {
         String info = alertCategories.get(id);
         return info;

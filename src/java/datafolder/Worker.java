@@ -53,24 +53,12 @@ public class Worker {
     public void setTitle(String s){
         this.title = s;
     }
-    
-    //Receive alert test
-    public void receiveAlert() {
-        //do something
-        System.out.println(this.name + ": alert received");
-    }
 
-    /**
-     * @return the groupID
-     */
     @XmlElement
     public int getGroupID() {
         return groupID;
     }
 
-    /**
-     * @param groupID the groupID to set
-     */
     public void setGroupID(int groupID) {
         this.groupID = groupID;
     }
