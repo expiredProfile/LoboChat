@@ -7,6 +7,14 @@ and open the template in the editor.
     Created on : 09-Feb-2016, 10:48:08
     Author     : kimmo
 */
+@font-face {
+    font-family: Enigmatic_reg;
+    src: url(fonts/Enigmatic/Enigma__2.ttf);
+}
+@font-face {
+    font-family: Enigmatic_bold;
+    src: url(fonts/Enigmatic/EnigmaB_2.ttf);
+}
 html {
     background-color: #c2c2c2;
     background: url("images/maxresdefault.jpg") no-repeat center center fixed;
@@ -22,21 +30,31 @@ body {
 ::-moz-selection {
     background: #c2c2c2;
 }
-.login-class {
+.header-class h3 {
+    font-family: Enigmatic_reg;
+    margin: 2em;
+}
+.wrapper-class {
     background-color: #fff;
     border: 1px solid #c2c2c2;
     border-radius: 25px;
     margin: auto;
-    width: 35%;
-    min-height: 15em;
-    padding: 1em;
+    width: 40%;
+    min-height: 25em;
+    padding: 3em;
+    text-align: center;
 }
 .content-class {
     background-color: #fff;
-    margin: auto;
-    width: 80%;
-    padding: 1em;
+    padding: 2em;
 }
-.content-class button {
-    margin: 0.5em;
+#displayChoiceDiv-id button {
+    background-color: transparent;
+    border: transparent;
+}
+#displayChoiceDiv-id button:active {
+    outline: none;
+}
+#displayChoiceDiv-id button:focus {
+    outline: none;
 }

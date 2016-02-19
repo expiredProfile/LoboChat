@@ -22,7 +22,6 @@ public class TitleData {
         titles.put(3, "Guard");
     }
     
-    //Get info id as param instead?
     public String getTitle(String titleKey) {
         int titleInt = Integer.parseInt(titleKey);
         String title = titles.get(titleInt);
