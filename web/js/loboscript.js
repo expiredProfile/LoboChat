@@ -413,13 +413,15 @@ function adjustStyle(width) {
 
 function startConversation() {
     var topic = $('#topic-id').text();
+    console.log("topic to add: " + topic);
     if (topic.length === 0) {
         window.alert("Topic missing!");
         return null;
     }
     // group object with an arraylist of participants ->(workerlist tags).
-    var xmlGroupObject = "<group><topic>" + topic + "</topic><workerList><id></id><name>" + readCookie('currentUser') + "</name><title></title></workerList>";
-    $('#userPlacement-id').children('p').each(function () { // iterates through the selected workers
+    var xmlGroupObject = "<group><topic>" + topic + "</topic><workerList><id></id><name>" 
+            + readCookie('currentUser') + "</name><title></title></workerList>";
+    $('#userPlacement-id').children('span').each(function () { // iterates through the selected workers
         xmlGroupObject += '<workerList><id></id><name>' + $(this).text() + '</name><title></title></workerList>';
     });
     xmlGroupObject += "</group>"; // adds end tag for the xml document.
@@ -488,7 +490,7 @@ function listConversations(xml, status) {
                     + "</button></div><br>";
         });
     });
-    document.getElementById("inField").innerHTML = content;
+    $("#inField").html(content);
 }// listConversations
 
 function getParticipants() {
