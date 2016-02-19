@@ -391,5 +391,54 @@ body {
     font-size: 1.5em;
 }
 
+#topicsDiv-id {
+    width: 100%;
+}
+
+#topicsDiv-id button {
+    width: 100%;
+    background-color: transparent;
+    border : none;
+    text-align: left;
+}
+
+#topicsDiv-id button:focus, button:active {
+    outline: none;
+}
+
+#topicsDiv-id p:not(#topicField-id){
+    display: inline-block;
+}
+
+#topicsDiv-id #topicField-id {
+    font-size: 2em;
+    padding-left: 0.65em;
+    font-weight: bold;
+}
+
+#topicsDiv-id #topicIDField-id {
+    visibility: hidden;
+}
+
+#topicsDiv-id #postName-id {
+    font-size: 1.5em;
+    padding-left: 0.866em;
+    font-weight: bold;
+}
+
+#topicsDiv-id #timeStamp-id {
+    float: right;
+    font-size: 1.5em;
+    padding-right: 1em;
+    color: #808080;
+}
+
+#topicsDiv-id #msgContent-id {
+    padding-left: 1em;
+    padding-right: 1em;
+    font-size: 1.3em;
+    color: #808080;
+}
+
 
 

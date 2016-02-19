@@ -5,6 +5,7 @@
  */
 package APIresources;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import javax.xml.bind.DatatypeConverter;
@@ -24,8 +25,10 @@ public class TimeResources {
     }
     //Timestamp function
     public String getTimestamp() {
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
         c.setTime(new Date());
+        String cal = sdf.format(new Date());
         String xmlDateTime = DatatypeConverter.printDateTime(c);
-        return xmlDateTime;
+        return cal;
     }
 }

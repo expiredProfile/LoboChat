@@ -12,21 +12,21 @@ var chatID;
 var wsUri = "ws://localhost:8080/LoboChat/chatend";
 //var wsUri = "ws://localhost:8080/LoboChat/resources/chatend/";
 var websocket;
-var mainUri = "ws://localhost:8080/LoboChat/main";
+var mainUri = "ws://localhost:8080/LoboChat/mainsock";
 var mainsocket;
 
 var number = 0;
 var check = true;
-var dropdownlogin;
-var dropdownlogout;
+var state = true;
+var dropdownlogin = "";
+var dropdownlogout = "";
 
 $(document).ready(function () {
 
     $(window).load(function () {
         var location = window.location.href;
         if (location !== ("http://localhost:8080/LoboChat/")) {
-            $("#main-id").load("userlist.html");
-            var state = true;
+            //$("#main-id").load("userlist.html");
             if (state === true) {
                 $.ajax({
                     url: baseUrl + '/resources/Workers/LoggedIn',
@@ -44,7 +44,6 @@ $(document).ready(function () {
             }
         }
     });
-
 
     $(window).resize(function () {
         adjustStyle($(this).width());
@@ -78,6 +77,7 @@ $(document).ready(function () {
         logIn(workerName);
         // window.location = baseUrl + "/userlists.html";
     });
+    
     $("#usersButton-id").click(function () {
         $("#main-id").load("userlist.html");
         $.ajax({
@@ -92,6 +92,7 @@ $(document).ready(function () {
             dataType: 'xml',
             success: loggedOut
         });
+        console.log("test");
     }); //loggedInUsers
 
     $("#createConversation-id").click(function () {
@@ -103,7 +104,7 @@ $(document).ready(function () {
             $("#myDropdown").append(dropdownlogin);
             console.log(dropdownlogin);
             $("#myDropdown").append(dropdownlogout);
-            console.log(dropdownlogout);
+            console.log(dropdownlogout); 
         });
     });
     $("#logOutButton").click(function () {
@@ -144,11 +145,16 @@ $(document).ready(function () {
     }); // sendAlert
 
     $("#topicsButton-id").click(function () {
+        console.log("click topic button");
+        $("#main-id").load("topicslist.html");
         getConversations();
+        loadLatest();
     });
 
     $(document).on("click", "#createButton-id", function () {
         startConversation();
+        $("#main-id").load("topicslist.html");
+        getConversations();
     });
 
 }); // $(document).ready
@@ -222,7 +228,7 @@ function onCloseMain(event) {
 
 function loadLatest(cid) {
     $.ajax({
-        url: baseUrl + "/resources/Messages/latest" + cid,
+        url: baseUrl + "/resources/Messages/latest/" + cid,
         type: 'GET',
         contentType: 'text/plain',
         dataType: 'xml',
@@ -239,10 +245,14 @@ function listMessage(xml, status) {
     $xml.find('message').each(function () {
         var postName = $(this).find("postName").text();
         var msgs = $(this).find("content").text();
-        content += postName + ": " + msgs;
+        var timeStamp = $(this).find("currentTime").text();
+        content += "<p id='postName-id'>" + postName + "</p>" + "<p id='timeStamp-id'>" + timeStamp
+                + "</p>" + "<br><div id='msgContDiv-id'><p id='msgContent-id'>" + msgs + "</p></div>";
+        console.log("current time: " + timeStamp);
     });
     cid = $xml.find('conversationID').text();
-    var target = "msgconv" + cid;
+    console.log("cid is: " + cid);
+    var target = "messageField" + cid + "-id";
 
     if (document.getElementById(target) !== null) {
         document.getElementById(target).innerHTML = content;
@@ -297,7 +307,7 @@ function logOut() {
 } // logOut
 
 function loggedOut(xml, status) {
-    console.log("listing messages");
+    console.log("listing logged out users");
     xmlString = (new XMLSerializer()).serializeToString(xml);
     console.log("XML: " + xmlString);
     var $xml = $(xml);
@@ -310,11 +320,11 @@ function loggedOut(xml, status) {
                     "</span>" + "<span class='leftSide-class'>" + $(this).find("title").text() + "</span>" + "</div>";
         });
     });
-    document.getElementById("outField").innerHTML = content;
+    $("#outField").html(content);
 } //loggedOut
 
 function loggedIn(xml, status) {
-    console.log("listing users");
+    console.log("listing  logged in users");
     xmlString = (new XMLSerializer()).serializeToString(xml);
     console.log("XML: " + xmlString);
     var $xml = $(xml);
@@ -331,7 +341,7 @@ function loggedIn(xml, status) {
             }
         });
     });
-    document.getElementById("inField").innerHTML = content;
+    $("#inField").html(content);
 } //loggedIn
 
 function loggedOutDropDown(xml, status) {
@@ -339,7 +349,7 @@ function loggedOutDropDown(xml, status) {
     xmlString = (new XMLSerializer()).serializeToString(xml);
     console.log("XML: " + xmlString);
     var $xml = $(xml);
-    var content = "";
+    //var content = "";
     $xml.find('workers').each(function () {
         $xml.find('worker').each(function () {
             dropdownlogout += "<p class='usersToAdd-class'>" + $(this).find("name").text() + "</p>";
@@ -353,13 +363,13 @@ function loggedInDropDown(xml, status) {
     xmlString = (new XMLSerializer()).serializeToString(xml);
     console.log("XML: " + xmlString);
     var $xml = $(xml);
-    var content = "";
+    //var content = "";
     $xml.find('workers').each(function () {
         $xml.find('worker').each(function () {
             var wname = $(this).find("name").text();
             console.log("Id name " + wname);
             if (wname !== readCookie('currentUser')) {
-                dropdownlogin += "<p class='usersToAdd-class>" + $(this).find("name").text() + "</p>";
+                dropdownlogin += "<p class='usersToAdd-class'>" + $(this).find("name").text() + "</p>";
             }
         });
     });
@@ -485,12 +495,14 @@ function listConversations(xml, status) {
             var conversationID = $(this).find("ID").text();
             console.log("conversationID " + conversationID);
             content += "<div class='onlines'><button onclick='openChat(\"" + conversationID + "\")'\n\
-             value='" + $(this).find("topic").text() +
-                    "'> " + $(this).find("topic").text() + ": " + $(this).find("ID").text()
-                    + "</button></div><br>";
+             value='" + $(this).find("topic").text() + "'> " 
+                    + "<p id='topicField-id'>" + $(this).find("topic").text() 
+                    + "<span id='topicIDField-id'>" + $(this).find("ID").text() + "</span></p>"  
+                    + "<p id='messageField" + conversationID + "-id'>"
+                    + loadLatest(conversationID) + "</p>" + "</button><hr></div><br>";
         });
     });
-    $("#inField").html(content);
+    $("#topicsDiv-id").html(content);
 }// listConversations
 
 function getParticipants() {
@@ -575,6 +587,7 @@ function onMessage(event) {
     var cid = document.getElementById("conversationID").innerHTML;
     if (event.data === cid) {
         loadMessages();
+        loadLatest(cid);
     }
 } //onMessage
 
@@ -628,7 +641,7 @@ function sendMessage() {
     var sender = readCookie('currentUser');
     var messageObject = "  <message><content>" + messageContent + "</content>"
             + "<conversationID> " + cid + "</conversationID>"
-            + " <currentTime>" + dd + "</currentTime>"
+            + "<currentTime></currentTime>"
             + "<postName>" + sender + "</postName></message> ";
     var messageXml = $.parseXML(messageObject);
     $.ajax({

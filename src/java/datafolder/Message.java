@@ -26,8 +26,7 @@ public class Message {
     public Message(String content, String name, int id) {
         this.content = content;
         this.postName = name;
-        this.conversationID = id;
-        this.currentTime = TimeResources.getInstance().getTimestamp();
+        this.conversationID = id;        
     }
 
     @XmlElement
@@ -58,5 +57,9 @@ public class Message {
     @XmlElement
     public String getCurrentTime(){
         return this.currentTime;
+    }
+    
+    public void setCurrentTime() {
+        this.currentTime = TimeResources.getInstance().getTimestamp();
     }
 }

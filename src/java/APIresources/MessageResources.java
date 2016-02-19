@@ -62,6 +62,7 @@ public class MessageResources {
     @Consumes(MediaType.APPLICATION_XML)
     public void postMessage(Message m) {
         int id = m.getConversationID();
+        m.setCurrentTime();
         system.addMessageToConversation(id, m);
     }
 //    @POST
