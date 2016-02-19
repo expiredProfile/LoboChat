@@ -12,7 +12,7 @@ var chatID;
 var wsUri = "ws://localhost:8080/LoboChat/chatend";
 //var wsUri = "ws://localhost:8080/LoboChat/resources/chatend/";
 var websocket;
-var mainUri = "ws://localhost:8080/LoboChat/main";
+var mainUri = "ws://localhost:8080/LoboChat/mainsock";
 var mainsocket;
 
 var number = 0;
@@ -113,7 +113,8 @@ $(document).ready(function () {
     $("#alertsButton-id").click(function () {
         $("#main-id").load("alert.html");
     });
-    $("#sendAlertButton").click(function () {
+    
+    $(document).on("click", "#sendAlertButton", function () {
         console.log("Sending alert");
         //Xml object
         var xmlAlertObject = "<alert><alertCat></alertCat><receiverGroup></receiverGroup><postName></postName></alert>";
@@ -419,7 +420,7 @@ function startConversation() {
     }
     // group object with an arraylist of participants ->(workerlist tags).
     var xmlGroupObject = "<group><topic>" + topic + "</topic><workerList><id></id><name>" + readCookie('currentUser') + "</name><title></title></workerList>";
-    $('#userPlacement-id').children('p').each(function () { // iterates through the selected workers
+    $('#userPlacement-id').children('span').each(function () { // iterates through the selected workers
         xmlGroupObject += '<workerList><id></id><name>' + $(this).text() + '</name><title></title></workerList>';
     });
     xmlGroupObject += "</group>"; // adds end tag for the xml document.
@@ -573,6 +574,7 @@ function onMessage(event) {
     var cid = document.getElementById("conversationID").innerHTML;
     if (event.data === cid) {
         loadMessages();
+        
     }
 } //onMessage
 
