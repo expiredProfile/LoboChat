@@ -4,6 +4,14 @@ To change this license header, choose License Headers in Project Properties.
 To change this template file, choose Tools | Templates
 and open the template in the editor.
 -->
+
+<style>
+    table, th, td {
+        padding: 0.3em;
+        text-align: center;
+    }
+</style>
+
 <select id="alert">
     <option value="0">Need assistance</option>
     <option value="1">Disturbance</option>
@@ -16,3 +24,6 @@ and open the template in the editor.
 <br>
 <button id="sendAlertButton" >Alert</button>
 <div id="alertResponse"></div>
+<br>
+<button id="alertHistoryButton">Alert history</button>
+<div id="alertHistory"><table id="alertTable"></table></div>
