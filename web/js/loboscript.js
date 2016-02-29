@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-var baseUrl = "http://localhost:8080/LoboChat";
+var baseUrl = "http://Localhost:8080/LoboChat";
 var workerName;
 //var chatParticipantId;
 var chatParticipantName;
