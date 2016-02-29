@@ -21,7 +21,8 @@ public class Message {
     private int conversationID;
     private String currentTime;
 
-    public Message() {}
+    public Message() {
+    }
 
     public Message(String content, String name, int id) {
         this.content = content;
@@ -46,12 +47,14 @@ public class Message {
     public void setPostName(String postName) {
         this.postName = postName;
     }
-    public void setConversationID(int id){
-        this.conversationID = id;
-    }
+    
     @XmlElement
     public int getConversationID(){
         return this.conversationID;
+    }
+    
+    public void setConversationID(int id){
+        this.conversationID = id;
     }
         
     @XmlElement

@@ -33,14 +33,25 @@ public class WorkerResources {
     @POST
     //@Path("/LoggedIn")
     @Consumes(MediaType.TEXT_PLAIN)
-    public void workerLogIn(String s) {
+    @Produces(MediaType.TEXT_PLAIN)
+    public String workerLogIn(String s) {
+        Worker temp = null;
         for (Worker w : system.getLoggedOutList()) {
             if (w.getName().equals(s)) {
                 system.getLoggedInList().add(w);
                 system.getLoggedOutList().remove(w);
+                temp = w;
                 break;
             }
         }
+        
+        if (temp != null){
+            return Integer.toString(temp.getGroupID());
+        } else {
+            return "0";
+        }
+        
+      
     }
 
     @POST

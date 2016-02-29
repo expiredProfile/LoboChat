@@ -82,7 +82,6 @@ public class ProfessionConversationResources {
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.APPLICATION_XML)
     public Conversation getConversationById(@PathParam("conversationID") int id) {
-//       system.getConversationByID(id).addMessage(new Message("kkk", "kkk2", 2));
        return system.getConversationByID(id);
     }
 }

@@ -5,9 +5,7 @@
  */
 package APIresources;
 
-import datafolder.Alert;
 import java.util.HashMap;
-//import javax.xml.bind.annotation.XmlElement;
 
 /**
  *
@@ -24,11 +22,8 @@ public class AlertData {
     }
     
     //Get alert info (value) with alert category id (key)
-    //@XmlElement
-    //Get info id as parameter instead?
-    public String getAlertInfo(Alert a) {
-        int alertCat = Integer.parseInt(a.getAlertCat());
-        String info = alertCategories.get(alertCat);
+    public String getAlertInfo(int id) {
+        String info = alertCategories.get(id);
         return info;
     }
 }

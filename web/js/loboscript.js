@@ -1,11 +1,6 @@
-/* 
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
-var baseUrl = "http://Localhost:8080/LoboChat";
+var baseUrl = "http://localhost:8080/LoboChat";
 var workerName;
+var groupID;
 //var chatParticipantId;
 var chatParticipantName;
 var chatID;
@@ -17,7 +12,6 @@ var mainsocket;
 
 var number = 0;
 var check = true;
-var state = true;
 var dropdownlogin = "";
 var dropdownlogout = "";
 
@@ -26,7 +20,8 @@ $(document).ready(function () {
     $(window).load(function () {
         var location = window.location.href;
         if (location !== ("http://localhost:8080/LoboChat/")) {
-            //$("#main-id").load("userlist.html");
+            $("#main-id").load("userlist.html");
+            var state = true;
             if (state === true) {
                 $.ajax({
                     url: baseUrl + '/resources/Workers/LoggedIn',
@@ -44,6 +39,7 @@ $(document).ready(function () {
             }
         }
     });
+
 
     $(window).resize(function () {
         adjustStyle($(this).width());
@@ -73,11 +69,10 @@ $(document).ready(function () {
 
     $("#loginButton").click(function () {
         workerName = $('#inputField-id').val();
-        writeCookie('currentUser', workerName, 3);
+        
         logIn(workerName);
         // window.location = baseUrl + "/userlists.html";
     });
-    
     $("#usersButton-id").click(function () {
         $("#main-id").load("userlist.html");
         $.ajax({
@@ -92,7 +87,6 @@ $(document).ready(function () {
             dataType: 'xml',
             success: loggedOut
         });
-        console.log("test");
     }); //loggedInUsers
 
     $("#createConversation-id").click(function () {
@@ -104,7 +98,7 @@ $(document).ready(function () {
             $("#myDropdown").append(dropdownlogin);
             console.log(dropdownlogin);
             $("#myDropdown").append(dropdownlogout);
-            console.log(dropdownlogout); 
+            console.log(dropdownlogout);
         });
     });
     $("#logOutButton").click(function () {
@@ -114,30 +108,30 @@ $(document).ready(function () {
     $("#alertsButton-id").click(function () {
         $("#main-id").load("alert.html");
     });
-    $("#sendAlertButton").click(function () {
+    
+    $(document).on("click", "#sendAlertButton", function () {
         console.log("Sending alert");
-        //Xml object
-        var xmlAlertObject = "<alert><alertCat></alertCat><receiverGroup></receiverGroup><postName></postName></alert>";
-        var alertXmlDoc = $.parseXML(xmlAlertObject);
-        var $alertXml = $(alertXmlDoc);
         //Get user input
         var alertCat = $("#alert").val(); //Alert category dropdown
         var recGroup = $('input[name="receiverGroup"]:checked').val(); //Receiver group radio
         var sender = readCookie("currentUser"); //Read current user from cookie (alert sender)
         //Print for test purposes
         alert("alertCat: " + alertCat + ", recGroup: " + recGroup);
-        //Append input data to xml
-        $alertXml.find("alertCat").append(alertCat);
-        $alertXml.find("receiverGroup").append(recGroup);
-        $alertXml.find("postName").append(sender);
+        //Xml object
+        var xmlAlertObject = "<alert><alertCat>" + alertCat + "</alertCat><receiverGroup>" + recGroup + "</receiverGroup><postName>" + sender + "</postName></alert>";
+        var alertXmlDoc = $.parseXML(xmlAlertObject);
+        //console.log(alertXmlDoc);
+        
         $.ajax({
             url: baseUrl + "/resources/Alerts",
             data: alertXmlDoc,
             processData: false, //already xml doc!
             type: 'POST',
             contentType: 'application/xml',
-            //dataType: 'text/plain',
-            success: document.getElementById("alertResponse").innerHTML = "Alert sent",
+            dataType: 'text',
+            success: function(data){
+                mainsocket.send(data);
+            },
             error: function (response) {
                 alert("Error in alert: " + response.statusText);
             }
@@ -145,10 +139,7 @@ $(document).ready(function () {
     }); // sendAlert
 
     $("#topicsButton-id").click(function () {
-        console.log("click topic button");
-        $("#main-id").load("topicslist.html");
         getConversations();
-        loadLatest();
     });
 
     $(document).on("click", "#createButton-id", function () {
@@ -215,8 +206,36 @@ function logToMainsocket() {
 }
 
 function onMessageMain(event) {
-    console.log("Alert lol");
+    $.ajax({
+        url: baseUrl + "/resources/Alerts/" + event.data,
+        type: 'GET',
+        dataType: 'xml',
+        success: handleAlert,
+        error: function (response) {
+            alert("Error in handleAlert: " + response.statusText);
+        }
+    });
 }//onMessage
+
+function handleAlert(xml, status){
+    xmlString = (new XMLSerializer()).serializeToString(xml);
+    console.log("Alert: " + xmlString);
+    var $xml = $(xml);
+    
+    var target = $xml.find('receiverGroup').text();
+    var topic = $xml.find('alertTopic').text();
+    console.log("Alert target: " + target);
+    groupID = readCookie('groupID');
+    console.log("GroupID: " + groupID);
+    if (target === "0"){
+        alert("Alert: " + topic);
+    } else if(target === groupID)  {
+        alert("Alert: " + topic + ", groupID: " + groupID);
+    } else {
+        //Test alert
+        alert("Alert not for you");
+    }
+}
 
 function onOpenMain(event) {
     console.log("Connected to mainsocket.");
@@ -266,8 +285,13 @@ function logIn(workerName) {
         data: workerName,
         type: 'POST',
         contentType: 'text/plain',
-        //success: alert('Logged In ' + workerName),
-        success: window.location = baseUrl + "/mainpage.html",
+        dataType: 'text',
+        success: function (data) {
+            writeCookie('currentUser', workerName, 3);
+            console.log(data);
+            writeCookie('groupID', data, 3);
+            window.location = baseUrl + "/mainpage.html";
+        },
         error: function (response) {
             alert(response.statusText + " wn: " + workerName);
         }
@@ -307,7 +331,7 @@ function logOut() {
 } // logOut
 
 function loggedOut(xml, status) {
-    console.log("listing logged out users");
+    console.log("listing messages");
     xmlString = (new XMLSerializer()).serializeToString(xml);
     console.log("XML: " + xmlString);
     var $xml = $(xml);
@@ -320,11 +344,11 @@ function loggedOut(xml, status) {
                     "</span>" + "<span class='leftSide-class'>" + $(this).find("title").text() + "</span>" + "</div>";
         });
     });
-    $("#outField").html(content);
+    document.getElementById("outField").innerHTML = content;
 } //loggedOut
 
 function loggedIn(xml, status) {
-    console.log("listing  logged in users");
+    console.log("listing users");
     xmlString = (new XMLSerializer()).serializeToString(xml);
     console.log("XML: " + xmlString);
     var $xml = $(xml);
@@ -341,7 +365,7 @@ function loggedIn(xml, status) {
             }
         });
     });
-    $("#inField").html(content);
+    document.getElementById("inField").innerHTML = content;
 } //loggedIn
 
 function loggedOutDropDown(xml, status) {
@@ -423,14 +447,12 @@ function adjustStyle(width) {
 
 function startConversation() {
     var topic = $('#topic-id').text();
-    console.log("topic to add: " + topic);
     if (topic.length === 0) {
         window.alert("Topic missing!");
         return null;
     }
     // group object with an arraylist of participants ->(workerlist tags).
-    var xmlGroupObject = "<group><topic>" + topic + "</topic><workerList><id></id><name>" 
-            + readCookie('currentUser') + "</name><title></title></workerList>";
+    var xmlGroupObject = "<group><topic>" + topic + "</topic><workerList><id></id><name>" + readCookie('currentUser') + "</name><title></title></workerList>";
     $('#userPlacement-id').children('span').each(function () { // iterates through the selected workers
         xmlGroupObject += '<workerList><id></id><name>' + $(this).text() + '</name><title></title></workerList>';
     });
@@ -438,7 +460,7 @@ function startConversation() {
 //    window.alert(xmlGroupObject);
     var GroupXmlDoc = $.parseXML(xmlGroupObject);
     $.ajax({
-        url: "http://localhost:8080/LoboChat/resources/Conversations",
+        url: baseUrl + "/resources/Conversations",
         data: GroupXmlDoc,
         processData: false,
         type: 'POST',
@@ -455,9 +477,6 @@ function startProfGroupConversation(receiverProfession) {
     var xmlProfConvDataObject = "<profConvData><topic></topic><professionGroup></professionGroup><postName>" + readCookie("currentUser") + "</postName></profConvData>";
     var ProfXmlDoc = $.parseXML(xmlProfConvDataObject);
     var $profXml = $(ProfXmlDoc);
-    //Append input data to xml
-    $profXml.find("topic").append("");
-    $profXml.find("professionGroup").append("");
     $.ajax({
         url: baseUrl + "/resources/ProfessionConversations",
         data: ProfXmlDoc,
@@ -587,7 +606,7 @@ function onMessage(event) {
     var cid = document.getElementById("conversationID").innerHTML;
     if (event.data === cid) {
         loadMessages();
-        loadLatest(cid);
+        
     }
 } //onMessage
 
@@ -641,7 +660,7 @@ function sendMessage() {
     var sender = readCookie('currentUser');
     var messageObject = "  <message><content>" + messageContent + "</content>"
             + "<conversationID> " + cid + "</conversationID>"
-            + "<currentTime></currentTime>"
+            + " <currentTime>" + dd + "</currentTime>"
             + "<postName>" + sender + "</postName></message> ";
     var messageXml = $.parseXML(messageObject);
     $.ajax({
@@ -683,3 +702,4 @@ function systemMessage(content) {
     }); // ajax
     websocket.send(cid);
 }// systemMessage function
+

@@ -25,9 +25,12 @@ public class ProfessionGroup {
         workersByProf = new ArrayList<>();
     }
     
-    //@XmlElement
+    @XmlElement
     public String getProfessionName() {
         return this.profession;
+    }
+    public void setProfessionName(String p) {
+        this.profession = p;
     }
     
     @XmlElement

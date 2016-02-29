@@ -37,10 +37,10 @@ public class WorkerPool {
         this.psychotherapists = new ProfessionGroup("Psychotherapists");
         this.guards = new ProfessionGroup("Guards");
         //Create workers
-        this.kim = new Worker("Kim", "Guard");
-        this.henkka = new Worker("Henkka", "Doctor");
-        this.kasper = new Worker("Kasper", "Psychotherapist");
-        this.tommi = new Worker("Tommi", "Nurse");
+        this.kim = new Worker("Kim", "Guard", 1);
+        this.henkka = new Worker("Henkka", "Doctor", 2);
+        this.kasper = new Worker("Kasper", "Psychotherapist", 3);
+        this.tommi = new Worker("Tommi", "Nurse", 4);
         //Add to logged out list
         this.addToLoggedOut();
         //Add to all workers
