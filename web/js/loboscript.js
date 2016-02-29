@@ -69,7 +69,7 @@ $(document).ready(function () {
 
     $("#loginButton").click(function () {
         workerName = $('#inputField-id').val();
-        
+
         logIn(workerName);
         // window.location = baseUrl + "/userlists.html";
     });
@@ -108,7 +108,7 @@ $(document).ready(function () {
     $("#alertsButton-id").click(function () {
         $("#main-id").load("alert.html");
     });
-    
+
     $(document).on("click", "#sendAlertButton", function () {
         console.log("Sending alert");
         //Get user input
@@ -121,7 +121,7 @@ $(document).ready(function () {
         var xmlAlertObject = "<alert><alertCat>" + alertCat + "</alertCat><receiverGroup>" + recGroup + "</receiverGroup><postName>" + sender + "</postName></alert>";
         var alertXmlDoc = $.parseXML(xmlAlertObject);
         //console.log(alertXmlDoc);
-        
+
         $.ajax({
             url: baseUrl + "/resources/Alerts",
             data: alertXmlDoc,
@@ -129,7 +129,7 @@ $(document).ready(function () {
             type: 'POST',
             contentType: 'application/xml',
             dataType: 'text',
-            success: function(data){
+            success: function (data) {
                 mainsocket.send(data);
             },
             error: function (response) {
@@ -139,6 +139,7 @@ $(document).ready(function () {
     }); // sendAlert
 
     $("#topicsButton-id").click(function () {
+        $("#main-id").load("topicslist.html");
         getConversations();
     });
 
@@ -217,19 +218,19 @@ function onMessageMain(event) {
     });
 }//onMessage
 
-function handleAlert(xml, status){
+function handleAlert(xml, status) {
     xmlString = (new XMLSerializer()).serializeToString(xml);
     console.log("Alert: " + xmlString);
     var $xml = $(xml);
-    
+
     var target = $xml.find('receiverGroup').text();
     var topic = $xml.find('alertTopic').text();
     console.log("Alert target: " + target);
     groupID = readCookie('groupID');
     console.log("GroupID: " + groupID);
-    if (target === "0"){
+    if (target === "0") {
         alert("Alert: " + topic);
-    } else if(target === groupID)  {
+    } else if (target === groupID) {
         alert("Alert: " + topic + ", groupID: " + groupID);
     } else {
         //Test alert
@@ -365,7 +366,7 @@ function loggedIn(xml, status) {
             }
         });
     });
-    document.getElementById("inField").innerHTML = content;
+    $("#inField").html = content;
 } //loggedIn
 
 function loggedOutDropDown(xml, status) {
@@ -514,9 +515,9 @@ function listConversations(xml, status) {
             var conversationID = $(this).find("ID").text();
             console.log("conversationID " + conversationID);
             content += "<div class='onlines'><button onclick='openChat(\"" + conversationID + "\")'\n\
-             value='" + $(this).find("topic").text() + "'> " 
-                    + "<p id='topicField-id'>" + $(this).find("topic").text() 
-                    + "<span id='topicIDField-id'>" + $(this).find("ID").text() + "</span></p>"  
+             value='" + $(this).find("topic").text() + "'> "
+                    + "<p id='topicField-id'>" + $(this).find("topic").text()
+                    + "<span id='topicIDField-id'>" + $(this).find("ID").text() + "</span></p>"
                     + "<p id='messageField" + conversationID + "-id'>"
                     + loadLatest(conversationID) + "</p>" + "</button><hr></div><br>";
         });
@@ -580,22 +581,23 @@ function listParticipant(xml, status) { // also lists messages !
 
     $xml.find('memberList').each(function () {
         var memberName = $(this).find("name").text();
-        content += memberName + "<br>";
+        content += "<p id='memberName-id'>" + memberName + "</p>";
     });
-    var limiter = 0;
-    $xml.find('messages').each(function () {
-        limiter++;
-    });
-//    window.alert(limiter);
-    var messageCount = 0;
-    $xml.find('messages').each(function () {
-        if (messageCount >= limiter - 10) { // how many messages are displayed.
-            var postName = $(this).find("postName").text();
-            var msgs = $(this).find("content").text();
-            messages += postName + ": " + msgs + "<br>";
+    
+    var currentUser = readCookie('currentUser');
+    
+    $xml.find('message').each(function () {
+        var postName = $(this).find("postName").text();
+        var msgs = $(this).find("content").text();
+        console.log("user: " + currentUser + " postName: " + postName);
+        if (postName === currentUser) {
+            messages += "<p class='currentMessage-class'>" + msgs + "</p>";
+        } else {
+            messages += "<p class='chatPostName-class'>" + postName
+                    + "</p>" + "<p class='chatMessage-class'>" + msgs + "</p>";
         }
-        messageCount++;
     });
+
     document.getElementById("participants").innerHTML = content;
     document.getElementById("chatArea").innerHTML = messages;
     document.getElementById("conversationID").innerHTML = cid;
@@ -606,7 +608,7 @@ function onMessage(event) {
     var cid = document.getElementById("conversationID").innerHTML;
     if (event.data === cid) {
         loadMessages();
-        
+
     }
 } //onMessage
 
@@ -632,19 +634,19 @@ function loadMessages() {
 
 function listMessages(xml, status) {
     var $xml = $(xml);
-    var limiter = 0;
-    $xml.find('message').each(function () {
-        limiter++;
-    });
-    var messageCount = 0;
+    console.log(xml);
     var content = "";
+    var currentUser = readCookie('currentUser');
     $xml.find('message').each(function () {
-        if (messageCount >= limiter - 10) { // how many messages are displayed
-            var postName = $(this).find("postName").text();
-            var msgs = $(this).find("content").text();
-            content += postName + ": " + msgs + "<br>";
+        var postName = $(this).find("postName").text();
+        var msgs = $(this).find("content").text();
+        console.log(postName + " and " + msgs);
+        if (postName === currentUser) {
+            content += "<p class='currentMessage-class'>" + msgs + "</p>";
+        } else {
+            content += "<p class='chatPostName-class'>" + postName
+                    + "</p>" + "<p class='chatMessage-class'>" + msgs + "</p>";
         }
-        messageCount++;
     });
     document.getElementById("chatArea").innerHTML = content;
 } // listMessages
