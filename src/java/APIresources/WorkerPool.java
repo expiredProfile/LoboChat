@@ -53,6 +53,22 @@ public class WorkerPool {
         return instance;
     }
     
+    public void addGuard(Worker w){
+        guards.addWorker(w);
+    }
+    
+    public void addDoctor(Worker w){
+        doctors.addWorker(w);
+    }
+    
+    public void addPsycho(Worker w){
+        psychotherapists.addWorker(w);
+    }
+    
+    public void addNurse(Worker w){
+        nurses.addWorker(w);
+    }
+    
     private void addToLoggedOut(){
         system.workerLoggedOut(kim);
         system.workerLoggedOut(henkka);
