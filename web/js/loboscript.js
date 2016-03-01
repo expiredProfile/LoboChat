@@ -111,13 +111,14 @@ $(document).ready(function () {
     
     $(document).on("click", "#sendAlertButton", function () {
         $("#alertResponse").empty();
+        $("#alertHistory").empty();
         console.log("Sending alert");
         //Get user input
         var alertCat = $("#alert").val(); //Alert category dropdown
         var recGroup = $('input[name="receiverGroup"]:checked').val(); //Receiver group radio
         var sender = readCookie("currentUser"); //Read current user from cookie (alert sender)
         //Print for test purposes
-        alert("Send alert? alertCat: " + alertCat + ", recGroup: " + recGroup);
+        alert("alertCat: " + alertCat + ", recGroup: " + recGroup);
         //Xml object
         var xmlAlertObject = "<alert><alertCat>" + alertCat + "</alertCat><receiverGroup>" + recGroup + "</receiverGroup><postName>" + sender + "</postName></alert>";
         var alertXmlDoc = $.parseXML(xmlAlertObject);
@@ -141,18 +142,21 @@ $(document).ready(function () {
     }); // sendAlert
     
     $(document).on("click", "#alertHistoryButton", function () {
+        $("#alertResponse").empty();
+        $("#alertHistory").empty();
         console.log("Getting alert history");
+        var range = $("#alertHistoryRange").val();
         
         $.ajax({
-            url: baseUrl + "/resources/Alerts/Alerthistory",
+            url: baseUrl + "/resources/Alerts/Alerthistory/" + range,
             type: 'GET',
+            contentType: 'text/plain',
             dataType: 'xml',
             success: function(data){
                 //Test print to log
                 var xmlStringAlert = (new XMLSerializer()).serializeToString(data);
                 console.log("Alert history: " + xmlStringAlert);
                 //Display alert history
-                $("#alertHistory").empty();
                 var i;
                 var table = "<tr><th>AlertID</th><th>Alert category</th><th>Alert topic</th><th>Timestamp</th><th>Sender</th><th>Target group</th></tr>";
                 var alerts = data.getElementsByTagName("alert");
@@ -259,10 +263,11 @@ function onMessageMain(event) {
 }//onMessage
 
 function handleAlert(xml, status){
-    xmlString = (new XMLSerializer()).serializeToString(xml);
+    //Test print to log
+    var xmlString = (new XMLSerializer()).serializeToString(xml);
     console.log("Alert: " + xmlString);
-    var $xml = $(xml);
     
+    var $xml = $(xml);
     var target = $xml.find('receiverGroup').text();
     var topic = $xml.find('alertTopic').text();
     console.log("Alert target: " + target);

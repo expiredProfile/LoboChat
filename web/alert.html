@@ -25,5 +25,10 @@ and open the template in the editor.
 <button id="sendAlertButton" >Alert</button>
 <div id="alertResponse"></div>
 <br>
-<button id="alertHistoryButton">Alert history</button>
+<select id="alertHistoryRange">
+    <option value="0">5 latest</option>
+    <option value="1">10 latest</option>
+    <option value="2">All</option>
+</select>
+<button id="alertHistoryButton">Show alert history</button>
 <div id="alertHistory"><table id="alertTable"></table></div>

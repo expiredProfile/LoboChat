@@ -63,10 +63,11 @@ public class AlertResources {
     }
     //TODO Get only recent alerts
     @GET
-    @Path("/Alerthistory")
-    //@Consumes(MediaType.TEXT_PLAIN)
+    @Path("/Alerthistory/{range}")
+    @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.APPLICATION_XML)
-    public ArrayList<Alert> getAlertHistory() {
-        return system.getAlertHistory();
+    public ArrayList<Alert> getAlertHistory(@PathParam("range") int range) {
+        //int historyRange = Integer.parseInt(range);
+        return system.getAlertHistory(range);
     }
 }
