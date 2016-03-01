@@ -59,7 +59,10 @@ $(document).ready(function () {
 
                 window.location = baseUrl;
             }
-        } else {
+        } else if (location === "http://localhost:8080/LoboChat/") {
+            if (readCookie("currentUser") !== ""){
+                window.location = baseUrl+"/mainpage.html";
+            }
         }
     });
 
@@ -388,6 +391,7 @@ function logIn(workerName) {
 
                     if (workerName === "Admin") {
                         showError = false;
+                        writeCookie('currentUser', "Admin", 3);
                         window.location = baseUrl + "/adminpage.html";
                     }
 
