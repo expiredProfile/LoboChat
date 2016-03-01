@@ -145,6 +145,8 @@ $(document).ready(function () {
     });
 
     $(document).on("click", "#sendAlertButton", function () {
+        $("#alertResponse").empty();
+        $("#alertHistory").empty();
         console.log("Sending alert");
         //Get user input
         var alertCat = $("#alert").val(); //Alert category dropdown
@@ -167,9 +169,52 @@ $(document).ready(function () {
             success: function (data) {
                 console.log("success alert");
                 mainsocket.send(data);
+                $("#alertResponse").append("Alert sent!");
             },
             error: function (response) {
                 alert("Error in alert: " + response.statusText);
+            }
+        }); // ajax
+    }); // sendAlert
+    
+    $(document).on("click", "#alertHistoryButton", function () {
+        $("#alertResponse").empty();
+        $("#alertHistory").empty();
+        console.log("Getting alert history");
+        var range = $("#alertHistoryRange").val();
+        
+        $.ajax({
+            url: baseUrl + "/resources/Alerts/Alerthistory/" + range,
+            type: 'GET',
+            contentType: 'text/plain',
+            dataType: 'xml',
+            success: function(data){
+                //Test print to log
+                var xmlStringAlert = (new XMLSerializer()).serializeToString(data);
+                console.log("Alert history: " + xmlStringAlert);
+                //Display alert history
+                var i;
+                var table = "<tr><th>AlertID</th><th>Alert category</th><th>Alert topic</th><th>Timestamp</th><th>Sender</th><th>Target group</th></tr>";
+                var alerts = data.getElementsByTagName("alert");
+                for(i = 0; i < alerts.length; i++) {
+                    table += "<tr><td>" +
+                            alerts[i].getElementsByTagName("ID")[0].childNodes[0].nodeValue +
+                            "</td><td>" +
+                            alerts[i].getElementsByTagName("alertCat")[0].childNodes[0].nodeValue +
+                            "</td><td>" +
+                            alerts[i].getElementsByTagName("alertTopic")[0].childNodes[0].nodeValue +
+                            "</td><td>" +
+                            alerts[i].getElementsByTagName("currentTime")[0].childNodes[0].nodeValue +
+                            "</td><td>" +
+                            alerts[i].getElementsByTagName("postName")[0].childNodes[0].nodeValue +
+                            "</td><td>" +
+                            alerts[i].getElementsByTagName("receiverGroup")[0].childNodes[0].nodeValue +
+                            "</td></tr>";
+                }
+                $("#alertHistory").append(table);
+            },
+            error: function (response) {
+                alert("Error in get alert history: " + response.statusText);
             }
         }); // ajax
     }); // sendAlert
@@ -254,11 +299,12 @@ function onMessageMain(event) {
     });
 }//onMessage
 
-function handleAlert(xml, status) {
-    xmlString = (new XMLSerializer()).serializeToString(xml);
+function handleAlert(xml, status){
+    //Test print to log
+    var xmlString = (new XMLSerializer()).serializeToString(xml);
     console.log("Alert: " + xmlString);
+    
     var $xml = $(xml);
-
     var target = $xml.find('receiverGroup').text();
     var topic = $xml.find('alertTopic').text();
     console.log("Alert target: " + target);
