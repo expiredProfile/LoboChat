@@ -17,14 +17,6 @@ var dropdownlogin = "";
 var dropdownlogout = "";
 
 $(document).ready(function () {
-    var loc = window.location.href;
-
-    if (loc === "http://localhost:8080/LoboChat/") {
-        document.getElementById("testcookie").innerHTML = readCookie("currentUser");
-        if (readCookie("currentUser") === "") {
-            console.log("null cookie");
-        }
-    }
 
 
     $(window).load(function () {
@@ -523,6 +515,10 @@ function startConversation() {
     if (topic === "") {
         window.alert("Topic missing!");
         return null;
+    } else if (topic.length > 20){
+        $('#topicInput-id').val("");
+        window.alert("Max topic length is 20 characters!");
+        return null;
     }
 
     $('#userPlacement-id').children('span').each(function () {
@@ -687,10 +683,10 @@ function listParticipant(xml, status) { // also lists messages !
     document.getElementById("chatArea").innerHTML = messages;
     document.getElementById("conversationID").innerHTML = cid;
     document.getElementById("topic-banner").innerHTML = topic;
-    systemMessage(readCookie('currentUser') + " connected!");
+    //systemMessage(readCookie('currentUser') + " connected!");
 
     window.onbeforeunload = function () {
-        systemMessage(readCookie('currentUser') + " disconnected!");
+        //systemMessage(readCookie('currentUser') + " disconnected!");
         if (!websocket) {
 
         } else if (websocket.readyState === websocket.CLOSED) {
@@ -776,7 +772,7 @@ function sendMessage() {
             console.log("Error: " + response.statusText);
         }//error
     }); // ajax
-
+    $("#inputField").val("");
     websocket.send(cid);
 }// sendMessage function
 
