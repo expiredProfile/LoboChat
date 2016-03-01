@@ -17,27 +17,57 @@ var dropdownlogin = "";
 var dropdownlogout = "";
 
 $(document).ready(function () {
+    var loc = window.location.href;
+
+    if (loc === "http://localhost:8080/LoboChat/") {
+        document.getElementById("testcookie").innerHTML = readCookie("currentUser");
+        if (readCookie("currentUser") === "") {
+            console.log("null cookie");
+        }
+    }
+
 
     $(window).load(function () {
         var location = window.location.href;
         if (location !== ("http://localhost:8080/LoboChat/")) {
-            $("#main-id").load("userlist.html");
-            var state = true;
-            if (state === true) {
-                $.ajax({
-                    url: baseUrl + '/resources/Workers/LoggedIn',
-                    type: 'GET',
-                    dataType: 'xml',
-                    success: loggedIn
-                });
-                $.ajax({
-                    url: baseUrl + '/resources/Workers/LoggedOut',
-                    type: 'GET',
-                    dataType: 'xml',
-                    success: loggedOut
-                });
-                state = false;
+            if (readCookie("currentUser") !== "") {
+                $("#main-id").load("userlist.html");
+                var state = true;
+                if (state === true) {
+                    $.ajax({
+                        url: baseUrl + '/resources/Workers/LoggedIn',
+                        type: 'GET',
+                        dataType: 'xml',
+                        success: loggedIn
+                    });
+                    $.ajax({
+                        url: baseUrl + '/resources/Workers/LoggedOut',
+                        type: 'GET',
+                        dataType: 'xml',
+                        success: loggedOut
+                    });
+                    state = false;
+                }
+            } else {
+                if (!mainsocket) {
+
+                } else if (mainsocket.readyState === mainsocket.CLOSED) {
+
+                } else {
+                    mainsocket.close();
+                }
+
+                if (!websocket) {
+
+                } else if (websocket.readyState === websocket.CLOSED) {
+
+                } else {
+                    websocket.close();
+                }
+
+                window.location = baseUrl;
             }
+        } else {
         }
     });
 
@@ -135,6 +165,7 @@ $(document).ready(function () {
             contentType: 'application/xml',
             dataType: 'text',
             success: function (data) {
+                console.log("success alert");
                 mainsocket.send(data);
             },
             error: function (response) {
@@ -360,7 +391,10 @@ function logOut() {
         type: 'POST',
         contentType: 'text/plain',
         //success: alert('Logged Out'),
-        success: window.location = baseUrl,
+        success: function () {
+            writeCookie('currentUser', workerName, -3);
+            window.location = baseUrl;
+        },
         error: function (response) {
             alert('Error ' + response.statusText);
         }
@@ -484,8 +518,19 @@ function adjustStyle(width) {
 
 function startConversation() {
     var topic = $('#topic-id').text();
-    if (document.getElementById("topicValue-id") === null || document.getElementById("user") === null) {
-        window.alert("Topic or participant missing!");
+    var num = 0;
+    console.log(topic);
+    if (topic === "") {
+        window.alert("Topic missing!");
+        return null;
+    }
+
+    $('#userPlacement-id').children('span').each(function () {
+        num++;
+    });
+
+    if (num === 0) {
+        window.alert("Participant missing!");
         return null;
     }
     // group object with an arraylist of participants ->(workerlist tags).
@@ -504,9 +549,9 @@ function startConversation() {
         type: 'POST',
         contentType: 'application/xml', // datatype sent
         dataType: 'xml', // datatype received
-        success: function() {
-         $("#main-id").load("topicslist.html");
-         getConversations();   
+        success: function () {
+            $("#main-id").load("topicslist.html");
+            getConversations();
         },
         error: function (response) {
             console.log("Error: " + response.statusText);
@@ -593,6 +638,7 @@ function getParticipants() {
                 onClose(event);
             };
             console.log("Logged");
+
         }
     } else {
         websocket = new WebSocket(wsUri);

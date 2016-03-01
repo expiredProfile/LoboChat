@@ -43,19 +43,16 @@ public class MainSock {
     @OnMessage
     public void onMessage(String alertID) {
         int aid = 0;
-        
+
         try {
             aid = Integer.parseInt(alertID);
-        } catch (Exception e){
-            
-        }
-        
-        if (aid != 0){
+
             messageAll(alertID);
-        
-        } else {
-            
+
+        } catch (Exception e) {
+
         }
+
     }
 
     public void messageAll(String ss) {
