@@ -31,4 +31,12 @@ public class TimeResources {
         String xmlDateTime = DatatypeConverter.printDateTime(c);
         return cal;
     }
+    
+    public String getShortTimeStamp() {
+        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
+        c.setTime(new Date());
+        String cal = sdf.format(new Date());
+        String xmlDateTime = DatatypeConverter.printDateTime(c);
+        return cal;
+    }
 }

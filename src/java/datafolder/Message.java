@@ -20,6 +20,7 @@ public class Message {
     private String postName;
     private int conversationID;
     private String currentTime;
+    private String shortTimeStamp;
 
     public Message() {
     }
@@ -64,5 +65,14 @@ public class Message {
     
     public void setCurrentTime() {
         this.currentTime = TimeResources.getInstance().getTimestamp();
+    }
+    
+    @XmlElement
+    public String getShortTime() {
+        return this.shortTimeStamp;
+    }
+    
+    public void setShortTime() {
+        this.shortTimeStamp = TimeResources.getInstance().getShortTimeStamp();
     }
 }

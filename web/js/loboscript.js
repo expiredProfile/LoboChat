@@ -17,16 +17,7 @@ var dropdownlogin = "";
 var dropdownlogout = "";
 
 $(document).ready(function () {
-    var loc = window.location.href;
-
-    if (loc === "http://localhost:8080/LoboChat/") {
-        document.getElementById("testcookie").innerHTML = readCookie("currentUser");
-        if (readCookie("currentUser") === "") {
-            console.log("null cookie");
-        }
-    }
-
-
+    
     $(window).load(function () {
         var location = window.location.href;
         if (location !== ("http://localhost:8080/LoboChat/")) {
@@ -50,17 +41,13 @@ $(document).ready(function () {
                 }
             } else {
                 if (!mainsocket) {
-
                 } else if (mainsocket.readyState === mainsocket.CLOSED) {
-
                 } else {
                     mainsocket.close();
                 }
 
                 if (!websocket) {
-
                 } else if (websocket.readyState === websocket.CLOSED) {
-
                 } else {
                     websocket.close();
                 }
@@ -669,18 +656,21 @@ function listParticipant(xml, status) { // also lists messages !
         var memberName = $(this).find("name").text();
         content += "<p id='memberName-id'>" + memberName + "</p>";
     });
-    
+
     var currentUser = readCookie('currentUser');
-    
+
     $xml.find('message').each(function () {
         var postName = $(this).find("postName").text();
         var msgs = $(this).find("content").text();
+        var timeStamp = $(this).find("shortTime").text();
         console.log("user: " + currentUser + " postName: " + postName);
         if (postName === currentUser) {
-            messages += "<p class='currentMessage-class'>" + msgs + "</p>";
+            messages += "<div class='currentMessageDiv-class'><span id='timeStamp-id'>" + timeStamp
+                + "</span>" + "<span class='currentMessage-class'>" + msgs + "</span></div>";
         } else {
-            messages += "<p class='chatPostName-class'>" + postName
-                    + "</p>" + "<p class='chatMessage-class'>" + msgs + "</p>";
+            messages += "<div class='messageDiv-class'><span class='chatPostName-class'>" + postName
+                    + "</span><br>" + "<span class='chatMessage-class'>" + msgs + "</span>"
+                    + "<span id='timeStamp-id'>" + timeStamp + "</span></div>";
         }
     });
 
@@ -688,7 +678,7 @@ function listParticipant(xml, status) { // also lists messages !
     document.getElementById("chatArea").innerHTML = messages;
     document.getElementById("conversationID").innerHTML = cid;
     document.getElementById("topic-banner").innerHTML = topic;
-    systemMessage(readCookie('currentUser') + " connected!");
+/*    systemMessage(readCookie('currentUser') + " connected!");
 
     window.onbeforeunload = function () {
         systemMessage(readCookie('currentUser') + " disconnected!");
@@ -699,7 +689,7 @@ function listParticipant(xml, status) { // also lists messages !
         } else {
             websocket.close();
         }
-    };
+    };*/
 
 }//listParticipants(xml, status)
 
@@ -739,12 +729,15 @@ function listMessages(xml, status) {
     $xml.find('message').each(function () {
         var postName = $(this).find("postName").text();
         var msgs = $(this).find("content").text();
+        var timeStamp = $(this).find("shortTime").text();
         console.log(postName + " and " + msgs);
         if (postName === currentUser) {
-            content += "<p class='currentMessage-class'>" + msgs + "</p>";
+            content += "<div class='currentMessageDiv-class'><span id='timeStamp-id'>" + timeStamp
+                + "</span>" + "<span class='currentMessage-class'>" + msgs + "</span></div>";
         } else {
-            content += "<p class='chatPostName-class'>" + postName
-                    + "</p>" + "<p class='chatMessage-class'>" + msgs + "</p>";
+            content += "<div class='messageDiv-class'><span class='chatPostName-class'>" + postName
+                    + "</span><br>" + "<span class='chatMessage-class'>" + msgs + "</span>" 
+                    + "<span id='timeStamp-id'>" + timeStamp + "</span></div>";
         }
     });
     document.getElementById("chatArea").innerHTML = content;
