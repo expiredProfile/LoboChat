@@ -48,12 +48,15 @@ public class MessageResources {
     public Message getLatest(@PathParam("id") String id){
         int intid = Integer.parseInt(id);
         int latest = system.getConversationMessages(intid).size() - 1;
-        if (latest == 0){
+        /*if (latest < 0){
             return new Message();
         } else {
            Message m = system.getConversationMessages(intid).get(latest);
            return m; 
-        }
+        }*/
+        
+        Message m = system.getConversationMessages(intid).get(latest);
+        return m; 
         
     }
 

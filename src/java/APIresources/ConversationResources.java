@@ -56,6 +56,8 @@ public class ConversationResources {
         Conversation c = new Conversation(topic, list);
         System.out.println("new conversation: " + c.getTopic() + ", c-id: " + c.getID());
         system.addConversation(c);
+        Message mes = new Message("New conversation: "+c.getTopic(), "System", c.getID());
+        system.addMessageToConversation(c.getID(), mes);
         return g.getWorkerList();
     }
 

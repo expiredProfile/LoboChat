@@ -6,6 +6,7 @@
 package APIresources;
 
 import datafolder.ChatSystem;
+import datafolder.IDIncrement;
 import datafolder.Worker;
 import java.util.ArrayList;
 import javax.ws.rs.Consumes;
@@ -91,4 +92,28 @@ public class WorkerResources {
         return system.getWorkerById(workerid);
     }
      */
+    
+    @POST
+    @Path("/Newuser")
+    @Consumes(MediaType.APPLICATION_XML)
+    //@Produces(MediaType.APPLICATION_XML)
+    public void newUser(Worker w){
+        IDIncrement idi = IDIncrement.getInstance();
+        WorkerPool wp = WorkerPool.getInstance();
+        w.setId(idi.workerIncrement());
+        system.addToAllWorkers(w);
+        system.workerLoggedOut(w);
+        switch(w.getGroupID()){
+            case 1: wp.addGuard(w);
+                    break;
+            case 2: wp.addDoctor(w);
+                    break;
+            case 3: wp.addPsycho(w);
+                    break;
+            case 4: wp.addNurse(w);
+                    break;
+        }
+        
+        //return system.getAllWorkers();
+    }
 }
