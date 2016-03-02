@@ -12,6 +12,14 @@ and open the template in the editor.
         <link id="size-stylesheet" rel="stylesheet" type="text/css" href="css/narrow.css" />
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
         <script src="./js/loboscript.js"></script>
+        <script> $(document).keydown(function (e) {
+                if (e.keyCode === 13) { //13 = enter
+                    sendMessage();
+                    return false;
+                }
+            });
+        </script>
+
     </head>
     <body onload="getParticipants()">
         <div id="chatHeader-id">
@@ -19,11 +27,11 @@ and open the template in the editor.
             <div id="participants"> </div>
             <div id="conversationID"> </div>
         </div>
-        
+
         <div id="container">
             <div id="chatArea"></div> 
         </div>
-        
+
         <div id="chatFooter-id">
             <input type="text" id="inputField">
             <button onclick="sendMessage()" value="send">Send</button>

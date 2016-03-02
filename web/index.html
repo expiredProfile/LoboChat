@@ -9,6 +9,14 @@
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
         <script src="./js/loboscript.js"></script>
+        <script>
+            $(document).keydown(function (e) {
+                if (e.keyCode === 13) { //13 = enter 
+                    var workerName = $('#inputField-id').val();
+                    logIn(workerName);
+                }
+            });
+        </script>
     </head>
     <body>
         <div class="wrapper-class">
@@ -26,7 +34,7 @@
                 <div id="loginButton-id">
                     <button id="loginButton">Login</button>
                 </div>
-                
+
             </div>
 
             <div class="footer-class">
