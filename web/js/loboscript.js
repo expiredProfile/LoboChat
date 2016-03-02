@@ -9,6 +9,7 @@ var wsUri = "ws://localhost:8080/LoboChat/chatend";
 var websocket;
 var mainUri = "ws://localhost:8080/LoboChat/mainsock";
 var mainsocket;
+var chatCheck = true;
 
 
 var number = 0;
@@ -17,6 +18,14 @@ var dropdownlogin = "";
 var dropdownlogout = "";
 
 $(document).ready(function () {
+
+    $(window).load(function () {
+        var loc = window.location.href;
+        if (loc === "http://localhost:8080/LoboChat/chaWin.html") {
+            window.onfocus = notifyOff;
+            //chatScrollDown();
+        }
+    });
 
     $(window).load(function () {
         var location = window.location.href;
@@ -56,8 +65,7 @@ $(document).ready(function () {
             }
         } else if (location === "http://localhost:8080/LoboChat/") {
 
-            if (readCookie("currentUser") !== ""){
-                var user = readCookie("currentUser");
+            if (readCookie("currentUser") !== "") {
                 logOut();
             }
         }
@@ -225,8 +233,15 @@ $(document).ready(function () {
     $(document).on("click", "#createGroupConvButton-id", function () {
         startProfGroupConversation();
     });
-    
+
 }); // $(document).ready
+
+function chatScrollDown() {
+    console.log("Scroll start");
+    var element = document.getElementById("chatArea");
+    element.scrollTop = element.scrollHeight;
+    console.log("Scroll end");
+}
 
 function ajaxGet() {
     $("#myDropdown").empty();
@@ -428,7 +443,7 @@ function logOut() {
     } else {
         websocket.close();
     }
-    
+
     $.ajax({
         url: baseUrl + "/resources/Workers/LoggedOut",
         data: currentUser,
@@ -480,7 +495,7 @@ function loggedIn(xml, status) {
             }
         });
     });
-    $("#inField").html = content;
+    document.getElementById("inField").innerHTML = content;
 } //loggedIn
 
 function loggedOutDropDown(xml, status) {
@@ -612,12 +627,12 @@ function startProfGroupConversation() {
     if (topic.length === 0) {
         window.alert("Topic missing!");
         return null;
-    } else if (topic.length > 25){
+    } else if (topic.length > 25) {
         window.alert("Topic too long!");
         return null;
     }
     var targetGroup = $("#professions").val();
-    var xmlProfConvDataObject = "<profConvData><postName>"+readCookie('currentUser')+"</postName><profGroup>"+targetGroup+"</profGroup><topic>"+topic+"</topic></profConvData>";
+    var xmlProfConvDataObject = "<profConvData><postName>" + readCookie('currentUser') + "</postName><profGroup>" + targetGroup + "</profGroup><topic>" + topic + "</topic></profConvData>";
     var ProfXmlDoc = $.parseXML(xmlProfConvDataObject);
     $.ajax({
         url: baseUrl + "/resources/ProfessionConversations",
@@ -626,9 +641,9 @@ function startProfGroupConversation() {
         type: 'POST',
         contentType: 'application/xml', // datatype sent
         dataType: 'xml', // datatype received
-      success: function() {
-         $("#main-id").load("topicslist.html");
-         getConversations();   
+        success: function () {
+            $("#main-id").load("topicslist.html");
+            getConversations();
         },
         error: function (response) {
             console.log("Error: " + response.statusText);
@@ -738,7 +753,7 @@ function listParticipant(xml, status) { // also lists messages !
         console.log("user: " + currentUser + " postName: " + postName);
         if (postName === currentUser) {
             messages += "<div class='currentMessageDiv-class'><span id='userTimeStamp-id'>" + timeStamp
-                + "</span>" + "<span class='currentMessage-class'>" + msgs + "</span></div>";
+                    + "</span>" + "<span class='currentMessage-class'>" + msgs + "</span></div>";
         } else {
             messages += "<div class='messageDiv-class'><span class='chatPostName-class'>" + postName
                     + "</span><br>" + "<span class='chatMessage-class'>" + msgs + "</span>"
@@ -750,29 +765,38 @@ function listParticipant(xml, status) { // also lists messages !
     document.getElementById("chatArea").innerHTML = messages;
     document.getElementById("conversationID").innerHTML = cid;
     document.getElementById("topic-banner").innerHTML = topic;
-
-/*  systemMessage(readCookie('currentUser') + " connected!");
-
-    systemMessage(readCookie('currentUser') + " connected!");
-
-
-    window.onbeforeunload = function () {
-        //systemMessage(readCookie('currentUser') + " disconnected!");
-        if (!websocket) {
-
-        } else if (websocket.readyState === websocket.CLOSED) {
-
-        } else {
-            websocket.close();
-        }
-    };*/
+    loadMessages();
+    
+    /*  systemMessage(readCookie('currentUser') + " connected!");
+     
+     systemMessage(readCookie('currentUser') + " connected!");
+     
+     
+     window.onbeforeunload = function () {
+     //systemMessage(readCookie('currentUser') + " disconnected!");
+     if (!websocket) {
+     
+     } else if (websocket.readyState === websocket.CLOSED) {
+     
+     } else {
+     websocket.close();
+     }
+     };*/
 
 }//listParticipants(xml, status)
+function notifyOn() {
+    document.title = "New message!";
+}
+
+function notifyOff() {
+    document.title = "Lobo Chat";
+}
 
 function onMessage(event) {
     var cid = document.getElementById("conversationID").innerHTML;
     if (event.data === cid) {
         loadMessages();
+        //notifyOn();
 
     }
 } //onMessage
@@ -802,21 +826,31 @@ function listMessages(xml, status) {
     console.log(xml);
     var content = "";
     var currentUser = readCookie('currentUser');
+    var postName = "";
     $xml.find('message').each(function () {
-        var postName = $(this).find("postName").text();
+        postName = $(this).find("postName").text();
         var msgs = $(this).find("content").text();
         var timeStamp = $(this).find("shortTime").text();
         console.log(postName + " and " + msgs);
         if (postName === currentUser) {
             content += "<div class='currentMessageDiv-class'><span id='userTimeStamp-id'>" + timeStamp
-                + "</span>" + "<span class='currentMessage-class'>" + msgs + "</span></div>";
+                    + "</span>" + "<span class='currentMessage-class'>" + msgs + "</span></div>";
         } else {
             content += "<div class='messageDiv-class'><span class='chatPostName-class'>" + postName
-                    + "</span><br>" + "<span class='chatMessage-class'>" + msgs + "</span>" 
+                    + "</span><br>" + "<span class='chatMessage-class'>" + msgs + "</span>"
                     + "<span id='timeStamp-id'>" + timeStamp + "</span></div>";
         }
     });
     document.getElementById("chatArea").innerHTML = content;
+    if (currentUser !== postName) {
+        if (chatCheck) {
+            chatCheck = false;
+        } else {
+            notifyOn();
+        }
+
+    }
+    chatScrollDown();
 } // listMessages
 
 function sendMessage() {
