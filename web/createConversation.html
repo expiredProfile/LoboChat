@@ -2,29 +2,29 @@
     <h3>Create conversation</h3>
     <input placeholder="Insert topic here" id="topicInput-id" type="text" name="topic"><br>
     <button id="topicButton-id">Add topic</button><br>
-    <p id="userP-id">Select users to add</p>
-    <div id="dropDownDiv-id">
-        <button onclick="myFunction()" class="dropbtn">Dropdown</button>
-        <div id="myDropdown" class="dropdown-content">
-
-        </div>
-    </div>
     <div id="topicPlacement-id">
         <p>Topic to add</p>
         <div id="topic-id"></div>
     </div>
+    <p id="userP-id">Select users/groups to add</p>
+    <div id="dropDownDiv-id">
+        <button onclick="myFunction()" class="dropbtn">Users</button>
+        <button onclick="myGroupFunction()" class="groupdropbtn">Groups</button>
+        <div id="myDropdown" class="dropdown-content">
+
+        </div>
+        <div id="myGroupDropdown" class="groupDropdown-content">
+            <p class="groupToAdd-class">Guards</p>
+            <p class="groupToAdd-class">Doctors</p>
+            <p class="groupToAdd-class">Psychotherapists</p>
+            <p class="groupToAdd-class">Nurses</p>
+        </div>
+    </div>    
     <div id="userPlacement-id">
-        <p>Users to add</p>
+        <p>Users/Groups to add</p>
     </div>
     <button id="createButton-id">Create Conversation</button>
-    <!--rumia juttuja, siirrä / muokkaa tjsp?-->
     <button id="createGroupConvButton-id">Create Group Conversation</button>
-    <select id="professions">
-        <option value="Guards">Guards</option>
-        <option value="Doctors">Doctors</option>
-        <option value="Psychotherapists">Psychotherapists</option>
-        <option value="Nurses">Nurses</option>
-    </select>
 </div>
 <script>
     function myFunction() {
@@ -41,6 +41,25 @@
                 var openDropdown = dropdowns[i];
                 if (openDropdown.classList.contains('show')) {
                     openDropdown.classList.remove('show');
+                }
+            }
+        }
+    };
+    
+    function myGroupFunction() {
+        document.getElementById("myGroupDropdown").classList.toggle("groupshow");
+    }
+
+// Close the dropdown menu if the user clicks outside of it
+    window.onclick = function (event) {
+        if (!event.target.matches('.groupdropbtn')) {
+
+            var dropdowns = document.getElementsByClassName("groupDropdown-content");
+            var i;
+            for (i = 0; i < dropdowns.length; i++) {
+                var openDropdown = dropdowns[i];
+                if (openDropdown.classList.contains('groupshow')) {
+                    openDropdown.classList.remove('groupshow');
                 }
             }
         }

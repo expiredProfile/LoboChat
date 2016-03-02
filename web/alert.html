@@ -1,34 +1,28 @@
-<!DOCTYPE html>
-<!--
-To change this license header, choose License Headers in Project Properties.
-To change this template file, choose Tools | Templates
-and open the template in the editor.
--->
+<div id="alertSelectDiv-id">
+    <select id="alert">
+        <option value="0">Need assistance</option>
+        <option value="1">Disturbance</option>
+        <option value="2">Fire alert</option>
+    </select>
 
-<style>
-    table, th, td {
-        padding: 0.3em;
-        text-align: center;
-    }
-</style>
+    <br><input type="radio" name="receiverGroup" value="0" checked="checked"><label>All</label>
+    <br><input type="radio" name="receiverGroup" value="1"><label>Guards</label>
+    <br><input type="radio" name="receiverGroup" value="2"><label>Doctors</label>
+    <br>
+    <button id="sendAlertButton" >Alert</button>
+</div>
 
-<select id="alert">
-    <option value="0">Need assistance</option>
-    <option value="1">Disturbance</option>
-    <option value="2">Fire alert</option>
-</select>
-
-<br><input type="radio" name="receiverGroup" value="0" checked="checked" /> All
-<br><input type="radio" name="receiverGroup" value="1" /> Guards
-<br><input type="radio" name="receiverGroup" value="2" /> Doctors
-<br>
-<button id="sendAlertButton" >Alert</button>
 <div id="alertResponse"></div>
 <br>
-<select id="alertHistoryRange">
-    <option value="0">5 latest</option>
-    <option value="1">10 latest</option>
-    <option value="2">All</option>
-</select>
-<button id="alertHistoryButton">Show alert history</button>
+
+<div id="alertHistoryDiv-id">
+    <p>Alert History</p>
+    <select id="alertHistoryRange">
+        <option value="0">5 latest</option>
+        <option value="1">10 latest</option>
+        <option value="2">All</option>
+    </select>
+    <button id="alertHistoryButton">Show alert history</button>
+</div>
+
 <div id="alertHistory"><table id="alertTable"></table></div>

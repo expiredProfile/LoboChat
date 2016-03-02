@@ -75,6 +75,16 @@ $(document).ready(function () {
         number++;
         $(this).remove();
     });
+    
+    $(document).on("click", ".groupToAdd-class", function () {
+        console.log("Test");
+        var text = $(this).text();
+        console.log("text to place: " + text);
+        $("#userPlacement-id").append("<span id='user" + number + "'>"
+                + text + "<i class='fa fa-times groupRemove'></i></span>");
+        number++;
+        $(this).remove();
+    });
 
     $(document).on("click", "#topicButton-id", function () {
         var text = $("input").val();
@@ -86,6 +96,13 @@ $(document).ready(function () {
         $(toRemove).remove();
         console.log("toRemove: " + toRemove.text());
         $("#myDropdown").append("<p class='usersToAdd-class'>" + toRemove.text() + "</p>");
+    });
+    
+    $(document).on("click", ".groupRemove", function () {
+        var toRemove = $(this).parent("span");
+        $(toRemove).remove();
+        console.log("toRemove: " + toRemove.text());
+        $("#myGroupDropdown").append("<p class='groupToAdd-class'>" + toRemove.text() + "</p>");
     });
 
     $("#loginButton").click(function () {
@@ -159,7 +176,7 @@ $(document).ready(function () {
             success: function (data) {
                 console.log("success alert");
                 mainsocket.send(data);
-                $("#alertResponse").append("Alert sent!");
+                //$("#alertResponse").append("<p id='alertSent-id'>Alert sent!</p>");
             },
             error: function (response) {
                 alert("Error in alert: " + response.statusText);
@@ -184,14 +201,15 @@ $(document).ready(function () {
                 console.log("Alert history: " + xmlStringAlert);
                 //Display alert history
                 var i;
-                var table = "<tr><th>AlertID</th><th>Alert category</th><th>Alert topic</th><th>Timestamp</th><th>Sender</th><th>Target group</th></tr>";
+                var table = "<tr><th>Alert topic</th><th>Timestamp</th><th>Sender</th><th>Target group</th></tr>";
                 var alerts = data.getElementsByTagName("alert");
                 for (i = 0; i < alerts.length; i++) {
                     table += "<tr><td>" +
+                            /*
                             alerts[i].getElementsByTagName("ID")[0].childNodes[0].nodeValue +
                             "</td><td>" +
                             alerts[i].getElementsByTagName("alertCat")[0].childNodes[0].nodeValue +
-                            "</td><td>" +
+                            "</td><td>" +*/
                             alerts[i].getElementsByTagName("alertTopic")[0].childNodes[0].nodeValue +
                             "</td><td>" +
                             alerts[i].getElementsByTagName("currentTime")[0].childNodes[0].nodeValue +
@@ -478,7 +496,7 @@ function loggedIn(xml, status) {
             }
         });
     });
-    $("#inField").html = content;
+    document.getElementById("inField").innerHTML = content;
 } //loggedIn
 
 function loggedOutDropDown(xml, status) {
@@ -614,7 +632,8 @@ function startProfGroupConversation() {
         window.alert("Topic too long!");
         return null;
     }
-    var targetGroup = $("#professions").val();
+    var targetGroup = $('#userPlacement-id').children('span').text();
+    console.log("Target group: " + targetGroup);
     var xmlProfConvDataObject = "<profConvData><postName>"+readCookie('currentUser')+"</postName><profGroup>"+targetGroup+"</profGroup><topic>"+topic+"</topic></profConvData>";
     var ProfXmlDoc = $.parseXML(xmlProfConvDataObject);
     $.ajax({

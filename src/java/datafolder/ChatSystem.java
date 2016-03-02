@@ -127,7 +127,7 @@ public class ChatSystem {
         
         if(range == 0) { //5 latest
             if(alertHistory.size() >= 5) {
-                for (int i = alertHistory.size()-6; i <= alertHistory.size(); i++) {
+                for (int i = alertHistory.size()-5; i < alertHistory.size(); i++) {
                     tempHistory.add(alertHistory.get(i));
                 }
                 return tempHistory;
@@ -136,7 +136,7 @@ public class ChatSystem {
             }
         } else if (range == 1) { //10 latest
             if(alertHistory.size() >= 10) {
-                for (int i = alertHistory.size()-11; i <= alertHistory.size(); i++) {
+                for (int i = alertHistory.size()-10; i < alertHistory.size(); i++) {
                     tempHistory.add(alertHistory.get(i));
                 }
                 return tempHistory;

@@ -24,21 +24,22 @@ and open the template in the editor.
     <body>
         <div class="header-class">
             <h3>Lobo Chat</h3>
-            <button id="createConversation-id"><i class="fa fa-commenting-o"></i><i class="fa fa-plus"></i></button>
-            <div id="displayChoiceDiv-id">
-                <p>Adminlolololo</p>
+            <div id="adminIntDiv-id">
+                <p id="adminIntP-id">Admin Interface</p>
             </div>
         </div>
 
         <div class="content-class">
-            <input type="text" id="workername">
-            <select id="profession">
-                <option value="1">Guard</option>
-                <option value="2">Doctor</option>
-                <option value="3">Psychotherapist</option>
-                <option value="4">Nurse</option>
-            </select>
-            <button id="addnewuser">Add</button>
+            <div id="addUserDiv-id">
+                <span>Name:</span><input type="text" id="workername"><br>
+                <select id="profession">
+                    <option value="1">Guard</option>
+                    <option value="2">Doctor</option>
+                    <option value="3">Psychotherapist</option>
+                    <option value="4">Nurse</option>
+                </select>
+                <button id="addnewuser">Add</button>
+            </div>
             <div id="main-id">
                 <div id="inField"></div>
                 <div id="outField"></div>
