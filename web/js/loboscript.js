@@ -665,7 +665,7 @@ function listParticipant(xml, status) { // also lists messages !
         var timeStamp = $(this).find("shortTime").text();
         console.log("user: " + currentUser + " postName: " + postName);
         if (postName === currentUser) {
-            messages += "<div class='currentMessageDiv-class'><span id='timeStamp-id'>" + timeStamp
+            messages += "<div class='currentMessageDiv-class'><span id='userTimeStamp-id'>" + timeStamp
                 + "</span>" + "<span class='currentMessage-class'>" + msgs + "</span></div>";
         } else {
             messages += "<div class='messageDiv-class'><span class='chatPostName-class'>" + postName
@@ -732,7 +732,7 @@ function listMessages(xml, status) {
         var timeStamp = $(this).find("shortTime").text();
         console.log(postName + " and " + msgs);
         if (postName === currentUser) {
-            content += "<div class='currentMessageDiv-class'><span id='timeStamp-id'>" + timeStamp
+            content += "<div class='currentMessageDiv-class'><span id='userTimeStamp-id'>" + timeStamp
                 + "</span>" + "<span class='currentMessage-class'>" + msgs + "</span></div>";
         } else {
             content += "<div class='messageDiv-class'><span class='chatPostName-class'>" + postName

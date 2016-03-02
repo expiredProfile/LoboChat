@@ -521,16 +521,24 @@ body {
     background-color: #d9d9d9;
 }
 
-#container #chatArea #timeStamp-id {
+#container #chatArea #userTimeStamp-id {
     color: white;
     font-size: 0.7em;
     padding-left: 0.3em;
 }
 
+#container #chatArea #timeStamp-id {
+    color: black;
+    font-size: 0.7em;
+    padding-right: 0.6em;
+    color: #737373;
+}
+
 #container #chatArea .chatPostName-class {
     font-size: 0.8em;
     margin-left: 0.6em;
-    color: white;
+    color: #4d4d4d;
+    
 }
 
 #container #chatArea .messageDiv-class {
@@ -542,14 +550,13 @@ body {
     margin-bottom: 0.5em;
     margin-top: 0.5em;
     margin-left: 5%;
-    background-color: #1a1a1a;
+    background-color: white;
     padding-left: 0.5em;
 }
 
 #container #chatArea .chatMessage-class {
     max-width: 80%;
     display: inline-block;
-    color: white;
     border-radius: 0.5em;
     padding: 0.2em;
     font-size: 0.8em;
