@@ -8,6 +8,7 @@ package APIresources;
 import datafolder.ChatSystem;
 import datafolder.Conversation;
 import datafolder.Group;
+import datafolder.Message;
 import datafolder.ProfConvData;
 import datafolder.ProfessionGroup;
 import datafolder.Worker;
@@ -40,23 +41,29 @@ public class ProfessionConversationResources {
     public ArrayList<Worker> postConversation(ProfConvData pcd) {
         //Get data
         String topic = pcd.getTopic();
+        System.out.println("topic:" + topic);
         String targetGroup = pcd.getProfGroup();
         ProfessionGroup profGroup = pool.getProfessionGroup(targetGroup);
         String postName = pcd.getPostName();
         //Get workers in target group as arraylist
-        ArrayList<Worker> workersInProfGroup = profGroup.getWorkersByProf();
-        //Add also current user to be part of conversation
-        for(Worker w : system.getAllWorkers()) {
-            if(w.getName().equals(postName)) {
-                workersInProfGroup.add(w);
-            }
+        ArrayList<Worker> workersInProfGroup = new ArrayList();
+        for(Worker w : profGroup.getWorkersByProf()){
+            workersInProfGroup.add(w);
         }
+        //Add also current user to be part of conversation
+        
+        for (Worker w : system.getAllWorkers()) {
+            if (w.getName().equals(postName)) {
+                if (workersInProfGroup.contains(w) == false) {
+                    workersInProfGroup.add(w);
+                }
+            }
+        }// for
         //Add all from profession and current user to new group object
         Group profConvGroup = new Group();
         profConvGroup.setWorkerList(workersInProfGroup);
         //Add list of workers in conversation to variable
         ArrayList<Worker> workerList = profConvGroup.getWorkerList();
-        
         String names = "";
         for (Worker w : workerList) {
             names += w.getName() + ", ";
@@ -65,6 +72,8 @@ public class ProfessionConversationResources {
         Conversation c = new Conversation(topic, workerList);
         System.out.println("new conversation: " + c.getTopic() + ", c-id: " + c.getID());
         system.addConversation(c);
+        Message mes = new Message("New conversation: "+c.getTopic(), "System", c.getID());
+        system.addMessageToConversation(c.getID(), mes);
         return workerList;
     }
     

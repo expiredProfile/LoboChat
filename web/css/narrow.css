@@ -461,5 +461,169 @@ body {
     color: #808080;
 }
 
+#topicsDiv-id hr {
+    margin-left: 5%;
+    margin-right: 5%;
+    margin-top: 0.6em;
+}
+
+/*Chat window css*/
+
+#chatHeader-id {
+    width: 100%;
+    height: 6em;
+    background-color: #990000;
+    top: 0;
+    left: 0;
+    position: absolute;
+}
+
+#chatHeader-id #topic-banner {
+    margin-left: 0.5em;
+    font-size: 2em;
+    color: white;
+}
+
+#chatHeader-id #conversationID {
+    visibility: hidden;
+}
+
+#chatHeader-id #participants {
+    margin-top: 0.5em;
+    margin-left: 1em;
+}
+
+#chatHeader-id #participants p{
+    margin-right: 0.4em;
+    font-size: 1em;
+    color: white;
+    display: inline-block;
+    background-color: black;
+    border-radius: 0.5em;
+    padding: 0.2em;
+}
+
+#container {
+    padding-bottom: 3em;
+    padding-top: 6em;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    height:100%;
+    overflow: hidden;
+}
+
+#container #chatArea {
+    font-size: 1.4em;
+    overflow: auto;
+    width: 100%;
+    height: 100%;
+    background-color: #d9d9d9;
+}
+
+#container #chatArea #userTimeStamp-id {
+    color: white;
+    font-size: 0.7em;
+    padding-left: 0.3em;
+}
+
+#container #chatArea #timeStamp-id {
+    color: black;
+    font-size: 0.7em;
+    padding-right: 0.6em;
+    color: #737373;
+}
+
+#container #chatArea .chatPostName-class {
+    font-size: 0.8em;
+    margin-left: 0.6em;
+    color: #4d4d4d;
+    
+}
+
+#container #chatArea .messageDiv-class {
+    border-radius: 0.5em;
+    float: left;
+    position: relative;
+    min-width: 60%;
+    max-width: 80%;
+    margin-bottom: 0.5em;
+    margin-top: 0.5em;
+    margin-left: 5%;
+    background-color: white;
+    padding-left: 0.5em;
+}
+
+#container #chatArea .chatMessage-class {
+    max-width: 80%;
+    display: inline-block;
+    border-radius: 0.5em;
+    padding: 0.2em;
+    font-size: 0.8em;
+    word-break: break-word;
+}
+
+#container #chatArea .currentMessageDiv-class {
+    border-radius: 0.5em;
+    float: right;
+    margin-right: 5%;
+    position: relative;
+    min-width: 60%;
+    max-width: 80%;
+    margin-bottom: 0.5em;
+    margin-top: 0.5em;
+    background-color: #990000;
+}
+
+#container #chatArea .currentMessage-class {
+    max-width: 80%;
+    display: inline-block;
+    color: white;
+    border-radius: 0.5em;
+    padding: 0.2em;
+    font-size: 0.8em;
+    word-break: break-word;
+    margin-left: 0.3em;
+}
+
+#chatFooter-id {
+    position: absolute;
+    width: 100%;
+    height: 3em;
+    bottom: 0;
+    left: 0;
+    text-align: center;
+}
+
+#chatFooter-id input {
+    position: absolute;
+    border: none;
+    height: 100%;
+    width: 75%;
+    font-size: 1.3em;
+    padding: 0;
+    padding-left: 0.3em;
+    left: 0;
+    bottom: 0;
+}
+
+#chatFooter-id input:active , input:focus {
+    outline: none;
+}
+
+#chatFooter-id button {
+    position: absolute;
+    background-color: #990000;
+    color: white;
+    border: none;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    width: 20%;
+    right: 0;
+    bottom: 0;
+    font-size: 1.4em;
+}
+
 
 

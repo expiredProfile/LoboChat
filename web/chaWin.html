@@ -9,48 +9,24 @@ and open the template in the editor.
         <title></title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link id="size-stylesheet" rel="stylesheet" type="text/css" href="css/narrow.css" />
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
         <script src="./js/loboscript.js"></script>
-        <script>
-       
-        
-        </script>
-        <style>
-            #chatArea {
-                display: block;
-                border-style: solid;
-                border-width: 2px;
-                width: 50%;
-               
-            }
-            
-            #participants {
-                display: block;
-                border-style: solid;
-                border-width: 2px 2px 2px 0px;
-                width: 15%;
-                height: 5em;
-                float: right;
-            }
-            
-            #inputField {
-                width: 65%;
-            }
-            
-            #container{
-                margin: 0 auto;
-                display: block;
-            }
-        </style>
     </head>
     <body onload="getParticipants()">
+        <div id="chatHeader-id">
+            <div id="topic-banner"> </div>
+            <div id="participants"> </div>
+            <div id="conversationID"> </div>
+        </div>
+        
         <div id="container">
             <div id="chatArea"></div> 
-            <div id="participants"> </div>
-            <div id="conversationID1"><span id="conversationID"> </span> </div>
-             <div id="topic-banner"> </div>
+        </div>
+        
+        <div id="chatFooter-id">
             <input type="text" id="inputField">
-            <button onclick="sendMessage()" value="send">lähetä</button>
+            <button onclick="sendMessage()" value="send">Send</button>
         </div>
     </body>
 </html>

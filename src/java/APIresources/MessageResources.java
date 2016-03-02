@@ -66,6 +66,7 @@ public class MessageResources {
     public void postMessage(Message m) {
         int id = m.getConversationID();
         m.setCurrentTime();
+        m.setShortTime();
         system.addMessageToConversation(id, m);
     }
 //    @POST
