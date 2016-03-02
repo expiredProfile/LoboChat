@@ -60,8 +60,8 @@ $(document).ready(function () {
                 window.location = baseUrl;
             }
         } else if (location === "http://localhost:8080/LoboChat/") {
-            if (readCookie("currentUser") !== ""){
-                window.location = baseUrl+"/mainpage.html";
+            if (readCookie("currentUser") !== "") {
+                window.location = baseUrl + "/mainpage.html";
             }
         }
     });
@@ -171,19 +171,19 @@ $(document).ready(function () {
             }
         }); // ajax
     }); // sendAlert
-    
+
     $(document).on("click", "#alertHistoryButton", function () {
         $("#alertResponse").empty();
         $("#alertHistory").empty();
         console.log("Getting alert history");
         var range = $("#alertHistoryRange").val();
-        
+
         $.ajax({
             url: baseUrl + "/resources/Alerts/Alerthistory/" + range,
             type: 'GET',
             contentType: 'text/plain',
             dataType: 'xml',
-            success: function(data){
+            success: function (data) {
                 //Test print to log
                 var xmlStringAlert = (new XMLSerializer()).serializeToString(data);
                 console.log("Alert history: " + xmlStringAlert);
@@ -191,7 +191,7 @@ $(document).ready(function () {
                 var i;
                 var table = "<tr><th>AlertID</th><th>Alert category</th><th>Alert topic</th><th>Timestamp</th><th>Sender</th><th>Target group</th></tr>";
                 var alerts = data.getElementsByTagName("alert");
-                for(i = 0; i < alerts.length; i++) {
+                for (i = 0; i < alerts.length; i++) {
                     table += "<tr><td>" +
                             alerts[i].getElementsByTagName("ID")[0].childNodes[0].nodeValue +
                             "</td><td>" +
@@ -225,6 +225,10 @@ $(document).ready(function () {
 //        getConversations();
     });
 
+    $(document).on("click", "#createGroupConvButton-id", function () {
+        startProfGroupConversation();
+    });
+    
 }); // $(document).ready
 
 function ajaxGet() {
@@ -294,11 +298,11 @@ function onMessageMain(event) {
     });
 }//onMessage
 
-function handleAlert(xml, status){
+function handleAlert(xml, status) {
     //Test print to log
     var xmlString = (new XMLSerializer()).serializeToString(xml);
     console.log("Alert: " + xmlString);
-    
+
     var $xml = $(xml);
     var target = $xml.find('receiverGroup').text();
     var topic = $xml.find('alertTopic').text();
@@ -410,6 +414,7 @@ function logIn(workerName) {
 
 function logOut() {
     var currentUser = readCookie('currentUser');
+    writeCookie('currentUser', workerName, -1);
     //window.alert("logged out: " + currentUser);
     if (!mainsocket) {
 
@@ -426,7 +431,7 @@ function logOut() {
     } else {
         websocket.close();
     }
-
+    
     $.ajax({
         url: baseUrl + "/resources/Workers/LoggedOut",
         data: currentUser,
@@ -565,7 +570,7 @@ function startConversation() {
     if (topic === "") {
         window.alert("Topic missing!");
         return null;
-    } else if (topic.length > 20){
+    } else if (topic.length > 20) {
         $('#topicInput-id').val("");
         window.alert("Max topic length is 20 characters!");
         return null;
@@ -605,10 +610,18 @@ function startConversation() {
     }); // ajax
 } // startConversation()
 
-function startProfGroupConversation(receiverProfession) {
-    var xmlProfConvDataObject = "<profConvData><topic></topic><professionGroup></professionGroup><postName>" + readCookie("currentUser") + "</postName></profConvData>";
+function startProfGroupConversation() {
+    var topic = $('#topic-id').text();
+    if (topic.length === 0) {
+        window.alert("Topic missing!");
+        return null;
+    } else if (topic.length > 25){
+        window.alert("Topic too long!");
+        return null;
+    }
+    var targetGroup = $("#professions").val();
+    var xmlProfConvDataObject = "<profConvData><postName>"+readCookie('currentUser')+"</postName><profGroup>"+targetGroup+"</profGroup><topic>"+topic+"</topic></profConvData>";
     var ProfXmlDoc = $.parseXML(xmlProfConvDataObject);
-    var $profXml = $(ProfXmlDoc);
     $.ajax({
         url: baseUrl + "/resources/ProfessionConversations",
         data: ProfXmlDoc,
@@ -616,10 +629,13 @@ function startProfGroupConversation(receiverProfession) {
         type: 'POST',
         contentType: 'application/xml', // datatype sent
         dataType: 'xml', // datatype received
-        //success: document.getElementById("outputField").innerHTML = ".. ",
+      success: function() {
+         $("#main-id").load("topicslist.html");
+         getConversations();   
+        },
         error: function (response) {
             console.log("Error: " + response.statusText);
-        }
+        }//error
     }); // ajax
 } // startProfGroupConversation function
 
