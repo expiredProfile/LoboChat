@@ -7,6 +7,7 @@ package APIresources;
 
 import datafolder.ChatSystem;
 import datafolder.Alert;
+import java.util.ArrayList;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -60,5 +61,13 @@ public class AlertResources {
         Alert alert = system.getAlertByID(id);
         return alert;
     }
-    
+    //TODO Get only recent alerts
+    @GET
+    @Path("/Alerthistory/{range}")
+    @Consumes(MediaType.TEXT_PLAIN)
+    @Produces(MediaType.APPLICATION_XML)
+    public ArrayList<Alert> getAlertHistory(@PathParam("range") int range) {
+        //int historyRange = Integer.parseInt(range);
+        return system.getAlertHistory(range);
+    }
 }

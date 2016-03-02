@@ -122,7 +122,29 @@ public class ChatSystem {
         return alertHistory.get(id);
     }
     
-    public ArrayList<Alert> getAlertHistory() {
-        return alertHistory;
+    public ArrayList<Alert> getAlertHistory(int range) {
+        ArrayList<Alert> tempHistory = new ArrayList<>();
+        
+        if(range == 0) { //5 latest
+            if(alertHistory.size() >= 5) {
+                for (int i = alertHistory.size()-6; i <= alertHistory.size(); i++) {
+                    tempHistory.add(alertHistory.get(i));
+                }
+                return tempHistory;
+            } else {
+                return alertHistory;
+            }
+        } else if (range == 1) { //10 latest
+            if(alertHistory.size() >= 10) {
+                for (int i = alertHistory.size()-11; i <= alertHistory.size(); i++) {
+                    tempHistory.add(alertHistory.get(i));
+                }
+                return tempHistory;
+            } else {
+                return alertHistory;
+            }
+        } else { //All
+            return alertHistory;
+        }
     }
 }
