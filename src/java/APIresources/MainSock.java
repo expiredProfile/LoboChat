@@ -42,10 +42,9 @@ public class MainSock {
 
     @OnMessage
     public void onMessage(String alertID) {
-        int aid = 0;
 
         try {
-            aid = Integer.parseInt(alertID);
+            int aid = Integer.parseInt(alertID);
 
             messageAll(alertID);
 

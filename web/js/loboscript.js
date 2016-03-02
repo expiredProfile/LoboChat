@@ -22,7 +22,7 @@ $(document).ready(function () {
     $(window).load(function () {
         var loc = window.location.href;
         if (loc === "http://localhost:8080/LoboChat/chaWin.html") {
-            window.onfocus = notifyOff;
+            //window.onfocus = notifyOff;
             //chatScrollDown();
         }
     });
@@ -47,6 +47,7 @@ $(document).ready(function () {
                         success: loggedOut
                     });
                     state = false;
+                    window.onfocus = refreshChats;
                 }
             } else {
                 if (!mainsocket) {
@@ -243,6 +244,12 @@ function chatScrollDown() {
     console.log("Scroll end");
 }
 
+function refreshChats(){
+    if (document.getElementById("topicsDiv-id") !== null){
+        getConversations();
+    }
+}
+
 function ajaxGet() {
     $("#myDropdown").empty();
     console.log("ajax get");
@@ -296,18 +303,37 @@ function logToMainsocket() {
         };
         console.log("Logged");
     }
+    
 }
 
 function onMessageMain(event) {
-    $.ajax({
-        url: baseUrl + "/resources/Alerts/" + event.data,
-        type: 'GET',
-        dataType: 'xml',
-        success: handleAlert,
-        error: function (response) {
-            alert("Error in handleAlert: " + response.statusText);
-        }
-    });
+    console.log(event.data);
+    if (event.data !== "0"){
+        console.log("Alert");
+        $.ajax({
+            url: baseUrl + "/resources/Alerts/" + event.data,
+            type: 'GET',
+            dataType: 'xml',
+            success: handleAlert,
+            error: function (response) {
+                alert("Error in handleAlert: " + response.statusText);
+            }
+        });
+    } else if (document.getElementById("inField") !== null && document.getElementById("outField") !== null){
+        console.log("login");
+        $.ajax({
+                url: baseUrl + '/resources/Workers/LoggedIn',
+                type: 'GET',
+                dataType: 'xml',
+                success: loggedIn
+            });
+            $.ajax({
+                url: baseUrl + '/resources/Workers/LoggedOut',
+                type: 'GET',
+                dataType: 'xml',
+                success: loggedOut
+            });
+    }
 }//onMessage
 
 function handleAlert(xml, status) {
@@ -333,6 +359,7 @@ function handleAlert(xml, status) {
 
 function onOpenMain(event) {
     console.log("Connected to mainsocket.");
+    mainsocket.send(0);
 }
 
 function onCloseMain(event) {
