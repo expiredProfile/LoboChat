@@ -9,7 +9,8 @@ var wsUri = "ws://localhost:8080/LoboChat/chatend";
 var websocket;
 var mainUri = "ws://localhost:8080/LoboChat/mainsock";
 var mainsocket;
-var chatCheck = true;
+var profGroups = 0;
+var userAm = 0;
 
 
 var number = 0;
@@ -82,8 +83,9 @@ $(document).ready(function () {
         var text = $(this).text();
         console.log("text to place: " + text);
         $("#userPlacement-id").append("<span id='user" + number + "'>"
-                + text + "<i class='fa fa-times'></i></span>");
+                + text + "<i class='fa fa-times userRemove'></i></span>");
         number++;
+        userAm++;
         $(this).remove();
     });
     
@@ -94,6 +96,7 @@ $(document).ready(function () {
         $("#userPlacement-id").append("<span id='user" + number + "'>"
                 + text + "<i class='fa fa-times groupRemove'></i></span>");
         number++;
+        profGroups++;
         $(this).remove();
     });
 
@@ -102,11 +105,12 @@ $(document).ready(function () {
         $("#topic-id").html("<span id='topicValue-id'>" + text + "</span>");
     });
 
-    $(document).on("click", ".fa-times", function () {
+    $(document).on("click", ".userRemove", function () {
         var toRemove = $(this).parent("span");
         $(toRemove).remove();
         console.log("toRemove: " + toRemove.text());
         $("#myDropdown").append("<p class='usersToAdd-class'>" + toRemove.text() + "</p>");
+        userAm--;
     });
     
     $(document).on("click", ".groupRemove", function () {
@@ -114,6 +118,7 @@ $(document).ready(function () {
         $(toRemove).remove();
         console.log("toRemove: " + toRemove.text());
         $("#myGroupDropdown").append("<p class='groupToAdd-class'>" + toRemove.text() + "</p>");
+        profGroups--;
     });
 
     $("#loginButton").click(function () {
@@ -621,6 +626,8 @@ function adjustStyle(width) {
 }
 
 function startConversation() {
+    console.log(userAm);
+    console.log(profGroups);
     var topic = $('#topic-id').text();
     var num = 0;
     console.log(topic);
@@ -641,6 +648,11 @@ function startConversation() {
         window.alert("Participant missing!");
         return null;
     }
+    
+    if (profGroups !== 0){
+        window.alert("Please choose only users!");
+        return null;
+    }
     // group object with an arraylist of participants ->(workerlist tags).
     var xmlGroupObject = "<group><topic>" + topic + "</topic><workerList><id></id><name>" + readCookie('currentUser') + "</name><title></title></workerList>";
     $('#userPlacement-id').children('span').each(function () { // iterates through the selected workers
@@ -658,6 +670,8 @@ function startConversation() {
         contentType: 'application/xml', // datatype sent
         dataType: 'xml', // datatype received
         success: function () {
+            profGroups = 0;
+            userAm = 0;
             $("#main-id").load("topicslist.html");
             getConversations();
         },
@@ -668,12 +682,28 @@ function startConversation() {
 } // startConversation()
 
 function startProfGroupConversation() {
+    console.log(userAm);
+    console.log(profGroups);
     var topic = $('#topic-id').text();
     if (topic.length === 0) {
         window.alert("Topic missing!");
         return null;
-    } else if (topic.length > 25) {
+    } else if (topic.length > 20) {
         window.alert("Topic too long!");
+        return null;
+    }
+    var num = 0;
+    $('#userPlacement-id').children('span').each(function () {
+        num++;
+    });
+
+    if (num === 0) {
+        window.alert("Participant missing!");
+        return null;
+    }
+    
+    if (profGroups !== 1 || userAm !== 0){
+        window.alert("Please choose only one group!");
         return null;
     }
 
@@ -689,6 +719,7 @@ function startProfGroupConversation() {
         contentType: 'application/xml', // datatype sent
         dataType: 'xml', // datatype received
         success: function () {
+            profGroups = 0;
             $("#main-id").load("topicslist.html");
             getConversations();
         },
@@ -840,8 +871,10 @@ function notifyOff() {
 }
 
 function onMessage(event) {
+    console.log("Message event");
     var cid = document.getElementById("conversationID").innerHTML;
     if (event.data === cid) {
+        console.log("Same id");
         loadMessages();
         //notifyOn();
 
@@ -856,6 +889,7 @@ function onClose(event) {
 }
 function loadMessages() {
     var cid = document.getElementById("conversationID").innerHTML;
+    console.log("Load messages:" +cid);
     $.ajax({
         url: baseUrl + "/resources/Messages/" + cid,
         type: 'GET',
@@ -869,6 +903,7 @@ function loadMessages() {
 }//loadMessages()
 
 function listMessages(xml, status) {
+    console.log("listmessages()");
     var $xml = $(xml);
     console.log(xml);
     var content = "";
@@ -889,14 +924,6 @@ function listMessages(xml, status) {
         }
     });
     document.getElementById("chatArea").innerHTML = content;
-    if (currentUser !== postName) {
-        if (chatCheck) {
-            chatCheck = false;
-        } else {
-            notifyOn();
-        }
-
-    }
     chatScrollDown();
 } // listMessages
 
