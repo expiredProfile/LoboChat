@@ -29,6 +29,7 @@ $(document).ready(function () {
     });
 
     $(window).load(function () {
+        adjustStyle($(this).width());
         var location = window.location.href;
         if (location !== ("http://localhost:8080/LoboChat/")) {
             if (readCookie("currentUser") !== "") {
@@ -75,6 +76,7 @@ $(document).ready(function () {
 
 
     $(window).resize(function () {
+        console.log($(this).width());
         adjustStyle($(this).width());
     });
 
