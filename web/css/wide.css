@@ -21,7 +21,6 @@ body {
     min-height: 100%;
     position: relative;
     padding: 0em;
-    background-color: white;
     overflow-y: hidden;
 }
 
@@ -134,11 +133,11 @@ body {
 .groupshow {display:block;}
 
 .header-class {
-    width: 100%;
+    width: 60%;
     height: 6em;
     background-color: #990000;
     top: 0;
-    left: 0;
+    left: 20%;
     position: absolute;
 }
 
@@ -187,25 +186,21 @@ body {
     -moz-box-sizing: border-box;
     box-sizing: border-box;
     height:100%;
+    width: 60%;
+    margin-left: 20%;
     overflow: hidden;
-}
-
-.content-class #main-id {
-    height: 100%;
-    width: 100%;
-    overflow: auto;
 }
 
 .login-class {
     /*height: 5em;*/
     width: 100%;
     padding-top: 7em;
-    padding-left: 5%;
+    padding-left: 30%;
 }
 
 #inputField-id {
     height: 2em;
-    width: 88%;
+    width: 40%;
     border-radius: 0.5em;
     border: 0.1em solid;
     padding-left: 0.5em;
@@ -243,11 +238,11 @@ body {
 
 .footer-class {
     position: absolute;
-    width: 100%;
+    width: 60%;
     height: 3em;
     background-color: #990000;
     bottom: 0;
-    left: 0;
+    left: 20%;
     text-align: center;
 }
 
@@ -257,6 +252,7 @@ body {
 }
 
 #displayChoiceDiv-id {
+    text-align: center;
     height: 3em;
     background-color: #990000;
     margin-top: 0.5em;
@@ -281,17 +277,21 @@ body {
 }
 
 #displayChoiceDiv-id button {
-    padding-left: 15%
+
 }
 
-#displayChoiceDiv-id #usersButton-id {
+#displayChoiceDiv-id #topicsButton-id {
     padding-left: 15%;
+    padding-right: 15%;
 }
 
 #main-id {
     padding-top: 1em;
     overflow-y: scroll;
     height: 100%;
+    width: 60%;
+    overflow: auto;
+    margin-left: 20%;
 }
 
 #main-id span {
@@ -360,7 +360,7 @@ body {
     text-align: center;
     width: 100%;
     height: 100%;
-    overflow-y: scroll;
+    /*overflow-y: scroll;*/
 }
 
 #crtConvDiv-id p {
@@ -373,7 +373,7 @@ body {
 }
 
 #crtConvDiv-id input {
-    width: 85%;
+    width: 60%;
     border-radius: 0.5em;
     border: 0.1em solid;
     height: 2em;
@@ -403,15 +403,15 @@ body {
 #crtConvDiv-id #topicPlacement-id {
     margin-bottom: 1em;
     background-color: #d9d9d9;
-    width: 80%;
+    width: 60%;
     height: 6em;
     margin-left: auto;
     margin-right: auto;
 }
 
 #crtConvDiv-id #topicPlacement-id #topic-id {
-    overflow-x: scroll;
-    white-space: nowrap;
+    /*overflow-x: scroll;
+    white-space: nowrap;*/
     margin-top: 0.5em;
 }
 
@@ -424,7 +424,7 @@ body {
 
 #crtConvDiv-id #userPlacement-id {
     background-color: #d9d9d9;
-    width: 80%;
+    width: 60%;
     height: 8em;
     margin-left: auto;
     margin-right: auto;
@@ -458,7 +458,7 @@ body {
     background-color: #990000;
     border-radius: 0.5em;
     color: white;
-    width: 70%;
+    width: 50%;
     height: 2em;
     font-size: 1.5em;
 }
@@ -469,7 +469,7 @@ body {
     background-color: #990000;
     border-radius: 0.5em;
     color: white;
-    width: 90%;
+    width: 50%;
     height: 2em;
     font-size: 1.5em;
 }
@@ -532,11 +532,11 @@ body {
 /*Chat window css*/
 
 #chatHeader-id {
-    width: 100%;
+    width: 60%;
     height: 6em;
     background-color: #990000;
     top: 0;
-    left: 0;
+    left: 20%;
     position: absolute;
 }
 
@@ -578,9 +578,10 @@ body {
 #container #chatArea {
     font-size: 1.4em;
     overflow: auto;
-    width: 100%;
+    width: 60%;
     height: 100%;
     background-color: #d9d9d9;
+    margin-left: 20%;
 }
 
 #container #chatArea #userTimeStamp-id {
@@ -621,7 +622,7 @@ body {
     display: inline-block;
     border-radius: 0.5em;
     padding: 0.2em;
-    font-size: 0.8em;
+    font-size: 1em;
     word-break: break-word;
 }
 
@@ -643,17 +644,17 @@ body {
     color: white;
     border-radius: 0.5em;
     padding: 0.2em;
-    font-size: 0.8em;
+    font-size: 1em;
     word-break: break-word;
     margin-left: 0.3em;
 }
 
 #chatFooter-id {
     position: absolute;
-    width: 100%;
+    width: 60%;
     height: 3em;
     bottom: 0;
-    left: 0;
+    left: 20%;
     text-align: center;
 }
 
@@ -766,12 +767,15 @@ body {
 #alertHistory {
     text-align: center;
     margin-top: 1em;
-    height: 20em;
+    height: 25em;
     overflow-y: scroll;
 }
 
 #alertHistory th, td {
     padding: 0.3em;
+    padding-right: 1.5em;
+    padding-bottom: 1em;
+    font-size: 1.3em;
 }
 
 #adminIntDiv-id {

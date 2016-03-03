@@ -257,6 +257,7 @@ body {
 }
 
 #displayChoiceDiv-id {
+    text-align: center;
     height: 3em;
     background-color: #990000;
     margin-top: 0.5em;
@@ -281,11 +282,12 @@ body {
 }
 
 #displayChoiceDiv-id button {
-    padding-left: 15%
+
 }
 
-#displayChoiceDiv-id #usersButton-id {
+#displayChoiceDiv-id #topicsButton-id {
     padding-left: 15%;
+    padding-right: 15%;
 }
 
 #main-id {

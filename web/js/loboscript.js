@@ -28,6 +28,7 @@ $(document).ready(function () {
     });
 
     $(window).load(function () {
+        adjustStyle($(this).width());
         var location = window.location.href;
         if (location !== ("http://localhost:8080/LoboChat/")) {
             if (readCookie("currentUser") !== "") {
@@ -74,6 +75,7 @@ $(document).ready(function () {
 
 
     $(window).resize(function () {
+        console.log($(this).width());
         adjustStyle($(this).width());
     });
 
@@ -82,7 +84,7 @@ $(document).ready(function () {
         var text = $(this).text();
         console.log("text to place: " + text);
         $("#userPlacement-id").append("<span id='user" + number + "'>"
-                + text + "<i class='fa fa-times'></i></span>");
+                + text + "<i class='fa fa-times userRemove'></i></span>");
         number++;
         $(this).remove();
     });
@@ -102,7 +104,7 @@ $(document).ready(function () {
         $("#topic-id").html("<span id='topicValue-id'>" + text + "</span>");
     });
 
-    $(document).on("click", ".fa-times", function () {
+    $(document).on("click", ".userRemove", function () {
         var toRemove = $(this).parent("span");
         $(toRemove).remove();
         console.log("toRemove: " + toRemove.text());
