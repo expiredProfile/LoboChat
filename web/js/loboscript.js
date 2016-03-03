@@ -90,7 +90,7 @@ $(document).ready(function () {
         userAm++;
         $(this).remove();
     });
-    
+
     $(document).on("click", ".groupToAdd-class", function () {
         console.log("Test");
         var text = $(this).text();
@@ -114,7 +114,7 @@ $(document).ready(function () {
         $("#myDropdown").append("<p class='usersToAdd-class'>" + toRemove.text() + "</p>");
         userAm--;
     });
-    
+
     $(document).on("click", ".groupRemove", function () {
         var toRemove = $(this).parent("span");
         $(toRemove).remove();
@@ -224,10 +224,10 @@ $(document).ready(function () {
                 for (i = 0; i < alerts.length; i++) {
                     table += "<tr><td>" +
                             /*
-                            alerts[i].getElementsByTagName("ID")[0].childNodes[0].nodeValue +
-                            "</td><td>" +
-                            alerts[i].getElementsByTagName("alertCat")[0].childNodes[0].nodeValue +
-                            "</td><td>" +*/
+                             alerts[i].getElementsByTagName("ID")[0].childNodes[0].nodeValue +
+                             "</td><td>" +
+                             alerts[i].getElementsByTagName("alertCat")[0].childNodes[0].nodeValue +
+                             "</td><td>" +*/
                             alerts[i].getElementsByTagName("alertTopic")[0].childNodes[0].nodeValue +
                             "</td><td>" +
                             alerts[i].getElementsByTagName("currentTime")[0].childNodes[0].nodeValue +
@@ -269,8 +269,8 @@ function chatScrollDown() {
     console.log("Scroll end");
 }
 
-function refreshChats(){
-    if (document.getElementById("topicsDiv-id") !== null){
+function refreshChats() {
+    if (document.getElementById("topicsDiv-id") !== null) {
         getConversations();
     }
 }
@@ -328,12 +328,12 @@ function logToMainsocket() {
         };
         console.log("Logged");
     }
-    
+
 }
 
 function onMessageMain(event) {
     console.log(event.data);
-    if (event.data !== "0"){
+    if (event.data !== "0") {
         console.log("Alert");
         $.ajax({
             url: baseUrl + "/resources/Alerts/" + event.data,
@@ -344,20 +344,20 @@ function onMessageMain(event) {
                 alert("Error in handleAlert: " + response.statusText);
             }
         });
-    } else if (document.getElementById("inField") !== null && document.getElementById("outField") !== null){
+    } else if (document.getElementById("inField") !== null && document.getElementById("outField") !== null) {
         console.log("login");
         $.ajax({
-                url: baseUrl + '/resources/Workers/LoggedIn',
-                type: 'GET',
-                dataType: 'xml',
-                success: loggedIn
-            });
-            $.ajax({
-                url: baseUrl + '/resources/Workers/LoggedOut',
-                type: 'GET',
-                dataType: 'xml',
-                success: loggedOut
-            });
+            url: baseUrl + '/resources/Workers/LoggedIn',
+            type: 'GET',
+            dataType: 'xml',
+            success: loggedIn
+        });
+        $.ajax({
+            url: baseUrl + '/resources/Workers/LoggedOut',
+            type: 'GET',
+            dataType: 'xml',
+            success: loggedOut
+        });
     }
 }//onMessage
 
@@ -650,8 +650,8 @@ function startConversation() {
         window.alert("Participant missing!");
         return null;
     }
-    
-    if (profGroups !== 0){
+
+    if (profGroups !== 0) {
         window.alert("Please choose only users!");
         return null;
     }
@@ -703,15 +703,15 @@ function startProfGroupConversation() {
         window.alert("Participant missing!");
         return null;
     }
-    
-    if (profGroups !== 1 || userAm !== 0){
+
+    if (profGroups !== 1 || userAm !== 0) {
         window.alert("Please choose only one group!");
         return null;
     }
 
     var targetGroup = $('#userPlacement-id').children('span').text();
     console.log("Target group: " + targetGroup);
-    var xmlProfConvDataObject = "<profConvData><postName>"+readCookie('currentUser')+"</postName><profGroup>"+targetGroup+"</profGroup><topic>"+topic+"</topic></profConvData>";
+    var xmlProfConvDataObject = "<profConvData><postName>" + readCookie('currentUser') + "</postName><profGroup>" + targetGroup + "</profGroup><topic>" + topic + "</topic></profConvData>";
     var ProfXmlDoc = $.parseXML(xmlProfConvDataObject);
     $.ajax({
         url: baseUrl + "/resources/ProfessionConversations",
@@ -846,7 +846,7 @@ function listParticipant(xml, status) { // also lists messages !
     document.getElementById("conversationID").innerHTML = cid;
     document.getElementById("topic-banner").innerHTML = topic;
     loadMessages();
-    
+
     /*  systemMessage(readCookie('currentUser') + " connected!");
      
      systemMessage(readCookie('currentUser') + " connected!");
@@ -891,7 +891,7 @@ function onClose(event) {
 }
 function loadMessages() {
     var cid = document.getElementById("conversationID").innerHTML;
-    console.log("Load messages:" +cid);
+    console.log("Load messages:" + cid);
     $.ajax({
         url: baseUrl + "/resources/Messages/" + cid,
         type: 'GET',
