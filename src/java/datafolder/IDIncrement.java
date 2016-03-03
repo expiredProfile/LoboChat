@@ -18,7 +18,7 @@ public class IDIncrement {
     private IDIncrement(){
         this.workerIncrement = 0;
         this.conversationIncrement = 0;
-        this.alertIncrement = 0;
+        this.alertIncrement = 1;
     }
     
     public static IDIncrement getInstance(){
