@@ -510,15 +510,27 @@ body {
 }
 
 #topicsDiv-id #timeStamp-id {
-    float: right;
+    position: absolute;
+    right: 5%;
+    /*float: right;*/
     font-size: 1.5em;
     padding-right: 1em;
     color: #808080;
 }
 
+#topicsDiv-id .messageField-class {
+    width: 100%;
+}
+
+#topicsDiv-id #msgContDiv-id {
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    width: 95%;
+}
+
 #topicsDiv-id #msgContent-id {
     padding-left: 1em;
-    padding-right: 1em;
     font-size: 1.3em;
     color: #808080;
 }

@@ -758,8 +758,8 @@ function listConversations(xml, status) {
              value='" + $(this).find("topic").text() + "'> "
                     + "<p id='topicField-id'>" + $(this).find("topic").text()
                     + "<span id='topicIDField-id'>" + $(this).find("ID").text() + "</span></p>"
-                    + "<p id='messageField" + conversationID + "-id'>"
-                    + loadLatest(conversationID) + "</p>" + "</button><hr></div><br>";
+                    + "<div id='messageWrap-id'><p class='messageField-class' id='messageField" + conversationID + "-id'>"
+                    + loadLatest(conversationID) + "</p></div>" + "</button><hr></div><br>";
         });
     });
     $("#topicsDiv-id").html(content);
