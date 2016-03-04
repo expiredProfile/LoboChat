@@ -13,7 +13,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  *
  * @author Kasper
  */
-// Handles the data required to send alerts to users
+// Contains the data required to send alerts to users (alert object)
 @XmlRootElement
 public class Alert {
     private int id;
@@ -24,7 +24,8 @@ public class Alert {
     private String postName;
     
     public Alert(){}
-
+    
+    //ID increment and timestamp requested from separate classes
     @XmlElement
     public int getID() {
         return id;
@@ -43,6 +44,7 @@ public class Alert {
         this.currentTime = TimeResources.getInstance().getTimestamp();
     }
     
+    //Alert category (descriptions listed in APIresources/AlertData)
     @XmlElement
     public int getAlertCat() {
         return alertCat;
@@ -52,6 +54,7 @@ public class Alert {
         this.alertCat = alertCat;
     }
     
+    //Alert topic is used to pass the description from AlertData
     @XmlElement
     public String getAlertTopic() {
         return alertTopic;
@@ -70,6 +73,7 @@ public class Alert {
         this.receiverGroup = receiverGroup;
     }
     
+    //Sender of the alert
     @XmlElement
     public String getPostName() {
         return postName;

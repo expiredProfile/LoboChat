@@ -20,6 +20,7 @@ import javax.ws.rs.core.MediaType;
  *
  * @author Kasper
  */
+//Handles the sending of alerts
 @Path("/Alerts")
 public class AlertResources {
     private final ChatSystem system;
@@ -47,11 +48,12 @@ public class AlertResources {
         int id = a.getID();
         String time = a.getCurrentTime();
         System.out.println("id: " + id + ", time: " + time);
-        //Add alert to history
+        //Add alert to history and return id (sent to socket)
         system.addAlert(a);
         return Integer.toString(id);
     }
     
+    //Get alerts from history with ID or all from given range
     @GET
     @Path("/{alertid}")
     @Consumes(MediaType.APPLICATION_XML)
@@ -62,13 +64,12 @@ public class AlertResources {
         Alert alert = system.getAlertByID(id);
         return alert;
     }
-    //TODO Get only recent alerts
+    
     @GET
     @Path("/Alerthistory/{range}")
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.APPLICATION_XML)
     public ArrayList<Alert> getAlertHistory(@PathParam("range") int range) {
-        //int historyRange = Integer.parseInt(range);
         return system.getAlertHistory(range);
     }
 }

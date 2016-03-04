@@ -25,6 +25,7 @@ import javax.ws.rs.core.MediaType;
  *
  * @author Kasper
  */
+//Handles the creation of profession specific conversation
 @Path("/ProfessionConversations")
 public class ProfessionConversationResources {
     private final ChatSystem system;
@@ -39,9 +40,9 @@ public class ProfessionConversationResources {
     @Consumes(MediaType.APPLICATION_XML)
     @Produces(MediaType.APPLICATION_XML)
     public ArrayList<Worker> postConversation(ProfConvData pcd) {
-        //Get data
+        //Get data from temp object in parameter
         String topic = pcd.getTopic();
-        System.out.println("topic:" + topic);
+        System.out.println("Topic:" + topic);
         String targetGroup = pcd.getProfGroup();
         ProfessionGroup profGroup = pool.getProfessionGroup(targetGroup);
         String postName = pcd.getPostName();
@@ -51,7 +52,6 @@ public class ProfessionConversationResources {
             workersInProfGroup.add(w);
         }
         //Add also current user to be part of conversation
-        
         for (Worker w : system.getAllWorkers()) {
             if (w.getName().equals(postName)) {
                 if (workersInProfGroup.contains(w) == false) {
@@ -59,24 +59,25 @@ public class ProfessionConversationResources {
                 }
             }
         }// for
-        //Add all from profession and current user to new group object
+        //Add all from profession and current user to new group object (conversation participants)
         Group profConvGroup = new Group();
         profConvGroup.setWorkerList(workersInProfGroup);
-        //Add list of workers in conversation to variable
+        //Add list of participants in conversation to variable
         ArrayList<Worker> workerList = profConvGroup.getWorkerList();
         String names = "";
         for (Worker w : workerList) {
             names += w.getName() + ", ";
         }
-        System.out.println("new group: " + topic + ", names: " + names);
+        System.out.println("New group: " + topic + ", names: " + names);
         Conversation c = new Conversation(topic, workerList);
-        System.out.println("new conversation: " + c.getTopic() + ", c-id: " + c.getID());
+        System.out.println("New conversation: " + c.getTopic() + ", c-id: " + c.getID());
         system.addConversation(c);
-        Message mes = new Message("New conversation: "+c.getTopic(), "System", c.getID());
+        Message mes = new Message("New conversation: " + c.getTopic(), "System", c.getID());
         system.addMessageToConversation(c.getID(), mes);
         return workerList;
     }
     
+    //Get conversation with username or ID
     @GET
     @Path("/{userName}")
     @Consumes(MediaType.TEXT_PLAIN)

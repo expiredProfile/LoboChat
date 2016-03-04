@@ -12,7 +12,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  *
  * @author Kasper
  */
-// required to create conversations between professional groups
+// required to create conversations between professional groups (temp object to pass data from client to server)
 @XmlRootElement
 public class ProfConvData {
     private String topic;

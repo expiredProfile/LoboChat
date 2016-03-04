@@ -11,6 +11,7 @@ import java.util.HashMap;
  *
  * @author Kasper
  */
+//Contains the alert description data (value) paired with alert categories (key)
 public class AlertData {
     private HashMap<Integer, String> alertCategories;
     

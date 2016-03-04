@@ -13,7 +13,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  *
  * @author Kasper
  */
-// gives structure to the professional groups used to create conversations between groups
+// Gives structure to the professional groups used to create conversations (e.g. conversation between doctors)
 @XmlRootElement
 public class ProfessionGroup {
     private String profession;
@@ -34,6 +34,7 @@ public class ProfessionGroup {
         this.profession = p;
     }
     
+    //Get and add workers according to profession
     @XmlElement
     public ArrayList<Worker> getWorkersByProf() {
         return this.workersByProf;

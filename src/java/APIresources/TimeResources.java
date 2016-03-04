@@ -14,16 +14,18 @@ import javax.xml.bind.DatatypeConverter;
  *
  * @author Kasper
  */
+//Handles timestamp requests
 public class TimeResources {
     private static TimeResources tr = new TimeResources();
     private Calendar c = Calendar.getInstance();
     
     private TimeResources() {}
     
+    //Singleton
     public static TimeResources getInstance() {
         return tr;
     }
-    //Timestamp function
+    //Timestamp functions
     public String getTimestamp() {
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
         c.setTime(new Date());

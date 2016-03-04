@@ -22,10 +22,12 @@ public class IDIncrement {
         this.alertIncrement = 1;
     }
     
+    //Singleton
     public static IDIncrement getInstance(){
         return instance;
     }
     
+    //ID increments
     public int workerIncrement(){
         return this.workerIncrement++;
     }

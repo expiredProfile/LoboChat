@@ -159,16 +159,18 @@ $(document).ready(function () {
     $("#addnewuser").click(function () {
         addUser();
     });
-
+    
+    //Send alert
     $(document).on("click", "#sendAlertButton", function () {
+        //Empty old responses from divs
         $("#alertResponse").empty();
         $("#alertHistory").empty();
         //Get user input
         var alertCat = $("#alert").val(); //Alert category dropdown
         var recGroup = $('input[name="receiverGroup"]:checked').val(); //Receiver group radio
         var sender = readCookie("currentUser"); //Read current user from cookie (alert sender)
-        //Print for test purposes
-        alert("alertCat: " + alertCat + ", recGroup: " + recGroup);
+        //Print for test purposes and confirmation
+        alert("Send alert? alertCat: " + alertCat + ", recGroup: " + recGroup);
         //Xml object
         var xmlAlertObject = "<alert><alertCat>" + alertCat + "</alertCat><receiverGroup>" + recGroup + "</receiverGroup><postName>" + sender + "</postName></alert>";
         var alertXmlDoc = $.parseXML(xmlAlertObject);
@@ -189,10 +191,13 @@ $(document).ready(function () {
             }
         }); // ajax
     }); // sendAlert
-
+    
+    //Get alert history
     $(document).on("click", "#alertHistoryButton", function () {
+        //Empty old responses from divs
         $("#alertResponse").empty();
         $("#alertHistory").empty();
+        //Get user input
         var range = $("#alertHistoryRange").val();
 
         $.ajax({
@@ -209,11 +214,6 @@ $(document).ready(function () {
                 var alerts = data.getElementsByTagName("alert");
                 for (i = 0; i < alerts.length; i++) {
                     table += "<tr><td>" +
-                            /*
-                             alerts[i].getElementsByTagName("ID")[0].childNodes[0].nodeValue +
-                             "</td><td>" +
-                             alerts[i].getElementsByTagName("alertCat")[0].childNodes[0].nodeValue +
-                             "</td><td>" +*/
                             alerts[i].getElementsByTagName("alertTopic")[0].childNodes[0].nodeValue +
                             "</td><td>" +
                             alerts[i].getElementsByTagName("currentTime")[0].childNodes[0].nodeValue +
@@ -247,6 +247,9 @@ $(document).ready(function () {
     });
 
 }); // $(document).ready
+
+
+//Functions
 
 function chatScrollDown() {
     var element = document.getElementById("chatArea");
@@ -349,13 +352,14 @@ function handleAlert(xml, status) {
     var target = $xml.find('receiverGroup').text();
     var topic = $xml.find('alertTopic').text();
     groupID = readCookie('groupID');
+    //Shows the alert for the user if target group matches
     if (target === "0") {
         alert("Alert: " + topic);
     } else if (target === groupID) {
         alert("Alert: " + topic + ", groupID: " + groupID);
     } else {
         //Test alert
-        alert("Alert not for you");
+        //alert("Alert not for you");
     }
 }
 
