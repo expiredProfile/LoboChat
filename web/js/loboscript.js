@@ -485,6 +485,7 @@ function logOut() {
     } else if (mainsocket.readyState === mainsocket.CLOSED) {
 
     } else {
+        mainsocket.send(0);
         mainsocket.close();
     }
 

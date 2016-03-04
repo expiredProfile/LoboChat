@@ -119,7 +119,7 @@ public class ChatSystem {
     }
     
     public Alert getAlertByID(int id) {
-        return alertHistory.get(id);
+        return alertHistory.get(id-1);
     }
     
     public ArrayList<Alert> getAlertHistory(int range) {

@@ -58,6 +58,7 @@ public class AlertResources {
     @Produces(MediaType.APPLICATION_XML)
     public Alert getAlertXML(@PathParam("alertid") String alertID){
         int id = Integer.parseInt(alertID);
+        System.out.println(id);
         Alert alert = system.getAlertByID(id);
         return alert;
     }
