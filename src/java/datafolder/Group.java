@@ -13,6 +13,8 @@ import javax.xml.bind.annotation.XmlRootElement;
  *
  * @author kimmo
  */
+// created to transfer multiple users from the client to server
+// to create conversations with multiple people in it
 @XmlRootElement
 public class Group {
     

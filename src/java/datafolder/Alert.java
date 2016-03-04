@@ -13,6 +13,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  *
  * @author Kasper
  */
+// Handles the data required to send alerts to users
 @XmlRootElement
 public class Alert {
     private int id;

@@ -12,6 +12,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  *
  * @author kimmo
  */
+// gives structure to the workers used to register users to the application
 @XmlRootElement
 public class Worker {
     private IDIncrement increment;

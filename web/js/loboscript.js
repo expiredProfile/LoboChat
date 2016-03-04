@@ -76,14 +76,11 @@ $(document).ready(function () {
 
 
     $(window).resize(function () {
-        console.log($(this).width());
         adjustStyle($(this).width());
     });
 
     $(document).on("click", ".usersToAdd-class", function () {
-        console.log("Test");
         var text = $(this).text();
-        console.log("text to place: " + text);
         $("#userPlacement-id").append("<span id='user" + number + "'>"
                 + text + "<i class='fa fa-times userRemove'></i></span>");
         number++;
@@ -92,9 +89,7 @@ $(document).ready(function () {
     });
 
     $(document).on("click", ".groupToAdd-class", function () {
-        console.log("Test");
         var text = $(this).text();
-        console.log("text to place: " + text);
         $("#userPlacement-id").append("<span id='user" + number + "'>"
                 + text + "<i class='fa fa-times groupRemove'></i></span>");
         number++;
@@ -110,7 +105,6 @@ $(document).ready(function () {
     $(document).on("click", ".userRemove", function () {
         var toRemove = $(this).parent("span");
         $(toRemove).remove();
-        console.log("toRemove: " + toRemove.text());
         $("#myDropdown").append("<p class='usersToAdd-class'>" + toRemove.text() + "</p>");
         userAm--;
     });
@@ -118,7 +112,6 @@ $(document).ready(function () {
     $(document).on("click", ".groupRemove", function () {
         var toRemove = $(this).parent("span");
         $(toRemove).remove();
-        console.log("toRemove: " + toRemove.text());
         $("#myGroupDropdown").append("<p class='groupToAdd-class'>" + toRemove.text() + "</p>");
         profGroups--;
     });
@@ -152,9 +145,7 @@ $(document).ready(function () {
                 check = false;
             }
             $("#myDropdown").append(dropdownlogin);
-            console.log(dropdownlogin);
             $("#myDropdown").append(dropdownlogout);
-            console.log(dropdownlogout);
         });
     });
     $("#logOutButton").click(function () {
@@ -172,7 +163,6 @@ $(document).ready(function () {
     $(document).on("click", "#sendAlertButton", function () {
         $("#alertResponse").empty();
         $("#alertHistory").empty();
-        console.log("Sending alert");
         //Get user input
         var alertCat = $("#alert").val(); //Alert category dropdown
         var recGroup = $('input[name="receiverGroup"]:checked').val(); //Receiver group radio
@@ -182,7 +172,6 @@ $(document).ready(function () {
         //Xml object
         var xmlAlertObject = "<alert><alertCat>" + alertCat + "</alertCat><receiverGroup>" + recGroup + "</receiverGroup><postName>" + sender + "</postName></alert>";
         var alertXmlDoc = $.parseXML(xmlAlertObject);
-        //console.log(alertXmlDoc);
 
         $.ajax({
             url: baseUrl + "/resources/Alerts",
@@ -192,7 +181,6 @@ $(document).ready(function () {
             contentType: 'application/xml',
             dataType: 'text',
             success: function (data) {
-                console.log("success alert");
                 mainsocket.send(data);
                 //$("#alertResponse").append("<p id='alertSent-id'>Alert sent!</p>");
             },
@@ -205,7 +193,6 @@ $(document).ready(function () {
     $(document).on("click", "#alertHistoryButton", function () {
         $("#alertResponse").empty();
         $("#alertHistory").empty();
-        console.log("Getting alert history");
         var range = $("#alertHistoryRange").val();
 
         $.ajax({
@@ -216,7 +203,6 @@ $(document).ready(function () {
             success: function (data) {
                 //Test print to log
                 var xmlStringAlert = (new XMLSerializer()).serializeToString(data);
-                console.log("Alert history: " + xmlStringAlert);
                 //Display alert history
                 var i;
                 var table = "<tr><th>Alert topic</th><th>Timestamp</th><th>Sender</th><th>Target group</th></tr>";
@@ -263,10 +249,8 @@ $(document).ready(function () {
 }); // $(document).ready
 
 function chatScrollDown() {
-    console.log("Scroll start");
     var element = document.getElementById("chatArea");
     element.scrollTop = element.scrollHeight;
-    console.log("Scroll end");
 }
 
 function refreshChats() {
@@ -277,7 +261,6 @@ function refreshChats() {
 
 function ajaxGet() {
     $("#myDropdown").empty();
-    console.log("ajax get");
     $.ajax({
         url: baseUrl + '/resources/Workers/LoggedIn',
         type: 'GET',
@@ -292,7 +275,6 @@ function ajaxGet() {
         async: false,
         success: loggedOutDropDown
     });
-    console.log("ajax get done");
 }
 
 function logToMainsocket() {
@@ -334,7 +316,6 @@ function logToMainsocket() {
 function onMessageMain(event) {
     console.log(event.data);
     if (event.data !== "0") {
-        console.log("Alert");
         $.ajax({
             url: baseUrl + "/resources/Alerts/" + event.data,
             type: 'GET',
@@ -345,7 +326,6 @@ function onMessageMain(event) {
             }
         });
     } else if (document.getElementById("inField") !== null && document.getElementById("outField") !== null) {
-        console.log("login");
         $.ajax({
             url: baseUrl + '/resources/Workers/LoggedIn',
             type: 'GET',
@@ -364,14 +344,11 @@ function onMessageMain(event) {
 function handleAlert(xml, status) {
     //Test print to log
     var xmlString = (new XMLSerializer()).serializeToString(xml);
-    console.log("Alert: " + xmlString);
 
     var $xml = $(xml);
     var target = $xml.find('receiverGroup').text();
     var topic = $xml.find('alertTopic').text();
-    console.log("Alert target: " + target);
     groupID = readCookie('groupID');
-    console.log("GroupID: " + groupID);
     if (target === "0") {
         alert("Alert: " + topic);
     } else if (target === groupID) {
@@ -413,11 +390,9 @@ function listMessage(xml, status) {
         var timeStamp = $(this).find("currentTime").text();
         content += "<p id='postName-id'>" + postName + "</p>" + "<p id='timeStamp-id'>" + timeStamp
                 + "</p>" + "<br><div id='msgContDiv-id'><p id='msgContent-id'>" + msgs + "</p></div>";
-        console.log("current time: " + timeStamp);
     });
 
     cid = $xml.find('conversationID').text();
-    console.log("cid is: " + cid);
     var target = "messageField" + cid + "-id";
 
     if (document.getElementById(target) !== null) {
@@ -447,7 +422,6 @@ function logIn(workerName) {
                             dataType: 'text',
                             success: function (data) {
                                 writeCookie('currentUser', workerName, 3);
-                                console.log(data);
                                 writeCookie('groupID', data, 3);
                                 window.location = baseUrl + "/mainpage.html";
                             },
@@ -514,9 +488,7 @@ function logOut() {
 } // logOut
 
 function loggedOut(xml, status) {
-    console.log("listing logged out");
     xmlString = (new XMLSerializer()).serializeToString(xml);
-    console.log("XML: " + xmlString);
     var $xml = $(xml);
     var content = "";
     $xml.find('workers').each(function () {
@@ -531,15 +503,12 @@ function loggedOut(xml, status) {
 } //loggedOut
 
 function loggedIn(xml, status) {
-    console.log("listing users");
     xmlString = (new XMLSerializer()).serializeToString(xml);
-    console.log("XML: " + xmlString);
     var $xml = $(xml);
     var content = "";
     $xml.find('workers').each(function () {
         $xml.find('worker').each(function () {
             var wname = $(this).find("name").text();
-            console.log("Id name " + wname);
             if (wname !== readCookie('currentUser')) {
                 content += "<div class='loggedInUsersDiv-class'>" +
                         "<i class='fa fa-circle loggedInBall-class'></i>" +
@@ -552,9 +521,7 @@ function loggedIn(xml, status) {
 } //loggedIn
 
 function loggedOutDropDown(xml, status) {
-    console.log("listing logged out users");
     xmlString = (new XMLSerializer()).serializeToString(xml);
-    console.log("XML: " + xmlString);
     var $xml = $(xml);
     //var content = "";
     $xml.find('workers').each(function () {
@@ -566,15 +533,12 @@ function loggedOutDropDown(xml, status) {
 }
 
 function loggedInDropDown(xml, status) {
-    console.log("listing logged in users");
     xmlString = (new XMLSerializer()).serializeToString(xml);
-    console.log("XML: " + xmlString);
     var $xml = $(xml);
     //var content = "";
     $xml.find('workers').each(function () {
         $xml.find('worker').each(function () {
             var wname = $(this).find("name").text();
-            console.log("Id name " + wname);
             if (wname !== readCookie('currentUser')) {
                 dropdownlogin += "<p class='usersToAdd-class'>" + $(this).find("name").text() + "</p>";
             }
@@ -629,11 +593,8 @@ function adjustStyle(width) {
 }
 
 function startConversation() {
-    console.log(userAm);
-    console.log(profGroups);
     var topic = $('#topic-id').text();
     var num = 0;
-    console.log(topic);
     if (topic === "") {
         window.alert("Topic missing!");
         return null;
@@ -664,7 +625,6 @@ function startConversation() {
     xmlGroupObject += "</group>"; // adds end tag for the xml document.
 //    window.alert(xmlGroupObject);
     var GroupXmlDoc = $.parseXML(xmlGroupObject);
-    console.log("lol");
     $.ajax({
         url: baseUrl + "/resources/Conversations",
         data: GroupXmlDoc,
@@ -685,8 +645,6 @@ function startConversation() {
 } // startConversation()
 
 function startProfGroupConversation() {
-    console.log(userAm);
-    console.log(profGroups);
     var topic = $('#topic-id').text();
     if (topic.length === 0) {
         window.alert("Topic missing!");
@@ -711,7 +669,6 @@ function startProfGroupConversation() {
     }
 
     var targetGroup = $('#userPlacement-id').children('span').text();
-    console.log("Target group: " + targetGroup);
     var xmlProfConvDataObject = "<profConvData><postName>" + readCookie('currentUser') + "</postName><profGroup>" + targetGroup + "</profGroup><topic>" + topic + "</topic></profConvData>";
     var ProfXmlDoc = $.parseXML(xmlProfConvDataObject);
     $.ajax({
@@ -747,13 +704,11 @@ function getConversations() {
 } // getConversations
 
 function listConversations(xml, status) {
-    console.log("listing Conversations");
     var $xml = $(xml);
     var content = "";
     $xml.find('conversations').each(function () {
         $xml.find('conversation').each(function () {
             var conversationID = $(this).find("ID").text();
-            console.log("conversationID " + conversationID);
             content += "<div class='onlines'><button onclick='openChat(\"" + conversationID + "\")'\n\
              value='" + $(this).find("topic").text() + "'> "
                     + "<p id='topicField-id'>" + $(this).find("topic").text()
@@ -813,7 +768,6 @@ function getParticipants() {
 
 
 function listParticipant(xml, status) { // also lists messages !
-    console.log("listing participants");
     var $xml = $(xml);
     var content = "";
     var messages = "";
@@ -831,7 +785,6 @@ function listParticipant(xml, status) { // also lists messages !
         var postName = $(this).find("postName").text();
         var msgs = $(this).find("content").text();
         var timeStamp = $(this).find("shortTime").text();
-        console.log("user: " + currentUser + " postName: " + postName);
         if (postName === currentUser) {
             messages += "<div class='currentMessageDiv-class'><span id='userTimeStamp-id'>" + timeStamp
                     + "</span>" + "<span class='currentMessage-class'>" + msgs + "</span></div>";
@@ -874,10 +827,8 @@ function notifyOff() {
 }
 
 function onMessage(event) {
-    console.log("Message event");
     var cid = document.getElementById("conversationID").innerHTML;
     if (event.data === cid) {
-        console.log("Same id");
         loadMessages();
         //notifyOn();
 
@@ -892,7 +843,6 @@ function onClose(event) {
 }
 function loadMessages() {
     var cid = document.getElementById("conversationID").innerHTML;
-    console.log("Load messages:" + cid);
     $.ajax({
         url: baseUrl + "/resources/Messages/" + cid,
         type: 'GET',
@@ -906,9 +856,7 @@ function loadMessages() {
 }//loadMessages()
 
 function listMessages(xml, status) {
-    console.log("listmessages()");
     var $xml = $(xml);
-    console.log(xml);
     var content = "";
     var currentUser = readCookie('currentUser');
     var postName = "";
@@ -916,7 +864,6 @@ function listMessages(xml, status) {
         postName = $(this).find("postName").text();
         var msgs = $(this).find("content").text();
         var timeStamp = $(this).find("shortTime").text();
-        console.log(postName + " and " + msgs);
         if (postName === currentUser) {
             content += "<div class='currentMessageDiv-class'><span id='userTimeStamp-id'>" + timeStamp
                     + "</span>" + "<span class='currentMessage-class'>" + msgs + "</span></div>";
@@ -938,7 +885,6 @@ function sendMessage() {
     var d = new Date();
     var dd = d.getDate() + "-" + (d.getMonth() + 1) + "-" + d.getFullYear() + " " + d.getHours() + ":" + d.getMinutes() + ":" + d.getSeconds();
     var cid = document.getElementById("conversationID").innerHTML;
-    console.log(cid);
     var sender = readCookie('currentUser');
     var messageObject = "  <message><content>" + messageContent + "</content>"
             + "<conversationID> " + cid + "</conversationID>"
@@ -964,7 +910,6 @@ function sendMessage() {
 function systemMessage(content) {
     var d = 1;
     var cid = document.getElementById("conversationID").innerHTML;
-    console.log(cid);
     var sender = "System";
     var messageObject = "  <message><content>" + content + "</content>"
             + "<conversationID> " + cid + "</conversationID>"
@@ -1008,7 +953,6 @@ function addUser() {
 
     var userxml = "<worker> <groupID>" + groupID + "</groupID><name>" + name + "</name><title>" + profession + "</title></worker>";
     var userxmlobj = $.parseXML(userxml);
-    //console.log(alertXmlDoc);
 
     $.ajax({
         url: baseUrl + "/resources/Workers/Newuser",

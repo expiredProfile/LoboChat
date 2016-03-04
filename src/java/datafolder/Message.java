@@ -13,6 +13,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  *
  * @author kimmo
  */
+// structure for the messages used in the application
 @XmlRootElement
 public class Message {
 

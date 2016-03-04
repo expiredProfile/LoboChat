@@ -13,6 +13,8 @@ import javax.xml.bind.annotation.XmlRootElement;
  *
  * @author kimmo
  */
+// Handles the data required to create conversations and
+// store the messages sent to the conversations
 @XmlRootElement
 public class Conversation {
     private int id;

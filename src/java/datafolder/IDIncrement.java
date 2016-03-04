@@ -9,6 +9,7 @@ package datafolder;
  *
  * @author kimmo
  */
+// handles all the id increments in the server side and stores the values
 public class IDIncrement {
     private static IDIncrement instance = new IDIncrement();
     private int workerIncrement;

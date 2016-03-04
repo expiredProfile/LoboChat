@@ -11,6 +11,8 @@ import java.util.ArrayList;
  *
  * @author kimmo
  */
+// singleton class that stores all the data and works as an link between the 
+// resource and data classes
 public class ChatSystem {
 
     private static ChatSystem instance = new ChatSystem();
@@ -45,7 +47,7 @@ public class ChatSystem {
     public void addConversation(Conversation c) {
         this.conversations.add(c);
     }
-    
+/*    
     public ArrayList<Conversation> getConversation() {
         ArrayList<Conversation> co = new ArrayList();
         for (int i = 0; i < this.conversations.size(); i++) {
@@ -53,7 +55,8 @@ public class ChatSystem {
         }
         return co;
     }
-
+*/
+    // returns all the conversations to the user given in the parameter
     public ArrayList<Conversation> getConversations(String name) {
         ArrayList<Conversation> tempConversations = new ArrayList<>();
 
@@ -67,10 +70,11 @@ public class ChatSystem {
         return tempConversations;
     }
 
-    public ArrayList<Conversation> getAllConversation() {
+    public ArrayList<Conversation> getAllConversations() {
         return this.conversations;
     }
 
+    // return all the messages from the given conversation by id
     public ArrayList<Message> getConversationMessages(int id) {
         return conversations.get(id).getMessages();
     }
@@ -88,6 +92,7 @@ public class ChatSystem {
         return group.getWorkerList();
     }
      */
+    
     //Worker methods
     public ArrayList<Worker> getLoggedOutList() {
         return this.loggedOut;
@@ -122,6 +127,7 @@ public class ChatSystem {
         return alertHistory.get(id-1);
     }
     
+    // returns either 5, 10 or all of the messages in the system
     public ArrayList<Alert> getAlertHistory(int range) {
         ArrayList<Alert> tempHistory = new ArrayList<>();
         

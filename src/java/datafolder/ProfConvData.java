@@ -12,6 +12,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  *
  * @author Kasper
  */
+// required to create conversations between professional groups
 @XmlRootElement
 public class ProfConvData {
     private String topic;

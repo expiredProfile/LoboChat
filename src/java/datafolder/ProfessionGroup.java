@@ -13,6 +13,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  *
  * @author Kasper
  */
+// gives structure to the professional groups used to create conversations between groups
 @XmlRootElement
 public class ProfessionGroup {
     private String profession;
