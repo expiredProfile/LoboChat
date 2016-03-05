@@ -946,7 +946,7 @@ function systemMessage(content) {
 }// systemMessage function
 
 function addUser() {
-    var name = $("#workername").val();
+    var name = capitalize($("#workername").val());
 
     var groupID = $("#profession").val();
     var profession = "";
@@ -994,5 +994,3 @@ function addUser() {
         }
     }); // ajax
 }
-
-
