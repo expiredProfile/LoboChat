@@ -11,9 +11,10 @@
         <script src="./js/loboscript.js"></script>
         <script>
             $(document).keydown(function (e) {
-                if (e.keyCode === 13) { //13 = enter 
-                    var workerName = $('#inputField-id').val();
-                    logIn(workerName);
+                if (e.keyCode === 13) { //13 = enter
+                    var workerNameInput = $('#inputField-id').val();
+                    workerName = capitalize(workerNameInput);
+                    logIn();
                 }
             });
         </script>

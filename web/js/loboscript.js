@@ -115,11 +115,13 @@ $(document).ready(function () {
         $("#myGroupDropdown").append("<p class='groupToAdd-class'>" + toRemove.text() + "</p>");
         profGroups--;
     });
-
+    
     $("#loginButton").click(function () {
-        workerName = $('#inputField-id').val();
-
-        logIn(workerName);
+        //Case insensitive login
+        //(same code on index page if user presses enter instead of button
+        var workerNameInput = $('#inputField-id').val();
+        workerName = capitalize(workerNameInput);
+        logIn();
         // window.location = baseUrl + "/userlists.html";
     });
     $("#usersButton-id").click(function () {
@@ -184,7 +186,7 @@ $(document).ready(function () {
             dataType: 'text',
             success: function (data) {
                 mainsocket.send(data);
-                //$("#alertResponse").append("<p id='alertSent-id'>Alert sent!</p>");
+                $("#alertResponse").append("<p id='alertSent-id'>Alert sent!</p>");
             },
             error: function (response) {
                 alert("Error in alert: " + response.statusText);
@@ -207,7 +209,8 @@ $(document).ready(function () {
             dataType: 'xml',
             success: function (data) {
                 //Test print to log
-                var xmlStringAlert = (new XMLSerializer()).serializeToString(data);
+                //var xmlStringAlert = (new XMLSerializer()).serializeToString(data);
+                //console.log(xmlStringAlert);
                 //Display alert history
                 var i;
                 var table = "<tr><th>Alert topic</th><th>Timestamp</th><th>Sender</th><th>Target group</th></tr>";
@@ -250,6 +253,13 @@ $(document).ready(function () {
 
 
 //Functions
+
+function capitalize(string) {
+    //console.log("String to capitalize: " + string);
+    var capString = string.charAt(0).toUpperCase() + string.slice(1);
+    //console.log("Capitalized: " + capString);
+    return capString;
+}
 
 function chatScrollDown() {
     var element = document.getElementById("chatArea");
@@ -346,7 +356,8 @@ function onMessageMain(event) {
 
 function handleAlert(xml, status) {
     //Test print to log
-    var xmlString = (new XMLSerializer()).serializeToString(xml);
+    //var xmlString = (new XMLSerializer()).serializeToString(xml);
+    //console.log(xmlString);
 
     var $xml = $(xml);
     var target = $xml.find('receiverGroup').text();
@@ -405,7 +416,7 @@ function listMessage(xml, status) {
     }
 }// listMessage
 
-function logIn(workerName) {
+function logIn() {
     $.ajax({
         url: baseUrl + "/resources/Workers/LoggedOut",
         type: 'GET',
@@ -443,7 +454,6 @@ function logIn(workerName) {
 
                 });
                 if (showError === true) {
-                    $("#inputField-id").val("");
                     window.alert("Invalid login information!");
                 }
             });
@@ -492,7 +502,7 @@ function logOut() {
 } // logOut
 
 function loggedOut(xml, status) {
-    xmlString = (new XMLSerializer()).serializeToString(xml);
+    var xmlString = (new XMLSerializer()).serializeToString(xml);
     var $xml = $(xml);
     var content = "";
     $xml.find('workers').each(function () {
@@ -507,7 +517,7 @@ function loggedOut(xml, status) {
 } //loggedOut
 
 function loggedIn(xml, status) {
-    xmlString = (new XMLSerializer()).serializeToString(xml);
+    var xmlString = (new XMLSerializer()).serializeToString(xml);
     var $xml = $(xml);
     var content = "";
     $xml.find('workers').each(function () {

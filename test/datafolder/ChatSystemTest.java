@@ -72,8 +72,8 @@ public class ChatSystemTest {
         System.out.println("getConversations");
         String name = "";
         ChatSystem instance = ChatSystem.getInstance();
-        ArrayList<Conversation> expResult = instance.getAllConversation();
-        ArrayList<Conversation> result = instance.getAllConversation();
+        ArrayList<Conversation> expResult = instance.getAllConversations();
+        ArrayList<Conversation> result = instance.getAllConversations();
         assertEquals(expResult, result);
     }
 
@@ -85,8 +85,8 @@ public class ChatSystemTest {
     public void testGetAllConversation() {
         System.out.println("getAllConversation");
         ChatSystem instance = ChatSystem.getInstance();
-        ArrayList<Conversation> expResult = instance.getAllConversation();
-        ArrayList<Conversation> result = instance.getAllConversation();
+        ArrayList<Conversation> expResult = instance.getAllConversations();
+        ArrayList<Conversation> result = instance.getAllConversations();
         assertEquals(expResult, result);
     }
 
@@ -215,18 +215,4 @@ public class ChatSystemTest {
         Alert result = instance.getAlertByID(id);
         assertEquals(expResult, result);
     }
-
-    /**
-     * Test of getConversation method, of class ChatSystem.
-     */
-    @Ignore
-    @Test
-    public void testGetConversation() {
-        System.out.println("getConversation");
-        ChatSystem instance = ChatSystem.getInstance();
-        ArrayList<Conversation> expResult = instance.getConversation();
-        ArrayList<Conversation> result = instance.getConversation();
-        assertEquals(expResult, result);
-    }
-    
 }
