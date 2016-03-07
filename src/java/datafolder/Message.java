@@ -13,7 +13,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  *
  * @author kimmo
  */
-// structure for the messages used in the application
+// The class serves as a structure for the messages used in the application.
 @XmlRootElement
 public class Message {
 
@@ -29,7 +29,7 @@ public class Message {
     public Message(String content, String name, int id) {
         this.content = content;
         this.postName = name;
-        this.conversationID = id;        
+        this.conversationID = id;
     }
 
     @XmlElement
@@ -49,30 +49,30 @@ public class Message {
     public void setPostName(String postName) {
         this.postName = postName;
     }
-    
+
     @XmlElement
-    public int getConversationID(){
+    public int getConversationID() {
         return this.conversationID;
     }
-    
-    public void setConversationID(int id){
+
+    public void setConversationID(int id) {
         this.conversationID = id;
     }
-        
+
     @XmlElement
-    public String getCurrentTime(){
+    public String getCurrentTime() {
         return this.currentTime;
     }
-    
+
     public void setCurrentTime() {
         this.currentTime = TimeResources.getInstance().getTimestamp();
     }
-    
+
     @XmlElement
     public String getShortTime() {
         return this.shortTimeStamp;
     }
-    
+
     public void setShortTime() {
         this.shortTimeStamp = TimeResources.getInstance().getShortTimeStamp();
     }

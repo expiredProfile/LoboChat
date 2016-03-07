@@ -23,6 +23,7 @@ import javax.ws.rs.core.MediaType;
  *
  * @author kimmo
  */
+// The class handles server requests related to conversations.
 @Path("/Conversations")
 public class ConversationResources {
 
@@ -32,35 +33,27 @@ public class ConversationResources {
         system = ChatSystem.getInstance();
     }
 
-//    @POST
-//    @Consumes(MediaType.APPLICATION_XML)
-//    @Produces(MediaType.TEXT_PLAIN)
-//    public int postConversation(Group g){
-//        ArrayList<Worker> list = g.getWorkerList();
-//        String topic = g.getTopic();
-//        Conversation c = new Conversation(topic, list);
-//        system.addConversation(c);
-//        return c.getID();
-//    }
+    /**
+     * This method creates and stores a new conversation. A Group object is sent
+     * from the client-side which includes users involved and a topic for
+     * the conversation. New Conversation object is created based on the
+     * extracted information.
+     */
     @POST
     @Consumes(MediaType.APPLICATION_XML)
     @Produces(MediaType.APPLICATION_XML)
     public ArrayList<Worker> postConversation(Group g) {
         ArrayList<Worker> list = g.getWorkerList();
         String topic = g.getTopic();
-        String s = "";
-        for (Worker w : list) {
-            s += w.getName() + ", ";
-        }
-        System.out.println("new group: " + g.getTopic() + ", nimet; " + s);
         Conversation c = new Conversation(topic, list);
-        System.out.println("new conversation: " + c.getTopic() + ", c-id: " + c.getID());
+        // System.out.println("new conversation: " + c.getTopic() + ", c-id: " + c.getID());
         system.addConversation(c);
-        Message mes = new Message("New conversation: "+c.getTopic(), "System", c.getID());
+        Message mes = new Message("New conversation: " + c.getTopic(), "System", c.getID());
         system.addMessageToConversation(c.getID(), mes);
         return g.getWorkerList();
     }
 
+    // Returns list of conversations the user given as parameter is a part of. 
     @GET
     @Path("/{userName}")
     @Consumes(MediaType.TEXT_PLAIN)
@@ -70,12 +63,12 @@ public class ConversationResources {
         return system.getConversations(name);
     }
 
+    // Returns the conversation with the id given as parameter. 
     @GET
     @Path("/conversationID/{conversationID}")
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.APPLICATION_XML)
     public Conversation getConversationById(@PathParam("conversationID") int id) {
-//       system.getConversationByID(id).addMessage(new Message("kkk", "kkk2", 2));
-       return system.getConversationByID(id);
+        return system.getConversationByID(id);
     }
 }

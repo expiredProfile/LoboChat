@@ -47,16 +47,8 @@ public class ChatSystem {
     public void addConversation(Conversation c) {
         this.conversations.add(c);
     }
-/*    
-    public ArrayList<Conversation> getConversation() {
-        ArrayList<Conversation> co = new ArrayList();
-        for (int i = 0; i < this.conversations.size(); i++) {
-            co.add(conversations.get(i));
-        }
-        return co;
-    }
-*/
-    // returns all the conversations to the user given in the parameter
+
+    // returns all the conversations related to the user given in the parameter
     public ArrayList<Conversation> getConversations(String name) {
         ArrayList<Conversation> tempConversations = new ArrayList<>();
 
@@ -87,12 +79,6 @@ public class ChatSystem {
         conversations.get(id).addMessage(m);
     }
 
-    /*
-    public ArrayList<Worker> getGroupList(){
-        return group.getWorkerList();
-    }
-     */
-    
     //Worker methods
     public ArrayList<Worker> getLoggedOutList() {
         return this.loggedOut;
@@ -101,7 +87,7 @@ public class ChatSystem {
     public ArrayList<Worker> getLoggedInList() {
         return this.loggedIn;
     }
-    
+
     public ArrayList<Worker> getAllWorkers() {
         return this.allWorkers;
     }
@@ -113,7 +99,7 @@ public class ChatSystem {
     public void workerLoggedOut(Worker w) {
         loggedOut.add(w);
     }
-    
+
     public void addToAllWorkers(Worker w) {
         allWorkers.add(w);
     }
@@ -122,19 +108,19 @@ public class ChatSystem {
     public void addAlert(Alert a) {
         alertHistory.add(a);
     }
-    
+
     public Alert getAlertByID(int id) {
-        return alertHistory.get(id-1);
+        return alertHistory.get(id - 1);
     }
-    
+
     // returns either 5, 10 or all of the messages in the system
     public ArrayList<Alert> getAlertHistory(int range) {
         ArrayList<Alert> tempHistory = new ArrayList<>();
-        
-        if(range == 0) { //5 latest
-            if(alertHistory.size() >= 5) {
 
-                for (int i = alertHistory.size()-5; i < alertHistory.size(); i++) {
+        if (range == 0) { //5 latest
+            if (alertHistory.size() >= 5) {
+
+                for (int i = alertHistory.size() - 5; i < alertHistory.size(); i++) {
                     tempHistory.add(alertHistory.get(i));
                 }
                 return tempHistory;
@@ -142,8 +128,8 @@ public class ChatSystem {
                 return alertHistory;
             }
         } else if (range == 1) { //10 latest
-            if(alertHistory.size() >= 10) {
-                for (int i = alertHistory.size()-10; i < alertHistory.size(); i++) {
+            if (alertHistory.size() >= 10) {
+                for (int i = alertHistory.size() - 10; i < alertHistory.size(); i++) {
                     tempHistory.add(alertHistory.get(i));
                 }
                 return tempHistory;
