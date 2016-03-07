@@ -19,41 +19,36 @@ import javax.ws.rs.PathParam;
  *
  * @author Hege
  */
-//@ServerEndpoint("/chatend/{conv}")
+//Websocket endpoint for the main socket where users connect to when logging in. 
 @ServerEndpoint("/mainsock")
 public class MainSock {
-
-    private static Set<Session> wses = Collections.synchronizedSet(new HashSet<Session>());
-
+    private static Set<Session> wses = Collections.synchronizedSet(new HashSet<Session>()); //Set variable for storing sessions.
+    
+    //When a connection is established, the session is stored into the set.
     @OnOpen
     public void onOpen(Session s) {
         wses.add(s);
-        // s.getUserProperties().put("conv", conv);
-
     }
-//    public void onOpen(Session s, @PathParam("conv") String conv){
-
+    
+    //When a connection is closed, the session is removed from the set
     @OnClose
     public void onClose(Session s) {
-//        s.getUserProperties().remove("conv");
         wses.remove(s);
-
     }
-
+    
+    //When the websocket receives a message, it checks if the string is a legitimate number
+    // and sends it to all sessions if an exception is not catched. 
     @OnMessage
     public void onMessage(String alertID) {
-
         try {
             int aid = Integer.parseInt(alertID);
-
             messageAll(alertID);
-
         } catch (Exception e) {
 
         }
-
     }
-
+    
+    //Method that includes the iteration of the set for all sessions and sending a message to each session.
     public void messageAll(String ss) {
         for (Session s : wses) {
             try {
@@ -63,5 +58,4 @@ public class MainSock {
             }
         }
     }
-
 }

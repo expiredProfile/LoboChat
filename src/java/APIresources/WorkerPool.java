@@ -36,7 +36,7 @@ public class WorkerPool {
         this.nurses = new ProfessionGroup("Nurses");
         this.psychotherapists = new ProfessionGroup("Psychotherapists");
         this.guards = new ProfessionGroup("Guards");
-        //Create workers
+        //Create predefined workers
         this.kim = new Worker("Kim", "Guard", 1);
         this.henkka = new Worker("Henkka", "Doctor", 2);
         this.kasper = new Worker("Kasper", "Psychotherapist", 3);
@@ -53,6 +53,7 @@ public class WorkerPool {
         return instance;
     }
     
+    //Add methods for all four profession groups.
     public void addGuard(Worker w){
         guards.addWorker(w);
     }
@@ -69,6 +70,7 @@ public class WorkerPool {
         nurses.addWorker(w);
     }
     
+    //Methods that store predefined workers into logged out list, worker list and profession groups. 
     private void addToLoggedOut(){
         system.workerLoggedOut(kim);
         system.workerLoggedOut(henkka);
@@ -89,6 +91,8 @@ public class WorkerPool {
         this.psychotherapists.addWorker(kasper);
         this.nurses.addWorker(tommi);
     }
+    
+    //The methdod that returns the requested ProfessionGroup object
     public ProfessionGroup getProfessionGroup(String pg) {
         switch(pg) {
             case "Doctors":

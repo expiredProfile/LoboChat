@@ -19,27 +19,24 @@ import javax.ws.rs.PathParam;
  *
  * @author Hege
  */
-//@ServerEndpoint("/chatend/{conv}")
+//Websocket endpoint for chat websocket where users connect to when opening a chat.
 @ServerEndpoint("/chatend")
 public class ChatWindowSock {
-
-    private static Set<Session> wses = Collections.synchronizedSet(new HashSet<Session>());
-
+    private static Set<Session> wses = Collections.synchronizedSet(new HashSet<Session>()); //Set variable for sessions
+    
+    //When a connection is made, the session is added to the set.
     @OnOpen
     public void onOpen(Session s) {
         wses.add(s);
-        // s.getUserProperties().put("conv", conv);
-
     }
-//    public void onOpen(Session s, @PathParam("conv") String conv){
-
+    
+    //When a connection is closed, the session is removed from the set.
     @OnClose
     public void onClose(Session s) {
-//        s.getUserProperties().remove("conv");
         wses.remove(s);
-
     }
-
+    
+    //When the socket receives a message, it sends the content to all contained sessions 
     @OnMessage
     public void onMessage(String conversationID) {
         for (Session s : wses) {
@@ -50,15 +47,4 @@ public class ChatWindowSock {
             }
         }
     }
-
-    public void messageAll(String ss) {
-        for (Session s : wses) {
-            try {
-                s.getBasicRemote().sendText(ss);
-            } catch (Exception e) {
-
-            }
-        }
-    }
-
 }
