@@ -20,6 +20,7 @@ var dropdownlogout = "";
 
 $(document).ready(function () {
 
+    /*
     $(window).load(function () {
         var loc = window.location.href;
         if (loc === "http://localhost:8080/LoboChat/chaWin.html") {
@@ -27,7 +28,9 @@ $(document).ready(function () {
             //chatScrollDown();
         }
     });
-
+    */
+   
+   // loads user lists onto the front page after login
     $(window).load(function () {
         adjustStyle($(this).width());
         var location = window.location.href;
@@ -66,6 +69,7 @@ $(document).ready(function () {
 
                 window.location = baseUrl;
             }
+            // logs a user out if they go back to the login screen while logged in
         } else if (location === "http://localhost:8080/LoboChat/") {
 
             if (readCookie("currentUser") !== "") {
@@ -79,6 +83,8 @@ $(document).ready(function () {
         adjustStyle($(this).width());
     });
 
+    // adds users to the list to add to a conversation
+    // and removes them from the dropdown menu
     $(document).on("click", ".usersToAdd-class", function () {
         var text = $(this).text();
         $("#userPlacement-id").append("<span id='user" + number + "'>"
@@ -88,6 +94,8 @@ $(document).ready(function () {
         $(this).remove();
     });
 
+    // adds a group to the list of groups to add to a conversation
+    // removes from dropdown
     $(document).on("click", ".groupToAdd-class", function () {
         var text = $(this).text();
         $("#userPlacement-id").append("<span id='user" + number + "'>"
@@ -97,11 +105,13 @@ $(document).ready(function () {
         $(this).remove();
     });
 
+    // adds topic to be added to conversation
     $(document).on("click", "#topicButton-id", function () {
         var text = $("input").val();
         $("#topic-id").html("<span id='topicValue-id'>" + text + "</span>");
     });
 
+    // removes user from the list when the x is clicked
     $(document).on("click", ".userRemove", function () {
         var toRemove = $(this).parent("span");
         $(toRemove).remove();
@@ -109,6 +119,7 @@ $(document).ready(function () {
         userAm--;
     });
 
+    // removes group from list
     $(document).on("click", ".groupRemove", function () {
         var toRemove = $(this).parent("span");
         $(toRemove).remove();
@@ -116,6 +127,7 @@ $(document).ready(function () {
         profGroups--;
     });
 
+    // non-casesensitive log in 
     $("#loginButton").click(function () {
         //Case insensitive login
         //(same code on index page if user presses enter instead of button
@@ -283,6 +295,7 @@ function refreshChats() {
     }
 }
 
+// loads the logged in/logged out user lists
 function ajaxGet() {
     $("#myDropdown").empty();
     $.ajax({
@@ -394,6 +407,7 @@ function onCloseMain(event) {
     console.log("Disconnected from mainsocket.");
 }
 
+// loads the latest message to conversation list
 function loadLatest(cid) {
     $.ajax({
         url: baseUrl + "/resources/Messages/latest/" + cid,
@@ -407,6 +421,7 @@ function loadLatest(cid) {
     });
 }
 
+// parsing for the message that is loaded to the conversation list
 function listMessage(xml, status) {
     var $xml = $(xml);
     var content = "";
@@ -530,6 +545,7 @@ function loggedOut(xml, status) {
     document.getElementById("outField").innerHTML = content;
 } //loggedOut
 
+// parsing for the logged in users list
 function loggedIn(xml, status) {
     var xmlString = (new XMLSerializer()).serializeToString(xml);
     var $xml = $(xml);
@@ -548,6 +564,7 @@ function loggedIn(xml, status) {
     document.getElementById("inField").innerHTML = content;
 } //loggedIn
 
+// adds logged out users to the dropdown menu in create conversation
 function loggedOutDropDown(xml, status) {
     xmlString = (new XMLSerializer()).serializeToString(xml);
     var $xml = $(xml);
@@ -560,6 +577,7 @@ function loggedOutDropDown(xml, status) {
     //document.getElementById("dropDownMenu").innerHTML = content;
 }
 
+// adds logged in users to the dropdown menu in create conversation
 function loggedInDropDown(xml, status) {
     xmlString = (new XMLSerializer()).serializeToString(xml);
     var $xml = $(xml);
@@ -596,6 +614,7 @@ function writeCookie(name, value, days) {
     document.cookie = name + "=" + value + expires + "; path=/";
 }
 
+// reads the value of a cookie with the given string
 function readCookie(name) { //readCookie('currentUser')
     var i, c, ca, nameEQ = name + "=";
     ca = document.cookie.split(';');
@@ -756,6 +775,7 @@ function listConversations(xml, status) {
     $("#topicsDiv-id").html(content);
 }// listConversations
 
+
 function getParticipants() {
     var cid = sessionStorage.getItem("cid");
     $.ajax({
@@ -802,7 +822,7 @@ function getParticipants() {
     }
 }// getParticipants
 
-
+// parsing for the messages in the chat window
 function listParticipant(xml, status) { // also lists messages !
     var $xml = $(xml);
     var content = "";
