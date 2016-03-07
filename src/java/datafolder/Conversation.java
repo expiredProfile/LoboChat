@@ -13,42 +13,44 @@ import javax.xml.bind.annotation.XmlRootElement;
  *
  * @author kimmo
  */
-// Handles the data required to create conversations and
-// store the messages sent to the conversations
+// Stores the data of a single conversation and
+// the messages sent to the conversation.
 @XmlRootElement
 public class Conversation {
+
     private int id;
     private String topic;
     private ArrayList<Message> messages;
     private ArrayList<Worker> memberList;
     private IDIncrement instance;
-    
-    public Conversation(){
-        
+
+    public Conversation() {
     }
-    
-    public Conversation(String topic, ArrayList<Worker> list){
+
+    public Conversation(String topic, ArrayList<Worker> list) {
         this.instance = IDIncrement.getInstance();
         this.id = instance.conversationIncrement();
         this.topic = topic;
         this.messages = new ArrayList<>();
         this.memberList = list;
     }
-    
-    public void addMessage(Message m){
+
+    public void addMessage(Message m) {
         this.messages.add(m);
     }
-    
+
     @XmlElement
-    public ArrayList<Message> getMessages(){
+    public ArrayList<Message> getMessages() {
         return this.messages;
     }
+
     @XmlElement
-    public int getID(){
+    public int getID() {
         return this.id;
     }
+
     @XmlElement
-    public String getTopic(){
+    public String getTopic() {
         return this.topic;
     }
 
@@ -56,5 +58,5 @@ public class Conversation {
     public ArrayList<Worker> getMemberList() {
         return memberList;
     }
-    
+
 }

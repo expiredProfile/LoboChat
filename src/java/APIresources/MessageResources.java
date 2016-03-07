@@ -20,6 +20,7 @@ import javax.ws.rs.core.MediaType;
  *
  * @author kimmo
  */
+//  The class handles server requests related to messages.
 @Path("/Messages")
 public class MessageResources {
 
@@ -30,7 +31,7 @@ public class MessageResources {
         this.system = ChatSystem.getInstance();
     }
 
-    //send conversation id from server as plain text
+    // Sends conversation id from server as plain text.
     @GET
     @Path("/{id}")
     @Consumes(MediaType.TEXT_PLAIN)
@@ -39,28 +40,20 @@ public class MessageResources {
         int id = Integer.parseInt(s);
         return system.getConversationMessages(id);
     }
-    
-    //send the latest message from a particular converation
+
+    // Returns the latest message from the converation with the id given as parameter.
     @GET
     @Path("/latest/{id}")
     @Consumes(MediaType.TEXT_PLAIN)
     @Produces(MediaType.APPLICATION_XML)
-    public Message getLatest(@PathParam("id") String id){
+    public Message getLatest(@PathParam("id") String id) {
         int intid = Integer.parseInt(id);
         int latest = system.getConversationMessages(intid).size() - 1;
-        /*if (latest < 0){
-            return new Message();
-        } else {
-           Message m = system.getConversationMessages(intid).get(latest);
-           return m; 
-        }*/
-        
         Message m = system.getConversationMessages(intid).get(latest);
-        return m; 
-        
+        return m;
     }
 
-//    Send username from browser when sending a new message
+    // Sends a username from client-side when a user is sending a new message.
     @POST
     @Consumes(MediaType.APPLICATION_XML)
     public void postMessage(Message m) {
@@ -69,21 +62,5 @@ public class MessageResources {
         m.setShortTime();
         system.addMessageToConversation(id, m);
     }
-//    @POST
-//    @Consumes(MediaType.APPLICATION_XML)
-//    public ArrayList<Message> postMessage(String s) {
-//       
-//        system.addMessageToConversation(0, new Message("ayy", "kk", 0));
-//        return system.getConversationMessages(0);
-//    }
 
-
-    /*
-    @Path("/{messageid}")
-    @GET
-    @Produces(MediaType.APPLICATION_XML)
-    public Message getMessageIdXML(@PathParam("messageid") int messageid) {
-        return system.getMessageByID(messageid);
-    }
-     */
 }

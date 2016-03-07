@@ -13,36 +13,36 @@ import javax.xml.bind.annotation.XmlRootElement;
  *
  * @author kimmo
  */
-// created to transfer multiple users from the client to server
-// to create conversations with multiple people in it
+// Created to transfer a topic and multiple users from the client to server in one package.
 @XmlRootElement
 public class Group {
-    
+
     private String topic;
     private ArrayList<Worker> workerList;
-    
-    public Group(){}
-    
-    public Group(String topic){
+
+    public Group() {
+    }
+
+    public Group(String topic) {
         this.topic = topic;
         this.workerList = new ArrayList<>();
     }
-    
+
     @XmlElement
-    public String getTopic(){
+    public String getTopic() {
         return this.topic;
     }
-    
-    public void setTopic(String s){
+
+    public void setTopic(String s) {
         this.topic = s;
     }
-    
+
     @XmlElement
-    public ArrayList<Worker> getWorkerList(){
+    public ArrayList<Worker> getWorkerList() {
         return this.workerList;
     }
-    
-    public void setWorkerList(ArrayList<Worker> a){
+
+    public void setWorkerList(ArrayList<Worker> a) {
         this.workerList = a;
     }
 }
