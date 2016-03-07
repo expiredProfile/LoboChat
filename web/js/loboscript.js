@@ -74,7 +74,7 @@ $(document).ready(function () {
         }
     });
 
-
+// adjusts the style of the user interface upon resizing the window.
     $(window).resize(function () {
         adjustStyle($(this).width());
     });
@@ -115,7 +115,7 @@ $(document).ready(function () {
         $("#myGroupDropdown").append("<p class='groupToAdd-class'>" + toRemove.text() + "</p>");
         profGroups--;
     });
-    
+
     $("#loginButton").click(function () {
         //Case insensitive login
         //(same code on index page if user presses enter instead of button
@@ -124,6 +124,8 @@ $(document).ready(function () {
         logIn();
         // window.location = baseUrl + "/userlists.html";
     });
+
+    // Loads and displays the online and offline users.
     $("#usersButton-id").click(function () {
         $("#main-id").load("userlist.html");
         $.ajax({
@@ -138,8 +140,9 @@ $(document).ready(function () {
             dataType: 'xml',
             success: loggedOut
         });
-    }); //loggedInUsers
+    });
 
+// Loads the interface used to create new conversations. 
     $("#createConversation-id").click(function () {
         $("#main-id").load("createConversation.html", function () {
             if (check === true) {
@@ -150,10 +153,14 @@ $(document).ready(function () {
             $("#myDropdown").append(dropdownlogout);
         });
     });
+
+    // Logs out the current user.
     $("#logOutButton").click(function () {
         logOut();
         //window.location = baseUrl;
     });
+
+    // Loads and displays the interface used in creating new alerts and viewing the alert history.
     $("#alertsButton-id").click(function () {
         $("#main-id").load("alert.html");
     });
@@ -161,7 +168,7 @@ $(document).ready(function () {
     $("#addnewuser").click(function () {
         addUser();
     });
-    
+
     //Send alert
     $(document).on("click", "#sendAlertButton", function () {
         //Empty old responses from divs
@@ -193,7 +200,7 @@ $(document).ready(function () {
             }
         }); // ajax
     }); // sendAlert
-    
+
     //Get alert history
     $(document).on("click", "#alertHistoryButton", function () {
         //Empty old responses from divs
@@ -234,17 +241,20 @@ $(document).ready(function () {
         }); // ajax
     }); // sendAlert
 
+// Loads and displays conversations the current user is a part of.
     $("#topicsButton-id").click(function () {
         $("#main-id").load("topicslist.html");
         getConversations();
     });
 
+// Creates a new conversation.
     $(document).on("click", "#createButton-id", function () {
         startConversation();
 //        $("#main-id").load("topicslist.html");
 //        getConversations();
     });
 
+// Creates a new group conversation.
     $(document).on("click", "#createGroupConvButton-id", function () {
         startProfGroupConversation();
     });
@@ -261,6 +271,7 @@ function capitalize(string) {
     return capString;
 }
 
+// The view on chat window (chaWin.html) scrolls down as new messages are sent.
 function chatScrollDown() {
     var element = document.getElementById("chatArea");
     element.scrollTop = element.scrollHeight;
@@ -417,6 +428,7 @@ function listMessage(xml, status) {
 }// listMessage
 
 function logIn() {
+    // Retrieves the users currently logged.
     $.ajax({
         url: baseUrl + "/resources/Workers/LoggedOut",
         type: 'GET',
@@ -425,8 +437,10 @@ function logIn() {
         success: function (data) {
             var $xml = $(data);
             var showError = true;
+            // Compares the provided login information against the users logged out.
             $xml.find('workers').each(function () {
                 $xml.find('worker').each(function () {
+                    // Informs the server that this user has succesfully logged in.
                     if (workerName === $(this).find("name").text()) {
                         showError = false;
                         $.ajax({
@@ -445,14 +459,14 @@ function logIn() {
                             }
                         });//ajax
                     }
-
+                    // User logged in as an admin. Admin page (adminpage.html) is loaded.
                     if (workerName === "Admin") {
                         showError = false;
                         writeCookie('currentUser', "Admin", 3);
                         window.location = baseUrl + "/adminpage.html";
                     }
-
                 });
+                // User did not provide valid login information.
                 if (showError === true) {
                     window.alert("Invalid login information!");
                 }
@@ -466,8 +480,8 @@ function logIn() {
 
 function logOut() {
     var currentUser = readCookie('currentUser');
+    // The cookie of current user is deleted.
     writeCookie('currentUser', workerName, -1);
-    //window.alert("logged out: " + currentUser);
     if (!mainsocket) {
 
     } else if (mainsocket.readyState === mainsocket.CLOSED) {
@@ -484,7 +498,7 @@ function logOut() {
     } else {
         websocket.close();
     }
-
+// The server is informed that user has logged out succesfully.
     $.ajax({
         url: baseUrl + "/resources/Workers/LoggedOut",
         data: currentUser,
@@ -561,6 +575,7 @@ function loggedInDropDown(xml, status) {
     //document.getElementById("dropDownMenu").innerHTML = content;
 }
 
+// Opens a new chat window for a conversation.
 function openChat(id) {
     var url = baseUrl + "/chaWin.html";
     //chatParticipantId = id;
@@ -568,6 +583,7 @@ function openChat(id) {
     window.open(url);
 }
 
+// Creates a cookie to identify the user and maintain the session.
 function writeCookie(name, value, days) {
     var date, expires;
     if (days) {
@@ -595,6 +611,7 @@ function readCookie(name) { //readCookie('currentUser')
     return '';
 }
 
+// Adjusts the style of the interface based on the screen width.
 function adjustStyle(width) {
     width = parseInt(width);
     if (width < 500) {
@@ -606,6 +623,8 @@ function adjustStyle(width) {
     }
 }
 
+// Checks that the user has provided valid information for the new conversation.
+// Creates the new conversation.
 function startConversation() {
     var topic = $('#topic-id').text();
     var num = 0;
@@ -617,7 +636,6 @@ function startConversation() {
         window.alert("Max topic length is 20 characters!");
         return null;
     }
-
     $('#userPlacement-id').children('span').each(function () {
         num++;
     });
@@ -631,14 +649,14 @@ function startConversation() {
         window.alert("Please choose only users!");
         return null;
     }
-    // group object with an arraylist of participants ->(workerlist tags).
+    // Creates a group object with an arraylist of participants (workerlist).
     var xmlGroupObject = "<group><topic>" + topic + "</topic><workerList><id></id><name>" + readCookie('currentUser') + "</name><title></title></workerList>";
     $('#userPlacement-id').children('span').each(function () { // iterates through the selected workers
         xmlGroupObject += '<workerList><id></id><name>' + $(this).text() + '</name><title></title></workerList>';
     });
-    xmlGroupObject += "</group>"; // adds end tag for the xml document.
-//    window.alert(xmlGroupObject);
+    xmlGroupObject += "</group>"; // adds an end tag for the xml document.
     var GroupXmlDoc = $.parseXML(xmlGroupObject);
+    // Sends the group object to the server.
     $.ajax({
         url: baseUrl + "/resources/Conversations",
         data: GroupXmlDoc,
@@ -658,6 +676,8 @@ function startConversation() {
     }); // ajax
 } // startConversation()
 
+// Checks that the user has provided valid information for the new profession group conversation.
+// Creates the new profession group conversation.
 function startProfGroupConversation() {
     var topic = $('#topic-id').text();
     if (topic.length === 0) {
@@ -681,7 +701,7 @@ function startProfGroupConversation() {
         window.alert("Please choose only one group!");
         return null;
     }
-
+    // Creates a ProfConvData object and sends it to server.
     var targetGroup = $('#userPlacement-id').children('span').text();
     var xmlProfConvDataObject = "<profConvData><postName>" + readCookie('currentUser') + "</postName><profGroup>" + targetGroup + "</profGroup><topic>" + topic + "</topic></profConvData>";
     var ProfXmlDoc = $.parseXML(xmlProfConvDataObject);
@@ -703,6 +723,7 @@ function startProfGroupConversation() {
     }); // ajax
 } // startProfGroupConversation function
 
+// Loads the conversations of the current user.
 function getConversations() {
     var user = readCookie('currentUser');
     $.ajax({
@@ -710,13 +731,14 @@ function getConversations() {
         type: 'GET',
         contentType: 'text/plain',
         dataType: 'xml',
-        success: listConversations,
+        success: listConversations, // Displays the conversations.
         error: function (response) {
             alert(response.statusText + " wn: " + workerName);
         }
     });
 } // getConversations
 
+// Processes XML to create and display a list of users.
 function listConversations(xml, status) {
     var $xml = $(xml);
     var content = "";
@@ -855,6 +877,8 @@ function onOpen(event) {
 function onClose(event) {
     //systemMessage(readCookie('currentUser') + " disconnected!");
 }
+
+// Loads messages of a conversation based on its id. 
 function loadMessages() {
     var cid = document.getElementById("conversationID").innerHTML;
     $.ajax({
@@ -862,13 +886,14 @@ function loadMessages() {
         type: 'GET',
         contentType: 'text/plain',
         dataType: 'xml',
-        success: listMessages,
+        success: listMessages, // processes and displays the messages.
         error: function (response) {
             alert(response.statusText + " wn: " + workerName);
         }
     });
 }//loadMessages()
 
+// Process XML to display messages of a conversation.
 function listMessages(xml, status) {
     var $xml = $(xml);
     var content = "";
@@ -892,6 +917,7 @@ function listMessages(xml, status) {
 } // listMessages
 
 function sendMessage() {
+    // Creates a new Message object and sends it to the server.
     var messageContent = $("#inputField").val();
     if (messageContent.length === 0) {
         return null;
@@ -911,13 +937,12 @@ function sendMessage() {
         processData: false,
         type: 'POST',
         contentType: 'application/xml', // datatype sent
-
-        //success: document.getElementById("outputField").innerHTML = ".. ",
         error: function (response) {
             console.log("Error: " + response.statusText);
         }//error
     }); // ajax
     $("#inputField").val("");
+    // Sends notification through the websocket.
     websocket.send(cid);
 }// sendMessage function
 
@@ -945,6 +970,7 @@ function systemMessage(content) {
     websocket.send(cid);
 }// systemMessage function
 
+// Used on adminpage.html to register new uses.
 function addUser() {
     var name = capitalize($("#workername").val());
 
@@ -967,14 +993,13 @@ function addUser() {
 
     var userxml = "<worker> <groupID>" + groupID + "</groupID><name>" + name + "</name><title>" + profession + "</title></worker>";
     var userxmlobj = $.parseXML(userxml);
-
+    // Send the new worker object to the server and refresh the userlist. 
     $.ajax({
         url: baseUrl + "/resources/Workers/Newuser",
         data: userxmlobj,
         processData: false, //already xml doc!
         type: 'POST',
         contentType: 'application/xml',
-        //dataType: 'application/xml',
         success: function () {
             $.ajax({
                 url: baseUrl + '/resources/Workers/LoggedIn',
