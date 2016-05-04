@@ -74,6 +74,14 @@ public class WorkerResources {
     }
 
     //GET method that returns the logout list
+    
+    @GET
+    @Path("/All")
+    @Produces(MediaType.APPLICATION_XML)
+    public ArrayList<Worker> getAllXml() {
+        return system.getAllWorkers();
+    }
+    
     @GET
     @Path("/LoggedOut")
     @Produces(MediaType.APPLICATION_XML)
