@@ -44,6 +44,17 @@ public class ConversationResources {
     @Produces(MediaType.APPLICATION_XML)
     public ArrayList<Worker> postConversation(Group g) {
         ArrayList<Worker> list = g.getWorkerList();
+        ArrayList<Worker> all = system.getAllWorkers();
+        
+        for (Worker w : list){
+            String listName = w.getName();
+            for (Worker wa : all){
+                if (listName.equals(wa.getName())){
+                   w.setTitle(wa.getTitle());
+                }
+            }
+        }
+        
         String topic = g.getTopic();
         Conversation c = new Conversation(topic, list);
         // System.out.println("new conversation: " + c.getTopic() + ", c-id: " + c.getID());

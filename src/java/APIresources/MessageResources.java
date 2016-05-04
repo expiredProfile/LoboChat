@@ -6,6 +6,7 @@
 package APIresources;
 
 import datafolder.ChatSystem;
+import datafolder.IDIncrement;
 import datafolder.Message;
 import java.util.ArrayList;
 import javax.ws.rs.Consumes;
@@ -26,9 +27,11 @@ public class MessageResources {
 
     private final ChatSystem system;
     private String newMessage;
+    private final IDIncrement idi;
 
     public MessageResources() {
         this.system = ChatSystem.getInstance();
+        this.idi = IDIncrement.getInstance();
     }
 
     // Sends conversation id from server as plain text.
@@ -60,6 +63,7 @@ public class MessageResources {
         int id = m.getConversationID();
         m.setCurrentTime();
         m.setShortTime();
+        m.setMessageID(idi.messageIncrement());
         system.addMessageToConversation(id, m);
     }
 

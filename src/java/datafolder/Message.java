@@ -22,6 +22,8 @@ public class Message {
     private int conversationID;
     private String currentTime;
     private String shortTimeStamp;
+    private int messageID;
+    private IDIncrement idi = IDIncrement.getInstance();
 
     public Message() {
     }
@@ -30,6 +32,7 @@ public class Message {
         this.content = content;
         this.postName = name;
         this.conversationID = id;
+        this.messageID = idi.messageIncrement();
     }
 
     @XmlElement
@@ -75,5 +78,20 @@ public class Message {
 
     public void setShortTime() {
         this.shortTimeStamp = TimeResources.getInstance().getShortTimeStamp();
+    }
+
+    /**
+     * @return the messageID
+     */
+    @XmlElement
+    public int getMessageID() {
+        return messageID;
+    }
+
+    /**
+     * @param messageID the messageID to set
+     */
+    public void setMessageID(int i) {
+        this.messageID = i;
     }
 }

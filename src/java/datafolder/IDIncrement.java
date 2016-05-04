@@ -15,11 +15,13 @@ public class IDIncrement {
     private int workerIncrement;
     private int conversationIncrement;
     private int alertIncrement;
+    private int messageIncrement;
     
     private IDIncrement(){
         this.workerIncrement = 0;
         this.conversationIncrement = 0;
         this.alertIncrement = 1;
+        this.messageIncrement = 0;
     }
     
     //Singleton
@@ -38,5 +40,9 @@ public class IDIncrement {
     
     public int alertIncrement(){
         return this.alertIncrement++;
+    }
+    
+    public int messageIncrement(){
+        return this.messageIncrement++;
     }
 }
